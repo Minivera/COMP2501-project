@@ -28,7 +28,7 @@ public:
 	virtual void upgrade();
 
 	// Method to trigger the weapon's attack. Does not handle the weapon's fring rate (Speed).
-	virtual void attack(glm::vec3 position, double angle, std::vector<shared_ptr<GameObject>> gameObjects);
+	virtual void attack(glm::vec3 position, double angle, std::vector<shared_ptr<GameObject>>& gameObjects);
 
 	// Method that prepares the reload for the weapon by adding the delta time to a counter
 	void recharge(double deltaTime);

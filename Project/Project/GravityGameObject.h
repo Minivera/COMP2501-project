@@ -13,5 +13,5 @@ public:
 	GravityGameObject(glm::vec3& entityPosition, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
 	GravityGameObject(glm::vec3& entityPosition, glm::vec3& entityVelocity, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
 
-	virtual void update(std::vector<shared_ptr<GameObject>> entities, double deltaTime);
+	virtual void update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime);
 };

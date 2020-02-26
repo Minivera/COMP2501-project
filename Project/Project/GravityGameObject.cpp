@@ -12,7 +12,7 @@ GravityGameObject::GravityGameObject(glm::vec3& entityPosition, glm::vec3& entit
 GravityGameObject::GravityGameObject(glm::vec3& entityPosition, glm::vec3& entityVelocity, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements) :
 	GameObject(entityPosition, entityVelocity, entityScale, entityRotation, entityTexture, entityNumElements) {}
 
-void GravityGameObject::update(std::vector<shared_ptr<GameObject>> entities, double deltaTime) {
+void GravityGameObject::update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime) {
 	bool collidesWithFloor = false;
 
 	for (auto it = entities.begin(); it != entities.end(); it++) {

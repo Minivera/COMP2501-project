@@ -33,7 +33,7 @@ GameObject::GameObject(glm::vec3& entityPosition, glm::vec3& entityVelocity, glm
 }
 
 // Updates the GameObject's state
-void GameObject::update(std::vector<shared_ptr<GameObject>> gameObjects, double deltaTime) {
+void GameObject::update(std::vector<shared_ptr<GameObject>>& gameObjects, double deltaTime) {
 	// Added some code to rotate the straight velocity verctor before adding it to the position
 	glm::vec3 rotatedVelocity = glm::vec3(
 		cos(glm::radians(angle)) * velocity.x - sin(glm::radians(angle)) * velocity.y,

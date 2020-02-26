@@ -19,7 +19,7 @@ public:
 	GameObject(glm::vec3& entityPosition, glm::vec3& entityVelocity, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
 
 	// Updates the GameObject's state. Can be overriden for children
-	virtual void update(std::vector<shared_ptr<GameObject>> entities, double deltaTime);
+	virtual void update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime);
 
 	// Renders the GameObject using a shader
 	virtual void render(Shader &shader);

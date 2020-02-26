@@ -16,7 +16,7 @@ PlayerGameObject::PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, G
 	laserTexture = entityLaserTexture;
 }
 
-void PlayerGameObject::update(std::vector<shared_ptr<GameObject>> entities, double deltaTime) {
+void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime) {
 	currentAir -= deltaTime;
 
 	// Reload the current weapon from the inventory

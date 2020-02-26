@@ -45,7 +45,7 @@ public:
 	PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, GLuint entityHarpoonTexture, GLuint entityPistolTexture, GLuint entityLaserTexture, GLint entityNumElements);
 
 	// Overriden update method to update the player and handle collisions
-	void update(std::vector<shared_ptr<GameObject>> gameObjects, double deltaTime);
+	void update(std::vector<shared_ptr<GameObject>>& gameObjects, double deltaTime);
 
 	// Overriden render emthod to render both the player and the weapon they are carrying
 	void render(Shader& shader);

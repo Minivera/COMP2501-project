@@ -6,7 +6,7 @@ class Pistol : public Weapon
 {
 private:
 	// How far the bullet will go.
-	double range = 0.5;
+	double range = 200;
 
 	const int baseDamage = 5;
 	const double baseSpeed = 150;
@@ -22,6 +22,6 @@ public:
 	virtual void upgrade();
 
 	// Method to trigger the weapon's attack. Does not handle the weapon's fring rate (Speed).
-	virtual void attack(glm::vec3 position, double angle, std::vector<shared_ptr<GameObject>> gameObjects);
+	virtual void attack(glm::vec3 position, double angle, std::vector<shared_ptr<GameObject>>& gameObjects);
 };
 

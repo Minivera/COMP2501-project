@@ -14,7 +14,7 @@ void Weapon::upgrade() {
 	level += 1;
 }
 
-void Weapon::attack(glm::vec3 position, double angle, std::vector<shared_ptr<GameObject>> gameObjects) {
+void Weapon::attack(glm::vec3 position, double angle, std::vector<shared_ptr<GameObject>>& gameObjects) {
 	return;
 }
 
