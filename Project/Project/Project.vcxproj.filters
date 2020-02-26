@@ -1,0 +1,230 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{9e6389bc-45ce-4798-a9d6-0b2842002595}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities">
+      <UniqueIdentifier>{8ab8837d-ec2e-43f9-8e06-820e640756e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{5f9bed93-e06b-4a8c-a0e8-5f539f525df5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities">
+      <UniqueIdentifier>{78183333-207a-42ab-aa43-aa9dee180f50}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{7857a73d-8f16-4dc1-b87a-dc98e85a06be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="assets">
+      <UniqueIdentifier>{7c98eefe-76b3-4beb-9ed4-276c016f119e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Equipment">
+      <UniqueIdentifier>{6b726d7a-9247-4980-a3ea-b6d7529aba3a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Equipment">
+      <UniqueIdentifier>{7ca5bc2e-0c51-4a48-a29c-3e6859fe3bdd}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Window.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FileUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="random.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameObject.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerGameObject.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GameState.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelState.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainGameObject.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="GravityGameObject.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="TreasureGameObject.cpp">
+      <Filter>Source Files\Entities</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelInterface.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInventory.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Source Files\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Harpoon.cpp">
+      <Filter>Source Files\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Pistol.cpp">
+      <Filter>Source Files\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="Laser.cpp">
+      <Filter>Source Files\Equipment</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Window.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FileUtils.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Random.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerGameObject.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="Game.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GameState.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelState.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainGameObject.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="GravityGameObject.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="TreasureGameObject.h">
+      <Filter>Header Files\Entities</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelInterface.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInventory.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Header Files\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Harpoon.h">
+      <Filter>Header Files\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Pistol.h">
+      <Filter>Header Files\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="Laser.h">
+      <Filter>Header Files\Equipment</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
+    <None Include="shader.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="shader.vert">
+      <Filter>shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Assets\environment\background.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\FX\bubbles.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\FX\enemy-death.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\FX\explosion.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\FX\explosion-big.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\FX\explosion-small.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\enemies\fish.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\enemies\fish-big.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\enemies\fish-dart.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\environment\midground.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\enemies\mine.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\enemies\mine-big.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\enemies\mine-small.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\player\player-fast.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\player\player-hurt.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\player\player-idle.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\player\player-idle-single.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\player\player-rush.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\player\player-swiming.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\environment\props.png">
+      <Filter>assets</Filter>
+    </Image>
+    <Image Include="Assets\environment\tiles.png">
+      <Filter>assets</Filter>
+    </Image>
+  </ItemGroup>
+</Project>
