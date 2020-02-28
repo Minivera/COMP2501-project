@@ -13,11 +13,11 @@
 using namespace std;
 
 class GameObject {
-public:
+protected:
 	GameObject(glm::vec3& entityPosition, GLuint entityTexture, GLint entityNumElements);
 	GameObject(glm::vec3& entityPosition, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
 	GameObject(glm::vec3& entityPosition, glm::vec3& entityVelocity, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
-
+public:
 	// Updates the GameObject's state. Can be overriden for children
 	virtual void update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime);
 

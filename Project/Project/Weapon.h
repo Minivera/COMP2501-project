@@ -49,8 +49,5 @@ public:
 
 	// Setters
 	inline void unlock() { enabled = true; }
-
-	// Static method to load the weapon textures from the file system
-	static int setWeaponTexture(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
 };
 

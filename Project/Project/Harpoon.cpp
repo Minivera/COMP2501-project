@@ -1,5 +1,7 @@
 #include "Harpoon.h"
 
+#include "HarpoonGameObject.h"
+
 // Harpoon is enabled by default
 Harpoon::Harpoon(): Weapon(true, baseDamage, baseSpeed, baseRechargeRate) {
 	// Constants seem to not work when called in super
@@ -18,6 +20,10 @@ void Harpoon::upgrade() {
 }
 
 void Harpoon::attack(glm::vec3 position, double angle, std::vector<shared_ptr<GameObject>>& gameObjects) {
-	// TODO: Render a game object
+	gameObjects.push_back(make_shared<HarpoonGameObject>(
+		damage,
+		0.15,
+		position
+	));
 	Weapon::attack(position, angle, gameObjects);
 }

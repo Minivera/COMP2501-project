@@ -6,6 +6,7 @@
 #include "PlayerGameObject.h"
 #include "TerrainGameObject.h"
 #include "TreasureGameObject.h"
+#include "FishGameObject.h"
 
 LevelState::LevelState(const GLuint* textures) {
 	backgroundTexture = textures[0];
@@ -13,11 +14,12 @@ LevelState::LevelState(const GLuint* textures) {
 
 	int size = 6;
 
-	entities.push_back(make_shared<PlayerGameObject>(glm::vec3(0.0f, 0.0f, 0.0f), textures[2], textures[3], textures[4], textures[5], size));
-	entities.push_back(make_shared<TreasureGameObject>(200, glm::vec3(0.5f, 1.0f, 0.0f), glm::vec3(0.3f, 0.3f, 1.0f), textures[10], size));
-	entities.push_back(make_shared<TerrainGameObject>(TerrainType::Wall, glm::vec3(-1.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0, textures[6], size));
-	entities.push_back(make_shared<TerrainGameObject>(TerrainType::Floor, glm::vec3(-0.5f, -1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0, textures[8], size));
-	entities.push_back(make_shared<TerrainGameObject>(TerrainType::Floor, glm::vec3(0.5f, -1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0, textures[9], size));
+	entities.push_back(make_shared<PlayerGameObject>(glm::vec3(0.0f, 0.0f, 0.0f), textures[2], textures[3], textures[4], textures[5], textures[6], textures[7], size));
+	entities.push_back(make_shared<TreasureGameObject>(200, glm::vec3(0.5f, 1.0f, 0.0f), textures[12], size));
+	entities.push_back(make_shared<TerrainGameObject>(TerrainType::Wall, glm::vec3(-1.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0, textures[8], size));
+	entities.push_back(make_shared<TerrainGameObject>(TerrainType::Floor, glm::vec3(-0.5f, -1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0, textures[10], size));
+	entities.push_back(make_shared<TerrainGameObject>(TerrainType::Floor, glm::vec3(0.5f, -1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0, textures[11], size));
+	entities.push_back(make_shared<FishGameObject>(glm::vec3(1.0f, 1.5f, 0.0f), textures[13], size));
 }
 
 void LevelState::controls(glm::vec2 mousePos, double deltaTime) {
@@ -56,6 +58,10 @@ void LevelState::controls(glm::vec2 mousePos, double deltaTime) {
 	if (glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 		player->attack();
 	}
+	if (glfwGetKey(Window::getWindow(), GLFW_KEY_Z) == GLFW_PRESS) {
+		// Demo command to trigger the player getting hurt
+		player->hurt();
+	}
 }
 
 void LevelState::render(Shader& shader) {
@@ -79,6 +85,7 @@ void LevelState::render(Shader& shader) {
 
 	// Set the transformation matrix in the shader
 	shader.setUniformMat4("transformationMatrix", transformationMatrix);
+	shader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -94,6 +101,7 @@ void LevelState::render(Shader& shader) {
 
 	// Set the transformation matrix in the shader
 	shader.setUniformMat4("transformationMatrix", transformationMatrix);
+	shader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);

@@ -158,11 +158,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BulletGameObject.cpp" />
+    <ClCompile Include="EnemyGameObject.cpp" />
+    <ClCompile Include="FishGameObject.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GravityGameObject.cpp" />
     <ClCompile Include="Harpoon.cpp" />
+    <ClCompile Include="HarpoonGameObject.cpp" />
     <ClCompile Include="Laser.cpp" />
+    <ClCompile Include="LaserGameObject.cpp" />
     <ClCompile Include="LevelInterface.cpp" />
     <ClCompile Include="LevelState.cpp" />
     <ClCompile Include="Pistol.cpp" />
@@ -176,15 +180,20 @@
     <ClCompile Include="TerrainGameObject.cpp" />
     <ClCompile Include="TreasureGameObject.cpp" />
     <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="WeaponGameObject.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BulletGameObject.h" />
+    <ClInclude Include="EnemyGameObject.h" />
+    <ClInclude Include="FishGameObject.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GravityGameObject.h" />
     <ClInclude Include="Harpoon.h" />
+    <ClInclude Include="HarpoonGameObject.h" />
     <ClInclude Include="Laser.h" />
+    <ClInclude Include="LaserGameObject.h" />
     <ClInclude Include="LevelInterface.h" />
     <ClInclude Include="LevelState.h" />
     <ClInclude Include="Pistol.h" />
@@ -197,6 +206,7 @@
     <ClInclude Include="TerrainGameObject.h" />
     <ClInclude Include="TreasureGameObject.h" />
     <ClInclude Include="Weapon.h" />
+    <ClInclude Include="WeaponGameObject.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

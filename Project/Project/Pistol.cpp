@@ -2,7 +2,10 @@
 
 #include "BulletGameObject.h"
 
-Pistol::Pistol(): Weapon(false, baseDamage, baseSpeed, baseRechargeRate) {
+Pistol::Pistol(GLuint bulletTexture, GLint entityNumElements): Weapon(false, baseDamage, baseSpeed, baseRechargeRate) {
+	texture = bulletTexture;
+	numElements = entityNumElements;
+
 	// Constants seem to not work when called in super
 	damage = baseDamage;
 	speed = baseSpeed;
@@ -20,12 +23,13 @@ void Pistol::upgrade() {
 
 void Pistol::attack(glm::vec3 position, double angle, std::vector<shared_ptr<GameObject>>& gameObjects) {
 	gameObjects.push_back(make_shared<BulletGameObject>(
+		damage,
 		range,
 		glm::vec3(speed, 0, 0),
 		position,
 		angle,
-		8,
-		6
+		texture,
+		numElements
 	));
 	Weapon::attack(position, angle, gameObjects);
 }

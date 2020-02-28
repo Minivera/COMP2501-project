@@ -5,6 +5,9 @@
 class Pistol : public Weapon
 {
 private:
+	GLuint texture;
+	GLint numElements;
+
 	// How far the bullet will go.
 	double range = 200;
 
@@ -16,7 +19,7 @@ private:
 	const double rangeByLevel = 1.25f;
 	const double damageByLevel = 1.5f;
 public:
-	Pistol();
+	Pistol(GLuint bulletTexture, GLint entityNumElements);
 
 	// Method to upgrade the weapon's level
 	virtual void upgrade();

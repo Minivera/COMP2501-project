@@ -69,6 +69,7 @@ void GameObject::render(Shader &shader) {
 
 	// Set the transformation matrix in the shader
 	shader.setUniformMat4("transformationMatrix", transformationMatrix);
+	shader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);

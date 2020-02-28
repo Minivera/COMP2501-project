@@ -4,14 +4,15 @@
 
 class GravityGameObject: public GameObject {
 protected:
-	GLfloat gravityAccel = 1.6f;
+	// Defines the global acceleration of gravity for all gravity based entities.
+	const GLfloat gravityAccel = 1.6f;
 
+	// Defines if the gravity is activate on this entity
 	bool gravityActivated = true;
 
-public:
 	GravityGameObject(glm::vec3& entityPosition, GLuint entityTexture, GLint entityNumElements);
 	GravityGameObject(glm::vec3& entityPosition, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
 	GravityGameObject(glm::vec3& entityPosition, glm::vec3& entityVelocity, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
-
+public:
 	virtual void update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime);
 };

@@ -14,7 +14,8 @@
 
 #include "Game.h"
 #include "TerrainGameObject.h"
-#include "Weapon.h"
+#include "EnemyGameObject.h"
+#include "WeaponGameObject.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -22,7 +23,7 @@
 
 // Globals that define the OpenGL window and viewport
 const std::string window_title_g = "COMP2501 Project";
-const unsigned int textures_count = 11;
+const unsigned int textures_count = 16;
 const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 
@@ -88,9 +89,10 @@ void setallTexture(GLuint* textures) {
 	setthisTexture(textures[0], "Assets\\environment\\background.png");
 	setthisTexture(textures[1], "Assets\\environment\\midground.png");
 	setthisTexture(textures[2], "Assets\\player\\player-idle-single.png");
-	int offset = Weapon::setWeaponTexture(setthisTexture, textures, 3);
+	int offset = WeaponGameObject::setWeaponTexture(setthisTexture, textures, 3);
 	offset = TerrainGameObject::setTerrainTexture(setthisTexture, textures, offset);
 	setthisTexture(textures[offset], "Assets\\objects\\treasure-big.png");
+	offset = EnemyGameObject::setEnemiesTexture(setthisTexture, textures, offset + 1);
 
 	for (int i = 0; i < textures_count; i++) {
 		glBindTexture(GL_TEXTURE_2D, textures[i]);

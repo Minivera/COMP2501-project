@@ -37,6 +37,18 @@
     <Filter Include="Source Files\Equipment">
       <UniqueIdentifier>{7ca5bc2e-0c51-4a48-a29c-3e6859fe3bdd}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Entities\EnemyEntities">
+      <UniqueIdentifier>{68d657cb-bb26-4126-bdc2-35b22f810a9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\WeaponEntities">
+      <UniqueIdentifier>{86e54513-a4c1-41a8-b2a1-02258fdc6827}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities\EnemyEntities">
+      <UniqueIdentifier>{30083c04-0bce-45c1-9bb9-961393667a04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities\WeaponEntities">
+      <UniqueIdentifier>{4f9a01ef-59fc-41dc-a826-7e2ededa6e51}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -97,7 +109,22 @@
       <Filter>Source Files\Equipment</Filter>
     </ClCompile>
     <ClCompile Include="BulletGameObject.cpp">
-      <Filter>Source Files\Entities</Filter>
+      <Filter>Source Files\Entities\WeaponEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyGameObject.cpp">
+      <Filter>Source Files\Entities\EnemyEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="FishGameObject.cpp">
+      <Filter>Source Files\Entities\EnemyEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="HarpoonGameObject.cpp">
+      <Filter>Source Files\Entities\WeaponEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="LaserGameObject.cpp">
+      <Filter>Source Files\Entities\WeaponEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponGameObject.cpp">
+      <Filter>Source Files\Entities\WeaponEntities</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -156,7 +183,22 @@
       <Filter>Header Files\Equipment</Filter>
     </ClInclude>
     <ClInclude Include="BulletGameObject.h">
-      <Filter>Header Files\Entities</Filter>
+      <Filter>Header Files\Entities\WeaponEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyGameObject.h">
+      <Filter>Header Files\Entities\EnemyEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="FishGameObject.h">
+      <Filter>Header Files\Entities\EnemyEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="HarpoonGameObject.h">
+      <Filter>Header Files\Entities\WeaponEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="LaserGameObject.h">
+      <Filter>Header Files\Entities\WeaponEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponGameObject.h">
+      <Filter>Header Files\Entities\WeaponEntities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

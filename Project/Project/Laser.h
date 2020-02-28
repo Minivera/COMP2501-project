@@ -5,6 +5,9 @@
 class Laser: public Weapon
 {
 private:
+	GLuint texture;
+	GLint numElements;
+
 	// How large the laser is meant to be
 	double size = 0.5;
 
@@ -17,7 +20,7 @@ private:
 	const double sizeByLevel = 1.5;
 	const double damageByLevel = 1.5;
 public:
-	Laser();
+	Laser(GLuint laserTexture, GLint entityNumElements);
 
 	// Method to upgrade the weapon's level
 	virtual void upgrade();

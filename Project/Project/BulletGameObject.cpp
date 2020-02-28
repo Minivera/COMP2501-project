@@ -1,7 +1,7 @@
 #include "BulletGameObject.h"
 
-BulletGameObject::BulletGameObject(double entityLifespan, glm::vec3& entitySpeed, glm::vec3& entityPosition, GLfloat entityAngle, GLuint entityTexture, GLint entityNumElements):
-	GameObject(entityPosition, entitySpeed, glm::vec3(1, 1, 1), entityAngle, entityTexture, entityNumElements) {
+BulletGameObject::BulletGameObject(int weaponDamage, double entityLifespan, glm::vec3& entitySpeed, glm::vec3& entityPosition, GLfloat entityAngle, GLuint entityTexture, GLint entityNumElements):
+	WeaponGameObject(weaponDamage, entityPosition, entitySpeed, glm::vec3(0.05, 0.05, 1), entityAngle, entityTexture, entityNumElements) {
 	lifespan = entityLifespan;
 	angle = entityAngle;
 	speed = entitySpeed;

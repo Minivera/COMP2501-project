@@ -1,5 +1,13 @@
 #include "PlayerInventory.h"
 
+PlayerInventory::PlayerInventory(GLuint bulletTexture, GLuint laserTexture, GLint entityNumElements) {
+	harpoon = make_unique<Harpoon>();
+	pistol = make_unique<Pistol>(bulletTexture, entityNumElements);
+	laser = make_unique<Laser>(laserTexture, entityNumElements);
+
+	equipedWeapon = harpoon.get();
+}
+
 void PlayerInventory::unlock(WeaponType type) {
 	switch (type)
 	{

@@ -4,7 +4,8 @@
 #include "PlayerInventory.h"
 
 // Possible states for the player state machine.
-enum class PlayerState { NONE, HURT, ATTACK, ATTACKING };
+// TODO: Make sure we can both attack and be hurt at the same time.
+enum class PlayerState { NONE, HURT, HURTING, ATTACK, ATTACKING };
 
 // Inherits from GameObject
 class PlayerGameObject : public GravityGameObject {
@@ -21,17 +22,23 @@ private:
 	// The base acceleration of the player in units per milliseconds
 	const double baseAcceleration = 5.0;
 
-	// The slow down effect on teh acceleration from colliding with terrain
+	// The slow down effect on the acceleration from colliding with terrain
 	const double wallSlowEffect = 0.65;
 
-	// Attribute that counts how much treasure the player has available.
-	int currentTreasure = 0;
+	// How much treasure is lost when getting hurt.
+	const double treasureLossFactor = 0.15;
 
-	// Attribute that counts the current air from the player in seconds.
-	double currentAir = 0;
+	// How much air is lost when getting hurt.
+	const double airLossFactor = 0.10;
+
+	// The length of time a player will stay invicible for.
+	const double invicibleTime = 0.5;
 
 	// Holds the current player's inventory of weapons and upgrades.
-	unique_ptr<PlayerInventory> inventory = make_unique<PlayerInventory>();
+	unique_ptr<PlayerInventory> inventory;
+
+	// Timer that counts how long a player stays invicible
+	double invicibilityTimer = 0;
 
 	// holds the current arm rotation of the player based on the mouse position.
 	GLfloat armRotation = 0;
@@ -42,7 +49,8 @@ private:
 	GLuint pistolTexture;
 	GLuint laserTexture;
 public:
-	PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, GLuint entityHarpoonTexture, GLuint entityPistolTexture, GLuint entityLaserTexture, GLint entityNumElements);
+	PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, GLuint entityHarpoonTexture, GLuint entityPistolTexture, GLuint entityLaserTexture,
+		GLuint entityBulletTexture, GLuint entityLaserRayTexture, GLint entityNumElements);
 
 	// Overriden update method to update the player and handle collisions
 	void update(std::vector<shared_ptr<GameObject>>& gameObjects, double deltaTime);
@@ -68,12 +76,20 @@ public:
 	// Method to trigger a player's attack cycle, which will be executed during the next update cycle.
 	void attack();
 
+	// Method to trigger a player being hurt by something in the environment.
+	void hurt();
+
+	// Method that makes the player pick up some treasure.
+	void pickUpTreasure(int quantity);
+
 	// Getters
-	inline int getCurrentTreasure() { return currentTreasure; }
-	inline double getCurrentAir() { return currentAir; }
+	inline int getCurrentTreasure() { return inventory->getTreasure(); }
+	inline double getCurrentAir() { return inventory->getAir(); }
 
 	// Setters
-	inline void setCurrentTreasure(int newTreasure) { currentTreasure = newTreasure; }
-	inline void setCurrenAir(double newAir) { currentAir = newAir; }
+	inline void addTreasure(int newTreasure) { inventory->addTreasure(newTreasure); }
+	inline void addAir(double newAir) { inventory->addAir(newAir); }
+	inline void removeTreasure(int newTreasure) { inventory->removeTreasure(newTreasure); }
+	inline void removeAir(double newAir) { inventory->removeAir(newAir); }
 	inline void setArmRotation(double newRotation) { armRotation = newRotation; }
 };

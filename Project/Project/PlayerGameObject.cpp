@@ -2,45 +2,34 @@
 
 #include "TerrainGameObject.h"
 #include "TreasureGameObject.h"
+#include "EnemyGameObject.h"
 #include "Window.h"
+#include "Random.h"
 
 /*
 	PlayerGameObject inherits from GameObject
 	It overrides GameObject's update method, so that you can check for input to change the velocity of the player
 */
 
-PlayerGameObject::PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, GLuint entityHarpoonTexture, GLuint entityPistolTexture, GLuint entityLaserTexture, GLint entityNumElements)
+PlayerGameObject::PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, GLuint entityHarpoonTexture, GLuint entityPistolTexture, GLuint entityLaserTexture,
+	GLuint entityBulletTexture, GLuint entityLaserRayTexture, GLint entityNumElements)
 	: GravityGameObject(entityPos, entityTexture, entityNumElements) {
 	harpoonTexture = entityHarpoonTexture;
 	pistolTexture = entityPistolTexture;
 	laserTexture = entityLaserTexture;
+
+	inventory = make_unique<PlayerInventory>(entityBulletTexture, entityLaserRayTexture, entityNumElements);
 }
 
 void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime) {
-	currentAir -= deltaTime;
+	inventory->removeAir(deltaTime);
 
 	// Reload the current weapon from the inventory
 	inventory->getEquipedWeapon().recharge(deltaTime);
-	
-	// Handle attack mechanism
-	if (currentState == PlayerState::ATTACK) {
-		// We processed the attack state, now we're executing it.
-		currentState = PlayerState::ATTACKING;
-		inventory->getEquipedWeapon().attack(position, armRotation, entities);
-
-		armMovement = inventory->getEquipedWeapon().getRechargeRate();
-	}
-	else if (currentState == PlayerState::ATTACKING) {
-		armMovement -= deltaTime;
-		if (armMovement <= 0) {
-			armMovement = 0;
-			currentState = PlayerState::NONE;
-		}
-	}
 
 	shared_ptr<TerrainGameObject> collidesWith;
 
-	// Attemps to collide with a something
+	// Attemps to collide with something
 	for (auto it = entities.begin(); it != entities.end(); it++) {
 		// Checks if the current object collides with a wall
 		auto terrain = dynamic_pointer_cast<TerrainGameObject>(*it);
@@ -48,10 +37,17 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 			collidesWith = terrain;
 		}
 
+		// Check if player is near some treasure they can pick up
 		auto treasure = dynamic_pointer_cast<TreasureGameObject>(*it);
-		if (treasure && checkCollision(*(*it))) {
-			currentTreasure += treasure->getValue();
+		if (currentState != PlayerState::HURTING && treasure && checkCollision(*(*it))) {
 			treasure->setDirty(true);
+			pickUpTreasure(treasure->getValue());
+		}
+
+		// Check if the player is getting hit by something
+		auto enemy = dynamic_pointer_cast<EnemyGameObject>(*it);
+		if (enemy && checkCollision(*(*it))) {
+			hurt();
 		}
 	}
 	
@@ -85,6 +81,42 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 
 	if (collidesWith == nullptr && velocity.y > 0 && !moved) {
 		velocity.y = glm::max(0.0f, velocity.y - slowDownFactor.y);
+	}
+
+	// Handle attack mechanism
+	if (currentState == PlayerState::ATTACK) {
+		// We processed the attack state, now we're executing it.
+		currentState = PlayerState::ATTACKING;
+		inventory->getEquipedWeapon().attack(position, armRotation, entities);
+
+		armMovement = inventory->getEquipedWeapon().getRechargeRate();
+	}
+	else if (currentState == PlayerState::ATTACKING) {
+		armMovement -= deltaTime;
+		if (armMovement <= 0) {
+			armMovement = 0;
+			currentState = PlayerState::NONE;
+		}
+	}
+
+	// Handle hurting mechanism
+	if (currentState == PlayerState::HURT) {
+		// We processed the hurt state, now we're executing it.
+		currentState = PlayerState::HURTING;
+
+		invicibilityTimer = invicibleTime;
+
+		// Lose some treasure when hurt
+		int treasureLoss = inventory->getTreasure() * treasureLossFactor;
+		inventory->removeTreasure(treasureLoss);
+
+		// lose some air when hurt
+		inventory->removeAir(inventory->getAir() * airLossFactor);
+
+		// Drop treasure at current position
+		entities.push_back(make_shared<TreasureGameObject>(treasureLoss, position + glm::vec3(0, -0.3, 0), 13, numElements));
+	} else if (currentState == PlayerState::HURTING) {
+		invicibilityTimer -= deltaTime;
 	}
 
 	GravityGameObject::update(entities, deltaTime);
@@ -199,6 +231,12 @@ void PlayerGameObject::render(Shader& shader) {
 
 	// Set the transformation matrix in the shader
 	shader.setUniformMat4("transformationMatrix", transformationMatrix);
+	if (currentState == PlayerState::HURTING && random::randomBool()) {
+		shader.setUniform4f("objectColor", glm::vec4(1, 0, 0, 0.6));
+	}
+	else {
+		shader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
+	}
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
@@ -207,6 +245,11 @@ void PlayerGameObject::render(Shader& shader) {
 void PlayerGameObject::clean() {
 	slowDownFactor = glm::vec2();
 	moved = false;
+
+	if (currentState == PlayerState::HURTING && invicibilityTimer <= 0) {
+		currentState = PlayerState::NONE;
+		invicibilityTimer = 0;
+	}
 }
 
 void PlayerGameObject::addLiftAcceleration(double deltaTime) {
@@ -251,5 +294,17 @@ void PlayerGameObject::upgrade(WeaponType type) {
 void PlayerGameObject::attack() {
 	if (currentState == PlayerState::NONE) {
 		currentState = PlayerState::ATTACK;
+	}
+}
+
+void PlayerGameObject::hurt() {
+	if (currentState != PlayerState::HURT && currentState != PlayerState::HURTING) {
+		currentState = PlayerState::HURT;
+	}
+}
+
+void PlayerGameObject::pickUpTreasure(int value) {
+	if (currentState != PlayerState::HURT && currentState != PlayerState::HURTING) {
+		inventory->addTreasure(value);
 	}
 }

@@ -5,7 +5,9 @@ void GameState::controls(glm::vec2 mousePos, double deltatime) {
 }
 
 void GameState::update(double deltaTime) {
-	for (auto it = entities.begin(); it != entities.end(); it++) {
+	vector<shared_ptr<GameObject>> currentEntities(entities);
+
+	for (auto it = currentEntities.begin(); it != currentEntities.end(); it++) {
 		// Get the current object
 		shared_ptr<GameObject> currentGameObject = *it;
 
