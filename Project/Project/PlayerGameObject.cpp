@@ -51,7 +51,7 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 		}
 	}
 	
-	if (collidesWith != nullptr && collidesWith->getType() == TerrainType::Wall) {
+	if (collidesWith != nullptr && collidesWith->getType() == TerrainType::Wall && !moved) {
 		// If colliding with a wall, deactivate gravity, stop any movement and slowly move down
 		gravityActivated = false;
 		velocity.y = glm::max(-maxSpeed * wallSlowEffect * deltaTime, velocity.y - slowDownFactor.y / wallSlowEffect);
@@ -66,7 +66,7 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 		// If colliding with the floor, slow down movement
 		velocity.x *= wallSlowEffect;
 	}
-	else if (collidesWith != nullptr && collidesWith->getType() == TerrainType::Ceilling) {
+	else if (collidesWith != nullptr && collidesWith->getType() == TerrainType::Ceilling && !moved) {
 		// If colliding with the ceiling, slow down movement and stop lift
 		velocity.y = 0;
 		velocity.x *= wallSlowEffect;
@@ -114,7 +114,7 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 		inventory->removeAir(inventory->getAir() * airLossFactor);
 
 		// Drop treasure at current position
-		entities.push_back(make_shared<TreasureGameObject>(treasureLoss, position + glm::vec3(0, -0.3, 0), 13, numElements));
+		entities.push_back(make_shared<TreasureGameObject>(treasureLoss, position + glm::vec3(0, -0.3, 0), TreasureGameObject::treasureTextureID, numElements));
 	} else if (currentState == PlayerState::HURTING) {
 		invicibilityTimer -= deltaTime;
 	}
@@ -135,6 +135,15 @@ void PlayerGameObject::render(Shader& shader) {
 	// Added a rotation matrix to rotate the sprite depending on the angle
 	transformationMatrix = glm::rotate(transformationMatrix, rotation, glm::vec3(0, 0, 1.0f));
 
+	GLfloat weaponFlip = -90;
+	// Flip the player when aiming on the left side
+	if (armRotation > 90 || armRotation < -90) {
+		transformationMatrix = glm::rotate(transformationMatrix, 180.f, glm::vec3(0, 1.0f, 0));
+		// Flip everything so the weapon rotates properly as well
+		weaponFlip = -weaponFlip;
+		armRotation = -armRotation;
+	}
+
 	// Added a scale matrix to scale the sprite so it can be rescaled
 	transformationMatrix = glm::scale(transformationMatrix, scale);
 
@@ -152,7 +161,7 @@ void PlayerGameObject::render(Shader& shader) {
 		weaponMatrix = glm::translate(weaponMatrix, glm::vec3(0.5, 0.5, 0));
 
 		// Added a rotation matrix to rotate the sprite depending on the angle
-		weaponMatrix = glm::rotate(weaponMatrix, armRotation - 90.0f, glm::vec3(0, 0, 1.0f));
+		weaponMatrix = glm::rotate(weaponMatrix, armRotation + weaponFlip, glm::vec3(0, 0, 1.0f));
 
 		// Added a scale matrix to scale the sprite so it can be rescaled
 		weaponMatrix = glm::scale(weaponMatrix, glm::vec3(0.5, 0.75, 1));
@@ -178,7 +187,7 @@ void PlayerGameObject::render(Shader& shader) {
 		weaponMatrix = glm::translate(weaponMatrix, glm::vec3(0.2, 0, 0));
 
 		// Added a rotation matrix to rotate the sprite depending on the angle
-		weaponMatrix = glm::rotate(weaponMatrix, armRotation - 90.0f, glm::vec3(0, 0, 1.0f));
+		weaponMatrix = glm::rotate(weaponMatrix, armRotation + weaponFlip, glm::vec3(0, 0, 1.0f));
 
 		// Bring back the offset after rotation
 		weaponMatrix = glm::translate(weaponMatrix, glm::vec3(0, 0.1f, 0));
@@ -207,7 +216,7 @@ void PlayerGameObject::render(Shader& shader) {
 		weaponMatrix = glm::translate(weaponMatrix, glm::vec3(0.2, 0, 0));
 
 		// Added a rotation matrix to rotate the sprite depending on the angle
-		weaponMatrix = glm::rotate(weaponMatrix, armRotation - 90.0f, glm::vec3(0, 0, 1.0f));
+		weaponMatrix = glm::rotate(weaponMatrix, armRotation + weaponFlip, glm::vec3(0, 0, 1.0f));
 
 		// Bring back the offset after rotation
 		weaponMatrix = glm::translate(weaponMatrix, glm::vec3(0, 0.1f, 0));
@@ -245,6 +254,7 @@ void PlayerGameObject::render(Shader& shader) {
 void PlayerGameObject::clean() {
 	slowDownFactor = glm::vec2();
 	moved = false;
+	gravityActivated = true;
 
 	if (currentState == PlayerState::HURTING && invicibilityTimer <= 0) {
 		currentState = PlayerState::NONE;
@@ -307,4 +317,12 @@ void PlayerGameObject::pickUpTreasure(int value) {
 	if (currentState != PlayerState::HURT && currentState != PlayerState::HURTING) {
 		inventory->addTreasure(value);
 	}
+}
+
+GLuint PlayerGameObject::playerTextureID = 0;
+
+int PlayerGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+	setFuncPtr(textures[offset + 0], "Assets\\player\\player-idle-single.png");
+	playerTextureID = textures[offset + 0];
+	return offset + 1;
 }

@@ -34,6 +34,9 @@ public:
 	// Method that handles cleaning any dirty state or entities within the game state
 	virtual void clean();
 
+	// Method that handles loading that state in the game.
+	virtual void load();
+
 	// Utility method that is called at the end of every loop cycle to potentially transition to a new state.
 	// Return an integer to transition to a specific state within the game. Return -1 to not transition.
 	virtual int transtionState();

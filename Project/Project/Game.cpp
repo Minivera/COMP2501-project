@@ -2,11 +2,27 @@
 #include "GameState.h"
 #include "LevelState.h"
 
+#include "PlayerGameObject.h"
+#include "WeaponGameObject.h"
+
 Game::Game(const GLuint* textures) {
+	auto player = make_shared<PlayerGameObject>(
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		PlayerGameObject::playerTextureID,
+		WeaponGameObject::harpoonTextureID,
+		WeaponGameObject::pistolTextureID,
+		WeaponGameObject::laserTextureID,
+		WeaponGameObject::bulletTextureID,
+		WeaponGameObject::laserRayTextureID,
+		6
+	);
+
 	// Set the levels and other states here
-	shared_ptr<GameState> level1 = make_shared<LevelState>(textures);
+	shared_ptr<GameState> level1 = make_shared<LevelState>(0, 1, "Data\\levels\\level1.csv", player);
+	shared_ptr<GameState> level2 = make_shared<LevelState>(1, 0, "Data\\levels\\level1.csv", player);
 
 	states.push_back(level1);
+	states.push_back(level2);
 	currentState = level1;
 }
 
@@ -39,6 +55,7 @@ bool Game::loop(Window& window, Shader& shader, double deltaTime) {
 	int newState = currentState->transtionState();
 	if (newState >= 0) {
 		currentState = states.at(newState);
+		currentState->load();
 	}
 
 	// Update other events like input handling

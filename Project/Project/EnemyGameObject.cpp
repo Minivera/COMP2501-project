@@ -2,12 +2,17 @@
 
 #include "WeaponGameObject.h"
 #include "TreasureGameObject.h"
+#include "PlayerGameObject.h"
 #include "Random.h"
 
 EnemyGameObject::EnemyGameObject(glm::vec3& entityPos, GLuint entityTexture, GLint entityNumElements):
 	GameObject(entityPos, entityTexture, entityNumElements) {}
 
 void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime) {
+	// Get the player
+	shared_ptr<PlayerGameObject> player = dynamic_pointer_cast<PlayerGameObject>(entities.at(0));
+	auto playerPos = player->getPosition();
+
 	// Attemps to collide with something
 	for (auto it = entities.begin(); it != entities.end(); it++) {
 		// Checks if the current object collides with a weapon of some kind
@@ -26,11 +31,29 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 	else if (currentState == EnemyState::HURTING) {
 		invicibilityTimer -= deltaTime;
 	}
+
+	if (currentState == EnemyState::CHASE) {
+		// We process the chase state, now we're executing it.
+		currentState = EnemyState::CHASING;
+	}
+	else if (currentState == EnemyState::CHASING) {
+		// Calculate the angle between self and player
+		rotation = glm::degrees(glm::atan(
+			position.y - playerPos.y,
+			position.x - playerPos.x
+		));
+
+		// TODO: Try to create a line of sight mecanism to prevent the fish from seeing the player through walls.
+		// Move towards the player
+		glm::vec3 desiredVelocity = glm::normalize(playerPos - position) * maxSpeed * float(deltaTime);
+		glm::vec3 steering = desiredVelocity - velocity;
+		velocity += steering;
+	}
 	
 	if (currentState == EnemyState::DIE) {
 		// Drop treasure and set as dirty
 		dirty = true;
-		entities.push_back(make_shared<TreasureGameObject>(random::randomInt(1, 3) * 5, position + glm::vec3(0, -0.3, 0), 13, numElements));
+		entities.push_back(make_shared<TreasureGameObject>(random::randomInt(1, 3) * 5, position + glm::vec3(0, -0.3, 0), TreasureGameObject::treasureTextureID, numElements));
 	}
 
 	GameObject::update(entities, deltaTime);
@@ -81,7 +104,9 @@ void EnemyGameObject::clean() {
 }
 
 void EnemyGameObject::attack() {
-	return;
+	if (currentState != EnemyState::ATTACKING && currentState != EnemyState::DIE) {
+		currentState = EnemyState::ATTACK;
+	}
 }
 
 void EnemyGameObject::hurt(int damage) {
@@ -92,9 +117,16 @@ void EnemyGameObject::hurt(int damage) {
 	}
 }
 
-int EnemyGameObject::setEnemiesTexture(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+GLuint EnemyGameObject::fishTextureID;
+GLuint EnemyGameObject::jellyfishTextureID;
+GLuint EnemyGameObject::smokerTextureID;
+
+int EnemyGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\enemies\\fish-single.png");
 	setFuncPtr(textures[offset + 1], "Assets\\enemies\\fish-big-single.png");
 	setFuncPtr(textures[offset + 2], "Assets\\enemies\\mine.png");
+	fishTextureID = textures[offset + 0];
+	jellyfishTextureID = textures[offset + 1];
+	smokerTextureID = textures[offset + 2];
 	return offset + 3;
 }

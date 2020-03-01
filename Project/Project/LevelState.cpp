@@ -3,23 +3,192 @@
 #include <GL/glew.h>
 #include <GL/glfw3.h>
 
-#include "PlayerGameObject.h"
+#include "FileUtils.h"
 #include "TerrainGameObject.h"
+#include "ExitGameObject.h"
 #include "TreasureGameObject.h"
+#include "EnemyGameObject.h"
 #include "FishGameObject.h"
+#include "JellyfishGameObject.h"
 
-LevelState::LevelState(const GLuint* textures) {
-	backgroundTexture = textures[0];
-	midgroundTexture = textures[1];
+LevelState::LevelState(int levelID, int nextLevelID, const char* levelFile, shared_ptr<PlayerGameObject> player) {
+	this->player = player;
+	this->levelID = levelID;
+	this->nextLevelID = nextLevelID;
 
+	backgroundTexture = backgroundTextureID;
+	midgroundTexture = midgroundTextureID;
+
+	levelDefinition = FileUtils::LoadCsvLevel(levelFile, ";");
+
+	loadLevel();
+}
+
+void LevelState::loadLevel(bool reloading) {
 	int size = 6;
 
-	entities.push_back(make_shared<PlayerGameObject>(glm::vec3(0.0f, 0.0f, 0.0f), textures[2], textures[3], textures[4], textures[5], textures[6], textures[7], size));
-	entities.push_back(make_shared<TreasureGameObject>(200, glm::vec3(0.5f, 1.0f, 0.0f), textures[12], size));
-	entities.push_back(make_shared<TerrainGameObject>(TerrainType::Wall, glm::vec3(-1.0f, 1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0, textures[8], size));
-	entities.push_back(make_shared<TerrainGameObject>(TerrainType::Floor, glm::vec3(-0.5f, -1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0, textures[10], size));
-	entities.push_back(make_shared<TerrainGameObject>(TerrainType::Floor, glm::vec3(0.5f, -1.0f, 0.0f), glm::vec3(1.0f, 1.0f, 1.0f), 0, textures[11], size));
-	entities.push_back(make_shared<FishGameObject>(glm::vec3(1.0f, 1.5f, 0.0f), textures[13], size));
+	if (reloading) {
+		// If reloading, go through the vector to remove all enemies
+		for (auto it = entities.end(); it != entities.begin();) {
+			--it;
+
+			// Delete all enemies so they can be respawned
+			if (dynamic_pointer_cast<EnemyGameObject>(*it)) {
+				it = entities.erase(it);
+			}
+		}
+	}
+	else {
+		// Else, start the fresh entities vector
+		entities.push_back(player);
+	}
+
+	int totalRows = levelDefinition.size();
+	int totalColumns = levelDefinition.at(0).size();
+
+	double rowStart = (totalRows / 2);
+	double columnStart = -(totalColumns / 2);
+	double currentRow = rowStart;
+	// For each row in the level csv file
+	for (auto rowIt = levelDefinition.begin(); rowIt != levelDefinition.end(); rowIt++) {
+		double currentColumn = columnStart;
+
+		// For each column in the level CSV file
+		for (auto columnIt = (*rowIt).begin(); columnIt != (*rowIt).end(); columnIt++) {
+			// Add the given entity to the game
+			string val = (*columnIt);
+			if (val == NONE) {
+				// skip
+			}
+			else if (val == ENTRY) {
+				player->setPosition(glm::vec3(currentColumn, currentRow, 0.0f));
+			}
+			else if (val == EXIT && !reloading) {
+				entities.push_back(make_shared<ExitGameObject>(glm::vec3(currentColumn, currentRow, 0.0f), ExitGameObject::exitTextureID, size));
+			}
+			else if (val.find(TREASURE) != string::npos && !reloading) {
+				string textValue = val.substr(9);
+				int treasureValue = stoi(textValue);
+				entities.push_back(make_shared<TreasureGameObject>(treasureValue, glm::vec3(currentColumn, currentRow, 0.0f), TreasureGameObject::treasureTextureID, size));
+			}
+			else if (val == FISH) {
+				entities.push_back(make_shared<FishGameObject>(glm::vec3(currentColumn, currentRow, 0.0f), FishGameObject::fishTextureID, size));
+			}
+			else if (val == JELLYFISH) {
+				entities.push_back(make_shared<JellyfishGameObject>(glm::vec3(currentColumn, currentRow, 0.0f), FishGameObject::jellyfishTextureID, size));
+			}
+			else if (val == SMOKER) {
+				// TODO: Change for smoker object when implemented
+				entities.push_back(make_shared<JellyfishGameObject>(glm::vec3(currentColumn, currentRow, 0.0f), FishGameObject::smokerTextureID, size));
+			}
+			else if (val == BG && !reloading) {
+				// TODO: Add a BG terrain type and texture
+			}
+			else if (val == CEILING_1 && !reloading) {
+				entities.push_back(make_shared<TerrainGameObject>(
+					TerrainType::Ceilling,
+					glm::vec3(currentColumn, currentRow, 0.0f),
+					glm::vec3(1.0f, 1.0f, 1.0f),
+					0,
+					TerrainGameObject::ceiling1TextureID,
+					size
+				));
+			}
+			else if (val == CEILING_2 && !reloading) {
+				entities.push_back(make_shared<TerrainGameObject>(
+					TerrainType::Ceilling,
+					glm::vec3(currentColumn, currentRow, 0.0f),
+					glm::vec3(1.0f, 1.0f, 1.0f),
+					0,
+					TerrainGameObject::ceiling2TextureID,
+					size
+				));
+			}
+			else if (val == FLOOR_1 && !reloading) {
+				entities.push_back(make_shared<TerrainGameObject>(
+					TerrainType::Floor,
+					glm::vec3(currentColumn, currentRow, 0.0f),
+					glm::vec3(1.0f, 1.0f, 1.0f),
+					0,
+					TerrainGameObject::floor1TextureID,
+					size
+				));
+			}
+			else if (val == FLOOR_2 && !reloading) {
+				entities.push_back(make_shared<TerrainGameObject>(
+					TerrainType::Floor,
+					glm::vec3(currentColumn, currentRow, 0.0f),
+					glm::vec3(1.0f, 1.0f, 1.0f),
+					0,
+					TerrainGameObject::floor2TextureID,
+					size
+				));
+			}
+			else if (val == WALL_L && !reloading) {
+				entities.push_back(make_shared<TerrainGameObject>(
+					TerrainType::Wall,
+					glm::vec3(currentColumn + 0.5, currentRow, 0.0f),
+					glm::vec3(0.5f, 1.0f, 1.0f),
+					0,
+					TerrainGameObject::wallLeftTextureID,
+					size
+				));
+			}
+			else if (val == WALL_R && !reloading) {
+				entities.push_back(make_shared<TerrainGameObject>(
+					TerrainType::Wall,
+					glm::vec3(currentColumn - 0.5, currentRow, 0.0f),
+					glm::vec3(0.5f, 1.0f, 1.0f),
+					0,
+					TerrainGameObject::wallRightTextureID,
+					size
+				));
+			}
+			else if (val == SLANT_T_L && !reloading) {
+				entities.push_back(make_shared<TerrainGameObject>(
+					TerrainType::Wall,
+					glm::vec3(currentColumn - 0.1, currentRow + 0.1, 0.0f),
+					glm::vec3(0.9f, 0.9f, 1.0f),
+					0,
+					TerrainGameObject::slantTopLeftTextureID,
+					size
+				));
+			}
+			else if (val == SLANT_T_R && !reloading) {
+				entities.push_back(make_shared<TerrainGameObject>(
+					TerrainType::Wall,
+					glm::vec3(currentColumn + 0.1, currentRow + 0.1, 0.0f),
+					glm::vec3(0.9f, 0.9f, 1.0f),
+					0,
+					TerrainGameObject::slantTopRightTextureID,
+					size
+				));
+			}
+			else if (val == SLANT_B_L && !reloading) {
+				entities.push_back(make_shared<TerrainGameObject>(
+					TerrainType::Wall,
+					glm::vec3(currentColumn - 0.1, currentRow - 0.1, 0.0f),
+					glm::vec3(0.9f, 0.9f, 1.0f),
+					0,
+					TerrainGameObject::slantBottomLeftTextureID,
+					size
+				));
+			}
+			else if (val == SLANT_B_R && !reloading) {
+				entities.push_back(make_shared<TerrainGameObject>(
+					TerrainType::Wall,
+					glm::vec3(currentColumn + 0.1, currentRow - 0.1, 0.0f),
+					glm::vec3(0.9f, 0.9f, 1.0f),
+					0,
+					TerrainGameObject::slantBottomRightTextureID,
+					size
+				));
+			}
+
+			currentColumn += 1;
+		}
+		currentRow -= 1;
+	}
 }
 
 void LevelState::controls(glm::vec2 mousePos, double deltaTime) {
@@ -39,6 +208,9 @@ void LevelState::controls(glm::vec2 mousePos, double deltaTime) {
 		player->addLiftAcceleration(deltaTime);
 	}
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_1) == GLFW_PRESS) {
+		if (glfwGetKey(Window::getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+			player->upgrade(WeaponType::Harpoon);
+		}
 		player->changeWeapon(WeaponType::Harpoon);
 	}
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_2) == GLFW_PRESS) {
@@ -46,12 +218,18 @@ void LevelState::controls(glm::vec2 mousePos, double deltaTime) {
 		if (glfwGetKey(Window::getWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
 			player->unlock(WeaponType::Pistol);
 		}
+		else if (glfwGetKey(Window::getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+			player->upgrade(WeaponType::Pistol);
+		}
 		player->changeWeapon(WeaponType::Pistol);
 	}
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_3) == GLFW_PRESS) {
 		// Command for the demo, unlocks the weapon
 		if (glfwGetKey(Window::getWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
 			player->unlock(WeaponType::Laser);
+		}
+		else if (glfwGetKey(Window::getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+			player->upgrade(WeaponType::Laser);
 		}
 		player->changeWeapon(WeaponType::Laser);
 	}
@@ -107,4 +285,30 @@ void LevelState::render(Shader& shader) {
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 	glDisable(GL_BLEND);
+}
+
+int LevelState::transtionState() {
+	// Check if player collides with the exit
+	for (auto it = entities.begin(); it != entities.end(); it++) {
+		if (dynamic_pointer_cast<ExitGameObject>(*it) && player->checkCollision(*(*it))) {
+			return nextLevelID;
+		}
+	}
+
+	return GameState::transtionState();
+}
+
+void LevelState::load() {
+	loadLevel(true);
+}
+
+GLuint LevelState::backgroundTextureID = 0;
+GLuint LevelState::midgroundTextureID = 0;
+
+int LevelState::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+	setFuncPtr(textures[offset + 0], "Assets\\environment\\background.png");
+	setFuncPtr(textures[offset + 1], "Assets\\environment\\midground.png");
+	backgroundTextureID = textures[offset + 0];
+	midgroundTextureID = textures[offset + 1];
+	return offset + 2;
 }

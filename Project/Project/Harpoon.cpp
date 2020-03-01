@@ -20,10 +20,16 @@ void Harpoon::upgrade() {
 }
 
 void Harpoon::attack(glm::vec3 position, double angle, std::vector<shared_ptr<GameObject>>& gameObjects) {
+	glm::vec3 harpoonTip = glm::vec3(
+		cos(glm::radians(angle)) * 0.5,
+		sin(glm::radians(angle)) * 0.5,
+		0
+	);
+
 	gameObjects.push_back(make_shared<HarpoonGameObject>(
 		damage,
 		0.15,
-		position
+		position + harpoonTip
 	));
 	Weapon::attack(position, angle, gameObjects);
 }

@@ -13,9 +13,13 @@
 #include <thread>
 
 #include "Game.h"
+#include "LevelState.h"
+#include "PlayerGameObject.h"
 #include "TerrainGameObject.h"
 #include "EnemyGameObject.h"
 #include "WeaponGameObject.h"
+#include "TreasureGameObject.h"
+#include "ExitGameObject.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -23,7 +27,7 @@
 
 // Globals that define the OpenGL window and viewport
 const std::string window_title_g = "COMP2501 Project";
-const unsigned int textures_count = 16;
+const unsigned int textures_count = 22;
 const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 
@@ -86,17 +90,13 @@ void setthisTexture(GLuint w, char *fname) {
 
 void setallTexture(GLuint* textures) {
 	glGenTextures(textures_count, textures);
-	setthisTexture(textures[0], "Assets\\environment\\background.png");
-	setthisTexture(textures[1], "Assets\\environment\\midground.png");
-	setthisTexture(textures[2], "Assets\\player\\player-idle-single.png");
-	int offset = WeaponGameObject::setWeaponTexture(setthisTexture, textures, 3);
-	offset = TerrainGameObject::setTerrainTexture(setthisTexture, textures, offset);
-	setthisTexture(textures[offset], "Assets\\objects\\treasure-big.png");
-	offset = EnemyGameObject::setEnemiesTexture(setthisTexture, textures, offset + 1);
-
-	for (int i = 0; i < textures_count; i++) {
-		glBindTexture(GL_TEXTURE_2D, textures[i]);
-	}
+	int offset = LevelState::setTextures(setthisTexture, textures, 0);
+	offset = PlayerGameObject::setTextures(setthisTexture, textures, offset);
+	offset = WeaponGameObject::setTextures(setthisTexture, textures, offset);
+	offset = TreasureGameObject::setTextures(setthisTexture, textures, offset);
+	offset = EnemyGameObject::setTextures(setthisTexture, textures, offset);
+	offset = TerrainGameObject::setTextures(setthisTexture, textures, offset);
+	offset = ExitGameObject::setTextures(setthisTexture, textures, offset);
 }
 
 // Main function that builds and runs the game

@@ -10,6 +10,9 @@ class EnemyGameObject: public GameObject
 protected:
 	EnemyState currentState = EnemyState::IDLE;
 
+	// Max speed of the base enemy.
+	const GLfloat maxSpeed = 45.0;
+
 	// The length of time an enemy will stay invicible for.
 	const double invicibleTime = 0.5;
 
@@ -36,7 +39,12 @@ public:
 	// Method to damage an enemy.
 	virtual void hurt(int damage);
 
+	// Variables that give the texture IDs for the texture of the entity.
+	static GLuint fishTextureID;
+	static GLuint jellyfishTextureID;
+	static GLuint smokerTextureID;
+
 	// Static method to load the various enemy sprites from the filesystem
-	static int setEnemiesTexture(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
+	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
 };
 

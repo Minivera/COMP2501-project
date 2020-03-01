@@ -46,6 +46,10 @@ void GameState::clean() {
 	}
 }
 
+void GameState::load() {
+	entities = vector<shared_ptr<GameObject>>();
+}
+
 int GameState::transtionState() {
 	return -1;
 }

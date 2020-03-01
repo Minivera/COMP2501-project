@@ -159,12 +159,14 @@
   <ItemGroup>
     <ClCompile Include="BulletGameObject.cpp" />
     <ClCompile Include="EnemyGameObject.cpp" />
+    <ClCompile Include="ExitGameObject.cpp" />
     <ClCompile Include="FishGameObject.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GravityGameObject.cpp" />
     <ClCompile Include="Harpoon.cpp" />
     <ClCompile Include="HarpoonGameObject.cpp" />
+    <ClCompile Include="JellyfishGameObject.cpp" />
     <ClCompile Include="Laser.cpp" />
     <ClCompile Include="LaserGameObject.cpp" />
     <ClCompile Include="LevelInterface.cpp" />
@@ -186,12 +188,14 @@
   <ItemGroup>
     <ClInclude Include="BulletGameObject.h" />
     <ClInclude Include="EnemyGameObject.h" />
+    <ClInclude Include="ExitGameObject.h" />
     <ClInclude Include="FishGameObject.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GravityGameObject.h" />
     <ClInclude Include="Harpoon.h" />
     <ClInclude Include="HarpoonGameObject.h" />
+    <ClInclude Include="JellyfishGameObject.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="LaserGameObject.h" />
     <ClInclude Include="LevelInterface.h" />

@@ -15,7 +15,14 @@ public:
 	// Getters
 	inline int getDamage() { return damage; }
 
+	// Variables that give the texture IDs for the textures of this entity.
+	static GLuint harpoonTextureID;
+	static GLuint pistolTextureID;
+	static GLuint laserTextureID;
+	static GLuint bulletTextureID;
+	static GLuint laserRayTextureID;
+
 	// Static method to load the weapon textures from the file system
-	static int setWeaponTexture(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
+	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
 };
 

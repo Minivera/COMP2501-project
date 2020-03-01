@@ -27,6 +27,9 @@ public:
 	// Cleans the object after an update has occured
 	virtual void clean();
 
+	// Check if the game object collides with another game object
+	GLboolean checkCollision(const GameObject& other);
+
 	// Getters
 	inline glm::vec3& getPosition() { return position; }
 	inline glm::vec3& getVelocity() { return velocity; }
@@ -60,8 +63,6 @@ protected:
 
 	// Object's texture
 	GLuint texture;
-
-	GLboolean checkCollision(const GameObject& other);
 
 	int getCollisionSide(const GameObject& other);
 };

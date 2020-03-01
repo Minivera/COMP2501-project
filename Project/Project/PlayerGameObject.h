@@ -91,5 +91,11 @@ public:
 	inline void addAir(double newAir) { inventory->addAir(newAir); }
 	inline void removeTreasure(int newTreasure) { inventory->removeTreasure(newTreasure); }
 	inline void removeAir(double newAir) { inventory->removeAir(newAir); }
-	inline void setArmRotation(double newRotation) { armRotation = newRotation; }
+ 	inline void setArmRotation(double newRotation) { armRotation = newRotation; }
+
+	// Variables that give the texture IDs for the textures of this entity
+	static GLuint playerTextureID;
+
+	// Static method to load the player textures.
+	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
 };

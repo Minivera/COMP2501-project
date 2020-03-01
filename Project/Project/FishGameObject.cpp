@@ -13,16 +13,11 @@ void FishGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doubl
 	shared_ptr<PlayerGameObject> player = dynamic_pointer_cast<PlayerGameObject>(entities.at(0));
 	auto playerPos = player->getPosition();
 
-	if (glm::distance(playerPos, position) < viewRange) {
-		// Calculate the angle between self and player
-		angle = rotation = glm::degrees(glm::atan(
-			position.y - playerPos.y,
-			position.x - playerPos.x
-		));
-
+	if (glm::distance(playerPos, position) < viewRange && currentState == EnemyState::IDLE) {
 		// TODO: Try to create a line of sight mecanism to prevent the fish from seeing the player through walls.
+		currentState = EnemyState::CHASE;
 	}
-	else {
+	else if (glm::distance(playerPos, position) >= viewRange && currentState != EnemyState::DIE) {
 		currentState = EnemyState::IDLE;
 	}
 

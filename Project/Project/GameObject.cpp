@@ -41,9 +41,6 @@ void GameObject::update(std::vector<shared_ptr<GameObject>>& gameObjects, double
 		0
 	);
 
-	// Added an offset to make the sprite move as a function of time
-	// currentOffset = glm::vec2(sin(glfwGetTime()), cos(glfwGetTime()));
-
 	// Update object position with Euler integration
 	position += rotatedVelocity * (float)deltaTime;
 }
