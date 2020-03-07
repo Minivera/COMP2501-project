@@ -74,6 +74,7 @@
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionPath)/../../Libraries/lib;$(LibraryPath)</LibraryPath>
     <IncludePath>$(SolutionPath)/../../Libraries/include;$(IncludePath)</IncludePath>
+    <ExecutablePath>$(SolutionPath)/../../Libraries/lib;$(VC_ExecutablePath_x86);$(CommonExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -92,13 +93,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Travail\COMP2501\Project\Libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32s.lib;SOIL.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Travail\COMP2501\Project\Libraries\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;SOIL.lib;glfw3.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -109,15 +110,15 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>D:\Travail\COMP2501\Demo\Libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>D:\Travail\COMP2501\Project\Libraries\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <ForcedIncludeFiles>
       </ForcedIncludeFiles>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>D:\Travail\COMP2501\Demo\Libraries\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SOIL.lib;SOILd.lib;glfw3.lib;glfw3d.lib;glew32s.lib;glew32d.lib;glew32sd.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>D:\Travail\COMP2501\Project\Libraries\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SOIL.lib;SOILd.lib;glfw3.lib;glfw3d.lib;glew32s.lib;glew32d.lib;glew32sd.lib;glew32.lib;opengl32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -181,6 +182,7 @@
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SpriteShader.cpp" />
     <ClCompile Include="TerrainGameObject.cpp" />
+    <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="TreasureGameObject.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WeaponGameObject.cpp" />
@@ -210,6 +212,7 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SpriteShader.h" />
     <ClInclude Include="TerrainGameObject.h" />
+    <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="TreasureGameObject.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WeaponGameObject.h" />
@@ -244,6 +247,5 @@
     <Image Include="Assets\player\player-swiming.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-  </ImportGroup>
+  <ImportGroup Label="ExtensionTargets" />
 </Project>
