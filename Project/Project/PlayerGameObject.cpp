@@ -22,6 +22,8 @@ PlayerGameObject::PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, G
 }
 
 void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime) {
+	playerTime += (float)deltaTime;
+
 	inventory->removeAir(deltaTime);
 
 	// Reload the current weapon from the inventory
@@ -46,8 +48,16 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 
 		// Check if the player is getting hit by something
 		auto enemy = dynamic_pointer_cast<EnemyGameObject>(*it);
-		if (enemy && checkCollision(*(*it))) {
+		if (currentState != PlayerState::HURT && currentState != PlayerState::HURTING && enemy && checkCollision(*(*it))) {
 			hurt();
+			enemy->collide();
+			glm::vec3 enemyVelocity = enemy->getVelocity();
+			GLfloat enemyAngle = enemy->getAngle();
+			collidedVelicity = -glm::vec3(
+				cos(glm::radians(enemyAngle)) * enemyVelocity.x - sin(glm::radians(enemyAngle)) * enemyVelocity.y,
+				sin(glm::radians(enemyAngle)) * enemyVelocity.x + cos(glm::radians(enemyAngle)) * enemyVelocity.y,
+				0
+			);
 		}
 	}
 	
@@ -117,13 +127,15 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 		entities.push_back(make_shared<TreasureGameObject>(treasureLoss, position + glm::vec3(0, -0.3, 0), TreasureGameObject::treasureTextureID, numElements));
 	} else if (currentState == PlayerState::HURTING) {
 		invicibilityTimer -= deltaTime;
+
+		velocity = -collidedVelicity;
 	}
 
 	GravityGameObject::update(entities, deltaTime);
 }
 
 // Renders the PlayerGameObject using the shader and then renders their weapon
-void PlayerGameObject::render(Shader& shader) {
+void PlayerGameObject::render(Shader& spriteShader) {
 	// Setup the transformation matrix for the shader
 	// Start by moving to the position
 	glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position);
@@ -168,12 +180,6 @@ void PlayerGameObject::render(Shader& shader) {
 
 		// Move the weapon to the center of the player
 		weaponMatrix = glm::translate(weaponMatrix, glm::vec3(0, armMovement, 0));
-
-		// Set the transformation matrix in the shader
-		shader.setUniformMat4("transformationMatrix", weaponMatrix);
-
-		// Draw the entity
-		glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
 		break;
 	case WeaponType::Pistol:
 		// Bind the entities texture
@@ -197,12 +203,6 @@ void PlayerGameObject::render(Shader& shader) {
 
 		// Move the weapon to the center of the player
 		weaponMatrix = glm::translate(weaponMatrix, glm::vec3(0, -armMovement, 0));
-
-		// Set the transformation matrix in the shader
-		shader.setUniformMat4("transformationMatrix", weaponMatrix);
-
-		// Draw the entity
-		glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
 		break;
 	case WeaponType::Laser:
 		// Bind the entities texture
@@ -226,29 +226,43 @@ void PlayerGameObject::render(Shader& shader) {
 
 		// Move the weapon to the center of the player
 		weaponMatrix = glm::translate(weaponMatrix, glm::vec3(0, -armMovement * 0.25, 0));
-
-		// Set the transformation matrix in the shader
-		shader.setUniformMat4("transformationMatrix", weaponMatrix);
-
-		// Draw the entity
-		glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
 		break;
 	}
 
-	// Bind the entities texture
-	glBindTexture(GL_TEXTURE_2D, texture);
+	spriteShader.enable();
+	spriteShader.setAttributes();
 
 	// Set the transformation matrix in the shader
-	shader.setUniformMat4("transformationMatrix", transformationMatrix);
-	if (currentState == PlayerState::HURTING && random::randomBool()) {
-		shader.setUniform4f("objectColor", glm::vec4(1, 0, 0, 0.6));
-	}
-	else {
-		shader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
-	}
+	spriteShader.setUniformMat4("transformationMatrix", weaponMatrix);
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
+
+	// Bind the entities texture
+	if (currentState == PlayerState::HURTING) {
+		glBindTexture(GL_TEXTURE_2D, playerHurtTextureID);
+		spriteShader.setUniform1f("count", 5.0f);
+	}
+	else if (moved) {
+		glBindTexture(GL_TEXTURE_2D, playerMovingTextureID);
+		spriteShader.setUniform1f("count", 7.0f);
+	}
+	else {
+		glBindTexture(GL_TEXTURE_2D, texture);
+		spriteShader.setUniform1f("count", 6.0f);
+	}
+
+	spriteShader.setUniform1f("time", playerTime);
+
+	// Set the transformation matrix in the shader
+	spriteShader.setUniformMat4("transformationMatrix", transformationMatrix);
+	spriteShader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
+
+	// Draw the entity
+	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
+
+	// Reset for other sprites
+	spriteShader.setUniform1f("count", 0);
 }
 
 void PlayerGameObject::clean() {
@@ -320,9 +334,15 @@ void PlayerGameObject::pickUpTreasure(int value) {
 }
 
 GLuint PlayerGameObject::playerTextureID = 0;
+GLuint PlayerGameObject::playerMovingTextureID = 0;
+GLuint PlayerGameObject::playerHurtTextureID = 0;
 
 int PlayerGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
-	setFuncPtr(textures[offset + 0], "Assets\\player\\player-idle-single.png");
+	setFuncPtr(textures[offset + 0], "Assets\\player\\player-idle.png");
+	setFuncPtr(textures[offset + 1], "Assets\\player\\player-swiming.png");
+	setFuncPtr(textures[offset + 2], "Assets\\player\\player-hurt.png");
 	playerTextureID = textures[offset + 0];
-	return offset + 1;
+	playerMovingTextureID = textures[offset + 1];
+	playerHurtTextureID = textures[offset + 2];
+	return offset + 3;
 }

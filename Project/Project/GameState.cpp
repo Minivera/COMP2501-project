@@ -16,18 +16,18 @@ void GameState::update(double deltaTime) {
 	}
 }
 
-void GameState::render(Shader& shader) {
+void GameState::render(Shader& spriteShader) {
 	// Apply position translate to the view matrix
 	glm::mat4 viewMatrix = glm::translate(glm::mat4(), currentViewPosition);
 
 	// Apply zoom scaling to the view matrix
 	viewMatrix = glm::scale(viewMatrix, glm::vec3(currentViewZoom, currentViewZoom, currentViewZoom));
 
-	shader.setUniformMat4("viewMatrix", viewMatrix);
+	spriteShader.setUniformMat4("viewMatrix", viewMatrix);
 
 	for (auto it = entities.begin(); it != entities.end(); it++) {
 		// Render game objects
-		(*it)->render(shader);
+		(*it)->render(spriteShader);
 	}
 }
 

@@ -15,6 +15,6 @@ public:
 	void update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime);
 
 	// Render method that displaces the laser so it appear next to its position
-	void render(Shader& shader);
+	void render(Shader& spriteShader);
 };
 

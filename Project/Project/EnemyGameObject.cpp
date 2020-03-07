@@ -9,6 +9,8 @@ EnemyGameObject::EnemyGameObject(glm::vec3& entityPos, GLuint entityTexture, GLi
 	GameObject(entityPos, entityTexture, entityNumElements) {}
 
 void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime) {
+	entityTime += (float)deltaTime;
+
 	// Get the player
 	shared_ptr<PlayerGameObject> player = dynamic_pointer_cast<PlayerGameObject>(entities.at(0));
 	auto playerPos = player->getPosition();
@@ -17,9 +19,10 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 	for (auto it = entities.begin(); it != entities.end(); it++) {
 		// Checks if the current object collides with a weapon of some kind
 		auto weapon = dynamic_pointer_cast<WeaponGameObject>(*it);
-		if (weapon && checkCollision(*(*it))) {
+		if (currentState != EnemyState::DIE && currentState != EnemyState::HURT && currentState != EnemyState::HURTING && weapon && checkCollision(*(*it))) {
 			hurt(weapon->getDamage());
 			weapon->setDirty(true);
+			angleToCollision = weapon->getAngle();
 		}
 	}
 
@@ -30,6 +33,21 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 	}
 	else if (currentState == EnemyState::HURTING) {
 		invicibilityTimer -= deltaTime;
+
+		angle = angleToCollision;
+		velocity = glm::vec3(1, 0, 0);
+	}
+
+	// Handle collision with player mechanism
+	if (currentState == EnemyState::COLLIDE) {
+		// We processed the collide state, now we're executing it.
+		currentState = EnemyState::COLLIDING;
+	}
+	else if (currentState == EnemyState::COLLIDING) {
+		collisonTimer -= deltaTime;
+
+		angle = angleToCollision;
+		velocity = glm::vec3(1, 0, 0);
 	}
 
 	if (currentState == EnemyState::CHASE) {
@@ -60,9 +78,14 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 }
 
 // Renders the PlayerGameObject using the shader and then renders their weapon
-void EnemyGameObject::render(Shader& shader) {
+void EnemyGameObject::render(Shader& spriteShader) {
 	// Bind the entities texture
 	glBindTexture(GL_TEXTURE_2D, texture);
+	spriteShader.enable();
+	spriteShader.setAttributes(); 
+	
+	spriteShader.setUniform1f("count", 4.0f);
+	spriteShader.setUniform1f("time", entityTime);
 
 	// Setup the transformation matrix for the shader
 	// Start by moving to the position
@@ -80,16 +103,19 @@ void EnemyGameObject::render(Shader& shader) {
 	transformationMatrix = glm::scale(transformationMatrix, scale);
 
 	// Set the transformation matrix in the shader
-	shader.setUniformMat4("transformationMatrix", transformationMatrix);
+	spriteShader.setUniformMat4("transformationMatrix", transformationMatrix);
 	if (currentState == EnemyState::HURTING && random::randomBool()) {
-		shader.setUniform4f("objectColor", glm::vec4(1, 0, 0, 0.6));
+		spriteShader.setUniform4f("objectColor", glm::vec4(1, 0, 0, 0.6));
 	}
 	else {
-		shader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
+		spriteShader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
 	}
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
+
+	// Reset for other sprites
+	spriteShader.setUniform1f("count", 0);
 }
 
 void EnemyGameObject::clean() {
@@ -100,6 +126,15 @@ void EnemyGameObject::clean() {
 	if (currentState == EnemyState::HURTING && invicibilityTimer <= 0) {
 		currentState = EnemyState::IDLE;
 		invicibilityTimer = 0;
+		angle = 0;
+		velocity = glm::vec3();
+	}
+
+	if (currentState == EnemyState::COLLIDING && collisonTimer <= 0) {
+		currentState = EnemyState::IDLE;
+		collisonTimer = 0;
+		angle = 0;
+		velocity = glm::vec3();
 	}
 }
 
@@ -117,13 +152,21 @@ void EnemyGameObject::hurt(int damage) {
 	}
 }
 
+void EnemyGameObject::collide() {
+	if (currentState != EnemyState::DIE && currentState != EnemyState::COLLIDE && currentState != EnemyState::COLLIDING) {
+		collisonTimer = collisionTime;
+		currentState = EnemyState::COLLIDE;
+		angleToCollision -= glm::degrees(glm::atan(velocity.x, velocity.y));
+	}
+}
+
 GLuint EnemyGameObject::fishTextureID;
 GLuint EnemyGameObject::jellyfishTextureID;
 GLuint EnemyGameObject::smokerTextureID;
 
 int EnemyGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
-	setFuncPtr(textures[offset + 0], "Assets\\enemies\\fish-single.png");
-	setFuncPtr(textures[offset + 1], "Assets\\enemies\\fish-big-single.png");
+	setFuncPtr(textures[offset + 0], "Assets\\enemies\\fish.png");
+	setFuncPtr(textures[offset + 1], "Assets\\enemies\\fish-big.png");
 	setFuncPtr(textures[offset + 2], "Assets\\enemies\\mine.png");
 	fishTextureID = textures[offset + 0];
 	jellyfishTextureID = textures[offset + 1];

@@ -46,9 +46,11 @@ void GameObject::update(std::vector<shared_ptr<GameObject>>& gameObjects, double
 }
 
 // Renders the GameObject using the shader
-void GameObject::render(Shader &shader) {
+void GameObject::render(Shader& spriteShader) {
 	// Bind the entities texture
 	glBindTexture(GL_TEXTURE_2D, texture);
+	spriteShader.enable();
+	spriteShader.setAttributes();
 
 	// Setup the transformation matrix for the shader
 	// Start by moving to the position
@@ -65,8 +67,9 @@ void GameObject::render(Shader &shader) {
 	transformationMatrix = glm::scale(transformationMatrix, scale);
 
 	// Set the transformation matrix in the shader
-	shader.setUniformMat4("transformationMatrix", transformationMatrix);
-	shader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
+	spriteShader.setUniformMat4("transformationMatrix", transformationMatrix);
+	spriteShader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
+	spriteShader.setUniform1i("count", 0);
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);

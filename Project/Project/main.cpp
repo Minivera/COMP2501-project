@@ -106,21 +106,18 @@ int main(void){
 	try {
 		// Setup window
 		Window window(window_width_g, window_height_g, window_title_g);
-		Shader shader("shader.vert", "shader.frag");
-		shader.enable();
+		SpriteShader spriteShader("shader.vert", "shader.frag");
+		spriteShader.setAttributes();
+		spriteShader.enable();
 
 		// Set up z-buffer for rendering
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
 
-		// Enable Alpha blending
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 		// Set up the textures
 		setallTexture(textures);
 
-		unique_ptr<Game> game = make_unique<Game>(textures);
+		Game game(textures);
 
 		// Run the main loop
 		double lastTime = glfwGetTime();
@@ -131,7 +128,7 @@ int main(void){
 			double deltaTime = currentTime - lastTime;
 			lastTime = currentTime;
 
-			running = game->loop(window, shader, deltaTime);
+			running = game.loop(window, spriteShader, deltaTime);
 		}
 	}
 	catch (std::exception &e){

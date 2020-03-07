@@ -13,7 +13,13 @@ private:
 	// Attribute that command the slow down of the player when moving
 	bool moved = false;
 	glm::vec2 slowDownFactor;
+	glm::vec3 collidedVelicity;
 
+	// Counter that counts how long the player has lived. Useful for animation and things like that.
+	GLfloat playerTime = 0.0;
+
+	// The player state machine
+	// FIXME: Currently it does not allow shooting and hurting at the same time.
 	PlayerState currentState = PlayerState::NONE;
 
 	// Maximum speed of the player in units per milliseconds
@@ -32,7 +38,7 @@ private:
 	const double airLossFactor = 0.10;
 
 	// The length of time a player will stay invicible for.
-	const double invicibleTime = 0.5;
+	const double invicibleTime = 0.95;
 
 	// Holds the current player's inventory of weapons and upgrades.
 	unique_ptr<PlayerInventory> inventory;
@@ -56,7 +62,7 @@ public:
 	void update(std::vector<shared_ptr<GameObject>>& gameObjects, double deltaTime);
 
 	// Overriden render emthod to render both the player and the weapon they are carrying
-	void render(Shader& shader);
+	void render(Shader& spriteShader);
 
 	// Overriden clean method to clean anything the player needs cleaning.
 	void clean();
@@ -95,6 +101,8 @@ public:
 
 	// Variables that give the texture IDs for the textures of this entity
 	static GLuint playerTextureID;
+	static GLuint playerMovingTextureID;
+	static GLuint playerHurtTextureID;
 
 	// Static method to load the player textures.
 	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);

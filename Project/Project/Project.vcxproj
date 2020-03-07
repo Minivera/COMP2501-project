@@ -179,6 +179,7 @@
     <ClCompile Include="PlayerInventory.cpp" />
     <ClCompile Include="random.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="SpriteShader.cpp" />
     <ClCompile Include="TerrainGameObject.cpp" />
     <ClCompile Include="TreasureGameObject.cpp" />
     <ClCompile Include="Weapon.cpp" />
@@ -207,6 +208,7 @@
     <ClInclude Include="PlayerInventory.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="SpriteShader.h" />
     <ClInclude Include="TerrainGameObject.h" />
     <ClInclude Include="TreasureGameObject.h" />
     <ClInclude Include="Weapon.h" />

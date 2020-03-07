@@ -242,18 +242,17 @@ void LevelState::controls(glm::vec2 mousePos, double deltaTime) {
 	}
 }
 
-void LevelState::render(Shader& shader) {
+void LevelState::render(Shader& spriteShader) {
 	shared_ptr<PlayerGameObject> player = dynamic_pointer_cast<PlayerGameObject>(entities.at(0));
 
 	currentViewPosition = -player->getPosition() * currentViewZoom;
-
-	glEnable(GL_BLEND); 
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	
-	GameState::render(shader);
+	GameState::render(spriteShader);
 
 	// Bind the midground texture
 	glBindTexture(GL_TEXTURE_2D, midgroundTexture);
+	spriteShader.enable();
+	spriteShader.setAttributes();
 
 	// Setup the transformation matrix for the shader
 	glm::mat4 transformationMatrix = glm::translate(glm::mat4(), player->getPosition());
@@ -262,8 +261,8 @@ void LevelState::render(Shader& shader) {
 	transformationMatrix = glm::scale(transformationMatrix, glm::vec3(8.0f, 8.0f, 1.0f));
 
 	// Set the transformation matrix in the shader
-	shader.setUniformMat4("transformationMatrix", transformationMatrix);
-	shader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
+	spriteShader.setUniformMat4("transformationMatrix", transformationMatrix);
+	spriteShader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
@@ -278,13 +277,11 @@ void LevelState::render(Shader& shader) {
 	transformationMatrix = glm::scale(transformationMatrix, glm::vec3(8.0f, 8.0f, 1.0f));
 
 	// Set the transformation matrix in the shader
-	shader.setUniformMat4("transformationMatrix", transformationMatrix);
-	shader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
+	spriteShader.setUniformMat4("transformationMatrix", transformationMatrix);
+	spriteShader.setUniform4f("objectColor", glm::vec4(0, 0, 0, 0));
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-	glDisable(GL_BLEND);
 }
 
 int LevelState::transtionState() {

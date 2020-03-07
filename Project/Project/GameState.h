@@ -29,7 +29,7 @@ public:
 	virtual void update(double deltaTime);
 
 	// Method that handles rendering all the entities within the game state
-	virtual void render(Shader& shader);
+	virtual void render(Shader& spriteShader);
 
 	// Method that handles cleaning any dirty state or entities within the game state
 	virtual void clean();

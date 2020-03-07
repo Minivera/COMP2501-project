@@ -10,14 +10,15 @@
 #include "FileUtils.h"
 
 class Shader {
+protected:
+	Shader(const char* vertPath, const char* fragPath);
 public:
-	Shader(const char *vertPath, const char *fragPath);
 	~Shader();
+
+	virtual void setAttributes();
 
 	void enable();
 	void disable();
-
-	void makeSprite();
 
 	// Sets a uniform integer variable in your shader program to a value
 	void setUniform1i(const GLchar *name, int value);
@@ -39,7 +40,6 @@ public:
 
 	// Getters
 	inline GLuint getShaderID() { return shaderProgram; }
-private:
+protected:
 	GLuint shaderProgram;
-	static bool setupSprite;
 };

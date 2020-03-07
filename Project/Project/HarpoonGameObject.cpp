@@ -14,7 +14,7 @@ void HarpoonGameObject::update(std::vector<shared_ptr<GameObject>>& entities, do
 	GameObject::update(entities, deltaTime);
 }
 
-void HarpoonGameObject::render(Shader& shader) {
+void HarpoonGameObject::render(Shader& spriteShader) {
 	// Do not render anything, this entity exists only for collision detection
 	return;
 }

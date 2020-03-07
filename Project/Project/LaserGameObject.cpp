@@ -16,9 +16,11 @@ void LaserGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 	GameObject::update(entities, deltaTime);
 }
 
-void LaserGameObject::render(Shader& shader) {
+void LaserGameObject::render(Shader& spriteShader) {
 	// Bind the entities texture
 	glBindTexture(GL_TEXTURE_2D, texture);
+	spriteShader.enable();
+	spriteShader.setAttributes();
 
 	// Setup the transformation matrix for the shader
 	// Start by moving to the position
@@ -38,7 +40,7 @@ void LaserGameObject::render(Shader& shader) {
 	transformationMatrix = glm::scale(transformationMatrix, scale);
 
 	// Set the transformation matrix in the shader
-	shader.setUniformMat4("transformationMatrix", transformationMatrix);
+	spriteShader.setUniformMat4("transformationMatrix", transformationMatrix);
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);

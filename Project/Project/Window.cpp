@@ -40,6 +40,7 @@ Window::~Window() {
 
 // Clears the window by setting it to a colour
 void Window::clear(const glm::vec3 &colour) {
+	glDepthMask(GL_TRUE);
 	glClearColor(colour.r, colour.g, colour.b, 0.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }

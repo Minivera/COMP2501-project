@@ -13,16 +13,12 @@
 using namespace std;
 
 class GameObject {
-protected:
-	GameObject(glm::vec3& entityPosition, GLuint entityTexture, GLint entityNumElements);
-	GameObject(glm::vec3& entityPosition, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
-	GameObject(glm::vec3& entityPosition, glm::vec3& entityVelocity, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
 public:
 	// Updates the GameObject's state. Can be overriden for children
 	virtual void update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime);
 
 	// Renders the GameObject using a shader
-	virtual void render(Shader &shader);
+	virtual void render(Shader& spriteShader);
 
 	// Cleans the object after an update has occured
 	virtual void clean();
@@ -43,6 +39,10 @@ public:
 	inline void setRotation(GLfloat newRotation) { rotation = newRotation; }
 	inline void setDirty(bool newDirty) { dirty = newDirty; }
 protected:
+	GameObject(glm::vec3& entityPosition, GLuint entityTexture, GLint entityNumElements);
+	GameObject(glm::vec3& entityPosition, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
+	GameObject(glm::vec3& entityPosition, glm::vec3& entityVelocity, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
+
 	// Defines the base size of all objects in the game (Default to 0.5f for all textures)
 	const GLfloat baseSize = 0.5f;
 

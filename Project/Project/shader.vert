@@ -9,6 +9,8 @@ in vec2 uv;
 // Uniform (global) buffer
 uniform mat4 transformationMatrix;
 uniform mat4 viewMatrix;
+uniform float time;
+uniform float count;
 
 // Attributes forwarded to the fragment shader
 out vec4 color_interp;
@@ -21,4 +23,9 @@ void main()
 	
     color_interp = vec4(color, 1.0);
 	uv_interp = uv;
+	if (count > 0) {
+		float acttime = floor(mod(time * 6, count));
+		uv_interp.x /= count;
+		uv_interp.x += acttime/count;
+	}
 }
