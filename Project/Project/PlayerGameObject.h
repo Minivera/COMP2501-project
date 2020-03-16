@@ -55,8 +55,8 @@ private:
 	GLuint pistolTexture;
 	GLuint laserTexture;
 public:
-	PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, GLuint entityHarpoonTexture, GLuint entityPistolTexture, GLuint entityLaserTexture,
-		GLuint entityBulletTexture, GLuint entityLaserRayTexture, GLint entityNumElements);
+	PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, GLuint entityHarpoonTexture, GLuint entityPistolTexture,
+		GLuint entityLaserTexture, GLuint entityBulletTexture, GLint entityNumElements);
 
 	// Overriden update method to update the player and handle collisions
 	void update(std::vector<shared_ptr<GameObject>>& gameObjects, double deltaTime);

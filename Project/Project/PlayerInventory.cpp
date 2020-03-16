@@ -1,9 +1,9 @@
 #include "PlayerInventory.h"
 
-PlayerInventory::PlayerInventory(GLuint bulletTexture, GLuint laserTexture, GLint entityNumElements) {
+PlayerInventory::PlayerInventory(GLuint bulletTexture, GLint entityNumElements) {
 	harpoon = make_unique<Harpoon>();
 	pistol = make_unique<Pistol>(bulletTexture, entityNumElements);
-	laser = make_unique<Laser>(laserTexture, entityNumElements);
+	laser = make_unique<Laser>();
 
 	equipedWeapon = harpoon.get();
 }

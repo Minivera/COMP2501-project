@@ -14,12 +14,14 @@
 
 #include "Game.h"
 #include "LevelState.h"
+#include "GameObject.h"
 #include "PlayerGameObject.h"
 #include "TerrainGameObject.h"
 #include "EnemyGameObject.h"
 #include "WeaponGameObject.h"
 #include "TreasureGameObject.h"
 #include "ExitGameObject.h"
+#include "LaserShader.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -27,7 +29,7 @@
 
 // Globals that define the OpenGL window and viewport
 const std::string window_title_g = "COMP2501 Project";
-const unsigned int textures_count = 22;
+const unsigned int textures_count = 23;
 const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 
@@ -91,6 +93,7 @@ void setthisTexture(GLuint w, char *fname) {
 void setallTexture(GLuint* textures) {
 	glGenTextures(textures_count, textures);
 	int offset = LevelState::setTextures(setthisTexture, textures, 0);
+	offset = GameObject::setTextures(setthisTexture, textures, offset);
 	offset = PlayerGameObject::setTextures(setthisTexture, textures, offset);
 	offset = WeaponGameObject::setTextures(setthisTexture, textures, offset);
 	offset = TreasureGameObject::setTextures(setthisTexture, textures, offset);
@@ -107,6 +110,7 @@ int main(void){
 		// Setup window
 		Window window(window_width_g, window_height_g, window_title_g);
 		SpriteShader spriteShader("shader.vert", "shader.frag");
+		LaserShader laserShader("laser.vert", "laser.frag");
 		spriteShader.setAttributes();
 		spriteShader.enable();
 
@@ -128,7 +132,7 @@ int main(void){
 			double deltaTime = currentTime - lastTime;
 			lastTime = currentTime;
 
-			running = game.loop(window, spriteShader, deltaTime);
+			running = game.loop(window, spriteShader, laserShader, deltaTime);
 		}
 	}
 	catch (std::exception &e){

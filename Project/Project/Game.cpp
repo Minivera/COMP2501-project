@@ -13,7 +13,6 @@ Game::Game(const GLuint* textures) {
 		WeaponGameObject::pistolTextureID,
 		WeaponGameObject::laserTextureID,
 		WeaponGameObject::bulletTextureID,
-		WeaponGameObject::laserRayTextureID,
 		6
 	);
 
@@ -26,7 +25,7 @@ Game::Game(const GLuint* textures) {
 	currentState = level1;
 }
 
-bool Game::loop(Window& window, SpriteShader& spriteShader, double deltaTime) {
+bool Game::loop(Window& window, SpriteShader& spriteShader, LaserShader& laserShader, double deltaTime) {
 	// Clear background
 	window.clear(viewportBackgroundColor);
 
@@ -46,7 +45,7 @@ bool Game::loop(Window& window, SpriteShader& spriteShader, double deltaTime) {
 	currentState->update(deltaTime);
 
 	// Render the current state
-	currentState->render(spriteShader);
+	currentState->render(spriteShader, laserShader);
 
 	// Clean anything that needs to be cleaned on the current state
 	currentState->clean();

@@ -2,7 +2,7 @@
 
 #include "GameObject.h"
 
-enum class TerrainType { Floor, Wall, Ceilling };
+enum class TerrainType { Floor, Wall, Ceilling, TopSlant, BottomSlant };
 
 class TerrainGameObject: public GameObject {
 private:

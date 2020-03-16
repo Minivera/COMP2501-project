@@ -6,6 +6,7 @@
 #include <GL/glfw3.h>
 
 #include "SpriteShader.h"
+#include "LaserShader.h"
 #include "Window.h"
 #include "GameState.h"
 
@@ -27,5 +28,5 @@ public:
 
 	// Main loop method that should run for every update from the main method
 	// Returns if the game should still be running, return false to stop it
-	bool loop(Window& window, SpriteShader& spriteShader, double deltaTime);
+	bool loop(Window& window, SpriteShader& spriteShader, LaserShader& laserShader, double deltaTime);
 };

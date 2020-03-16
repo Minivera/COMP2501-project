@@ -5,7 +5,7 @@
 class FishGameObject: public EnemyGameObject
 {
 private:
-	double viewRange = 3;
+	double viewRange = 6;
 public:
 	FishGameObject(glm::vec3& entityPos, GLuint entityTexture, GLint entityNumElements);
 

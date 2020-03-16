@@ -12,6 +12,8 @@
 
 using namespace std;
 
+enum class CollisionSides { Top, Bottom, Left, Right };
+
 class GameObject {
 public:
 	// Updates the GameObject's state. Can be overriden for children
@@ -20,6 +22,12 @@ public:
 	// Renders the GameObject using a shader
 	virtual void render(Shader& spriteShader);
 
+	// Renders the GameObject's particle system using a shader
+	virtual void renderParticles(Shader& particlesShader);
+
+	// Debug method that render an object's bounding box.
+	void renderBoundingBox(Shader& spriteShader);
+
 	// Cleans the object after an update has occured
 	virtual void clean();
 
@@ -27,10 +35,11 @@ public:
 	GLboolean checkCollision(const GameObject& other);
 
 	// Getters
-	inline glm::vec3& getPosition() { return position; }
-	inline glm::vec3& getVelocity() { return velocity; }
-	inline GLfloat getAngle() { return angle; }
-	inline bool isDirty() { return dirty; }
+	inline const glm::vec3& getPosition() const { return position; };
+	inline glm::vec3& getVelocity() { return velocity; } const
+	inline GLfloat getAngle() { return angle; } const
+	inline glm::vec2& getBoundingBox() const { return boundingBox; };
+	inline bool isDirty() { return dirty; } const
 
 	// Setters
 	inline void setPosition(glm::vec3& newPosition) { position = newPosition; }
@@ -38,13 +47,16 @@ public:
 	inline void setAngle(GLfloat newAngle) { angle = newAngle; }
 	inline void setRotation(GLfloat newRotation) { rotation = newRotation; }
 	inline void setDirty(bool newDirty) { dirty = newDirty; }
+
+	// Variables that give the texture IDs for the texture of the entity.
+	static GLuint boundingBoxTextureID;
+
+	// Static method to load the treasure textures.
+	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
 protected:
 	GameObject(glm::vec3& entityPosition, GLuint entityTexture, GLint entityNumElements);
 	GameObject(glm::vec3& entityPosition, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
 	GameObject(glm::vec3& entityPosition, glm::vec3& entityVelocity, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
-
-	// Defines the base size of all objects in the game (Default to 0.5f for all textures)
-	const GLfloat baseSize = 0.5f;
 
 	// Define if the object is dirty and should be deleted
 	bool dirty = false;
@@ -64,5 +76,8 @@ protected:
 	// Object's texture
 	GLuint texture;
 
-	int getCollisionSide(const GameObject& other);
+	// Defines the bounding box of the entity for the purposes of collision detection
+	glm::vec2 boundingBox;
+
+	CollisionSides getCollisionSide(const GameObject& other);
 };

@@ -16,9 +16,9 @@ void GravityGameObject::update(std::vector<shared_ptr<GameObject>>& entities, do
 	bool collidesWithFloor = false;
 
 	for (auto it = entities.begin(); it != entities.end(); it++) {
-		// Checks if the current object collides with a wall
+		// Checks if the current object collides with a floor or with a top slant
 		auto converted = dynamic_pointer_cast<TerrainGameObject>(*it);
-		if (converted && checkCollision(*(*it)) && converted->getType() == TerrainType::Floor) {
+		if (converted && checkCollision(*(*it)) && (converted->getType() == TerrainType::Floor || converted->getType() == TerrainType::BottomSlant)) {
 			collidesWithFloor = true;
 			break;
 		}

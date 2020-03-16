@@ -47,7 +47,7 @@ public:
 	
 	void controls(glm::vec2 mousePos, double deltaTime);
 
-	void render(Shader& spriteShader);
+	void render(Shader& spriteShader, Shader& particlesShader);
 
 	void load();
 

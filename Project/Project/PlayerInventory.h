@@ -28,7 +28,7 @@ private:
 	// Attribute that counts the current air from the player in seconds.
 	double currentAir = baseAir;
 public:
-	PlayerInventory(GLuint bulletTexture, GLuint laserTexture, GLint entityNumElements);
+	PlayerInventory(GLuint bulletTexture, GLint entityNumElements);
 
 	// Method that unlocks a specific weapon.
 	void unlock(WeaponType type);

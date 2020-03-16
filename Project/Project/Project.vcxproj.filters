@@ -135,9 +135,6 @@
     <ClCompile Include="FileUtils.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
-    <ClCompile Include="random.cpp">
-      <Filter>Source Files\Utilities</Filter>
-    </ClCompile>
     <ClCompile Include="ExitGameObject.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
@@ -147,8 +144,17 @@
     <ClCompile Include="SpriteShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="TextRenderer.cpp">
+    <ClCompile Include="Random.cpp">
       <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="AABB.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="LineOfSight.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="LaserShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -233,8 +239,14 @@
     <ClInclude Include="SpriteShader.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="TextRenderer.h">
+    <ClInclude Include="AABB.h">
       <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="LineOfSight.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="LaserShader.h">
+      <Filter>Header Files\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -243,6 +255,12 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="shader.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="laser.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="laser.frag">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

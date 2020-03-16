@@ -35,6 +35,8 @@ protected:
 	int health = 0;
 
 	EnemyGameObject(glm::vec3& entityPos, GLuint entityTexture, GLint entityNumElements);
+
+	virtual bool seesEntity(double sightRange, const GameObject& other);
 public:
 	// Overriden update method to update the enemy and handle collisions
 	virtual void update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime);

@@ -2,10 +2,7 @@
 
 #include "LaserGameObject.h"
 
-Laser::Laser(GLuint laserTexture, GLint entityNumElements): Weapon(false, baseDamage, baseSpeed, baseRechargeRate) {
-	texture = laserTexture;
-	numElements = entityNumElements;
-
+Laser::Laser(): Weapon(false, baseDamage, baseSpeed, baseRechargeRate) {
 	// Constants seem to not work when called in super
 	damage = baseDamage;
 	speed = baseSpeed;
@@ -34,9 +31,7 @@ void Laser::attack(glm::vec3 position, double angle, std::vector<shared_ptr<Game
 		0.25,
 		size,
 		position + laserTip,
-		angle,
-		texture,
-		numElements
+		angle
 		));
 	Weapon::attack(position, angle, gameObjects);
 }

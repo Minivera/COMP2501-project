@@ -4,9 +4,57 @@
 #include "TreasureGameObject.h"
 #include "PlayerGameObject.h"
 #include "Random.h"
+#include "LineOfSight.h"
 
 EnemyGameObject::EnemyGameObject(glm::vec3& entityPos, GLuint entityTexture, GLint entityNumElements):
 	GameObject(entityPos, entityTexture, entityNumElements) {}
+
+bool EnemyGameObject::seesEntity(double sightRange, const GameObject& other) {
+	glm::vec3 selfPos = position;
+	glm::vec3 otherPos = other.getPosition();
+	glm::vec2 otherBoundingBox = other.getBoundingBox();
+
+	glm::vec3 axis(-selfPos.y, selfPos.x, 0);
+	GLfloat selfCoords = glm::dot(otherPos, selfPos);
+	GLfloat axisCoords = glm::dot(otherPos, axis);
+	GLfloat angle = glm::atan(selfCoords, axisCoords);
+	glm::vec3 sightLength = glm::vec3(
+		cos(angle) * sightRange,
+		sin(angle) * sightRange,
+		0
+	);
+
+	// Invert y coordinates
+	selfPos.y = -selfPos.y;
+	otherPos.y = -otherPos.y;
+
+	// Align the coordinates on the axis to remove any minus coordinates
+	glm::vec3 alignment = glm::vec3(
+		glm::min(selfPos.x, otherPos.x - otherBoundingBox.x),
+		glm::min(selfPos.y, otherPos.y - otherBoundingBox.y),
+		0.0f
+	);
+
+	//If the alignment adjustment is smaller than 0, add the inverse to the position so we can align
+	if (alignment.x < 0) {
+		selfPos.x += -alignment.x;
+		otherPos.x += -alignment.x;
+	}
+	if (alignment.y < 0) {
+		selfPos.y += -alignment.y;
+		otherPos.y += -alignment.y;
+	}
+
+	auto lineOfSight = LineOfSight::drawLine(selfPos.x, selfPos.y, selfPos.x + sightLength.x, selfPos.y + sightLength.y);
+	auto entityRectangle = LineOfSight::drawRectangle(
+		otherPos.x - otherBoundingBox.x / 2, 
+		otherPos.y - otherBoundingBox.y / 2,
+		otherPos.x + otherBoundingBox.x / 2,
+		otherPos.y + otherBoundingBox.y / 2
+	);
+
+	return LineOfSight::intersectsWith(lineOfSight, entityRectangle);
+}
 
 void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime) {
 	entityTime += (float)deltaTime;
@@ -23,6 +71,7 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 			hurt(weapon->getDamage());
 			weapon->setDirty(true);
 			angleToCollision = weapon->getAngle();
+			break;
 		}
 	}
 
@@ -61,7 +110,6 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 			position.x - playerPos.x
 		));
 
-		// TODO: Try to create a line of sight mecanism to prevent the fish from seeing the player through walls.
 		// Move towards the player
 		glm::vec3 desiredVelocity = glm::normalize(playerPos - position) * maxSpeed * float(deltaTime);
 		glm::vec3 steering = desiredVelocity - velocity;
@@ -116,6 +164,8 @@ void EnemyGameObject::render(Shader& spriteShader) {
 
 	// Reset for other sprites
 	spriteShader.setUniform1f("count", 0);
+
+	GameObject::renderBoundingBox(spriteShader);
 }
 
 void EnemyGameObject::clean() {

@@ -99,7 +99,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>D:\Travail\COMP2501\Project\Libraries\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glew32s.lib;SOIL.lib;glfw3.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glew32s.lib;SOIL.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -158,6 +158,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AABB.cpp" />
     <ClCompile Include="BulletGameObject.cpp" />
     <ClCompile Include="EnemyGameObject.cpp" />
     <ClCompile Include="ExitGameObject.cpp" />
@@ -170,25 +171,27 @@
     <ClCompile Include="JellyfishGameObject.cpp" />
     <ClCompile Include="Laser.cpp" />
     <ClCompile Include="LaserGameObject.cpp" />
+    <ClCompile Include="LaserShader.cpp" />
     <ClCompile Include="LevelInterface.cpp" />
     <ClCompile Include="LevelState.cpp" />
+    <ClCompile Include="LineOfSight.cpp" />
     <ClCompile Include="Pistol.cpp" />
     <ClCompile Include="PlayerGameObject.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
-    <ClCompile Include="random.cpp" />
+    <ClCompile Include="Random.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SpriteShader.cpp" />
     <ClCompile Include="TerrainGameObject.cpp" />
-    <ClCompile Include="TextRenderer.cpp" />
     <ClCompile Include="TreasureGameObject.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WeaponGameObject.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AABB.h" />
     <ClInclude Include="BulletGameObject.h" />
     <ClInclude Include="EnemyGameObject.h" />
     <ClInclude Include="ExitGameObject.h" />
@@ -201,8 +204,10 @@
     <ClInclude Include="JellyfishGameObject.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="LaserGameObject.h" />
+    <ClInclude Include="LaserShader.h" />
     <ClInclude Include="LevelInterface.h" />
     <ClInclude Include="LevelState.h" />
+    <ClInclude Include="LineOfSight.h" />
     <ClInclude Include="Pistol.h" />
     <ClInclude Include="PlayerGameObject.h" />
     <ClInclude Include="GameObject.h" />
@@ -212,13 +217,14 @@
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SpriteShader.h" />
     <ClInclude Include="TerrainGameObject.h" />
-    <ClInclude Include="TextRenderer.h" />
     <ClInclude Include="TreasureGameObject.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WeaponGameObject.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="laser.frag" />
+    <None Include="laser.vert" />
     <None Include="README.md" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />

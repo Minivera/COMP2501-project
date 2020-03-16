@@ -146,7 +146,7 @@ void LevelState::loadLevel(bool reloading) {
 			}
 			else if (val == SLANT_T_L && !reloading) {
 				entities.push_back(make_shared<TerrainGameObject>(
-					TerrainType::Wall,
+					TerrainType::TopSlant,
 					glm::vec3(currentColumn - 0.1, currentRow + 0.1, 0.0f),
 					glm::vec3(0.9f, 0.9f, 1.0f),
 					0,
@@ -156,7 +156,7 @@ void LevelState::loadLevel(bool reloading) {
 			}
 			else if (val == SLANT_T_R && !reloading) {
 				entities.push_back(make_shared<TerrainGameObject>(
-					TerrainType::Wall,
+					TerrainType::TopSlant,
 					glm::vec3(currentColumn + 0.1, currentRow + 0.1, 0.0f),
 					glm::vec3(0.9f, 0.9f, 1.0f),
 					0,
@@ -166,7 +166,7 @@ void LevelState::loadLevel(bool reloading) {
 			}
 			else if (val == SLANT_B_L && !reloading) {
 				entities.push_back(make_shared<TerrainGameObject>(
-					TerrainType::Wall,
+					TerrainType::BottomSlant,
 					glm::vec3(currentColumn - 0.1, currentRow - 0.1, 0.0f),
 					glm::vec3(0.9f, 0.9f, 1.0f),
 					0,
@@ -176,7 +176,7 @@ void LevelState::loadLevel(bool reloading) {
 			}
 			else if (val == SLANT_B_R && !reloading) {
 				entities.push_back(make_shared<TerrainGameObject>(
-					TerrainType::Wall,
+					TerrainType::BottomSlant,
 					glm::vec3(currentColumn + 0.1, currentRow - 0.1, 0.0f),
 					glm::vec3(0.9f, 0.9f, 1.0f),
 					0,
@@ -242,12 +242,12 @@ void LevelState::controls(glm::vec2 mousePos, double deltaTime) {
 	}
 }
 
-void LevelState::render(Shader& spriteShader) {
+void LevelState::render(Shader& spriteShader, Shader& particlesShader) {
 	shared_ptr<PlayerGameObject> player = dynamic_pointer_cast<PlayerGameObject>(entities.at(0));
 
 	currentViewPosition = -player->getPosition() * currentViewZoom;
 	
-	GameState::render(spriteShader);
+	GameState::render(spriteShader, particlesShader);
 
 	// Bind the midground texture
 	glBindTexture(GL_TEXTURE_2D, midgroundTexture);

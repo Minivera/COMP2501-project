@@ -11,14 +11,15 @@
 	It overrides GameObject's update method, so that you can check for input to change the velocity of the player
 */
 
-PlayerGameObject::PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, GLuint entityHarpoonTexture, GLuint entityPistolTexture, GLuint entityLaserTexture,
-	GLuint entityBulletTexture, GLuint entityLaserRayTexture, GLint entityNumElements)
+PlayerGameObject::PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, GLuint entityHarpoonTexture, GLuint entityPistolTexture, 
+	GLuint entityLaserTexture, GLuint entityBulletTexture, GLint entityNumElements)
 	: GravityGameObject(entityPos, entityTexture, entityNumElements) {
 	harpoonTexture = entityHarpoonTexture;
 	pistolTexture = entityPistolTexture;
 	laserTexture = entityLaserTexture;
+	boundingBox = glm::vec2(0.4, 0.6);
 
-	inventory = make_unique<PlayerInventory>(entityBulletTexture, entityLaserRayTexture, entityNumElements);
+	inventory = make_unique<PlayerInventory>(entityBulletTexture, entityNumElements);
 }
 
 void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime) {
@@ -61,23 +62,27 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 		}
 	}
 	
-	if (collidesWith != nullptr && collidesWith->getType() == TerrainType::Wall && !moved) {
+	// If colloding with a wall, process which side has been collided with
+	if (collidesWith != nullptr && (collidesWith->getType() == TerrainType::Wall ||
+		collidesWith->getType() == TerrainType::BottomSlant || collidesWith->getType() == TerrainType::TopSlant) && moved) {
 		// If colliding with a wall, deactivate gravity, stop any movement and slowly move down
 		gravityActivated = false;
 		velocity.y = glm::max(-maxSpeed * wallSlowEffect * deltaTime, velocity.y - slowDownFactor.y / wallSlowEffect);
 		// Prevent movement on the side we collided with the wall
-		if (velocity.x > 0 && getCollisionSide(*collidesWith) > 0) {
+		auto collisionSide = getCollisionSide(*collidesWith);
+		if (velocity.x > 0 && collisionSide == CollisionSides::Left) {
 			velocity.x = 0;
-		} else if (velocity.x < 0 && getCollisionSide(*collidesWith) < 0) {
+		}
+		else if (velocity.x < 0 && collisionSide == CollisionSides::Right) {
 			velocity.x = 0;
 		}
 	}
-	else if (collidesWith != nullptr && collidesWith->getType() == TerrainType::Floor) {
-		// If colliding with the floor, slow down movement
+	else if (collidesWith != nullptr && (collidesWith->getType() == TerrainType::Floor || collidesWith->getType() == TerrainType::BottomSlant)) {
+		// If colliding with the floor or a bottom facing slant, slow down movement
 		velocity.x *= wallSlowEffect;
 	}
-	else if (collidesWith != nullptr && collidesWith->getType() == TerrainType::Ceilling && !moved) {
-		// If colliding with the ceiling, slow down movement and stop lift
+	else if (collidesWith != nullptr && (collidesWith->getType() == TerrainType::Ceilling || collidesWith->getType() == TerrainType::TopSlant) && moved) {
+		// If colliding with the ceiling or a top facing slant, slow down movement and stop lift
 		velocity.y = 0;
 		velocity.x *= wallSlowEffect;
 	}
@@ -263,6 +268,8 @@ void PlayerGameObject::render(Shader& spriteShader) {
 
 	// Reset for other sprites
 	spriteShader.setUniform1f("count", 0);
+
+	GameObject::renderBoundingBox(spriteShader);
 }
 
 void PlayerGameObject::clean() {
