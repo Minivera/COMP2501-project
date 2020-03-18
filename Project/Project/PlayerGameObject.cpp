@@ -268,8 +268,6 @@ void PlayerGameObject::render(Shader& spriteShader) {
 
 	// Reset for other sprites
 	spriteShader.setUniform1f("count", 0);
-
-	GameObject::renderBoundingBox(spriteShader);
 }
 
 void PlayerGameObject::clean() {

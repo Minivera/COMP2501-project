@@ -25,7 +25,7 @@ Game::Game(const GLuint* textures) {
 	currentState = level1;
 }
 
-bool Game::loop(Window& window, SpriteShader& spriteShader, LaserShader& laserShader, double deltaTime) {
+bool Game::loop(Window& window, Shader& spriteShader, Shader& laserShader, double deltaTime) {
 	// Clear background
 	window.clear(viewportBackgroundColor);
 

@@ -10,6 +10,7 @@
 #include "EnemyGameObject.h"
 #include "FishGameObject.h"
 #include "JellyfishGameObject.h"
+#include "LaserGameObject.h"
 
 LevelState::LevelState(int levelID, int nextLevelID, const char* levelFile, shared_ptr<PlayerGameObject> player) {
 	this->player = player;
@@ -246,8 +247,20 @@ void LevelState::render(Shader& spriteShader, Shader& particlesShader) {
 	shared_ptr<PlayerGameObject> player = dynamic_pointer_cast<PlayerGameObject>(entities.at(0));
 
 	currentViewPosition = -player->getPosition() * currentViewZoom;
-	
-	GameState::render(spriteShader, particlesShader);
+
+	// Apply position translate to the view matrix
+	glm::mat4 viewMatrix = glm::translate(glm::mat4(), currentViewPosition);
+
+	// Apply zoom scaling to the view matrix
+	viewMatrix = glm::scale(viewMatrix, glm::vec3(currentViewZoom, currentViewZoom, currentViewZoom));
+
+	spriteShader.setUniformMat4("viewMatrix", viewMatrix);
+	particlesShader.setUniformMat4("viewMatrix", viewMatrix);
+
+	for (auto it = entities.begin(); it != entities.end(); it++) {
+		// Render game objects
+		(*it)->render(spriteShader);
+	}
 
 	// Bind the midground texture
 	glBindTexture(GL_TEXTURE_2D, midgroundTexture);
@@ -282,6 +295,17 @@ void LevelState::render(Shader& spriteShader, Shader& particlesShader) {
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	// Render any special laser object if any
+	for (auto it = entities.begin(); it != entities.end(); it++) {
+		// Render game objects
+		auto laser = dynamic_pointer_cast<LaserGameObject>(*it);
+		if (laser) {
+			laser->renderParticles(particlesShader);
+		}
+	}
 }
 
 int LevelState::transtionState() {

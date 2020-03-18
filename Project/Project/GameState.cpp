@@ -1,7 +1,5 @@
 #include "GameState.h"
 
-#include "LaserGameObject.h"
-
 void GameState::controls(glm::vec2 mousePos, double deltatime) {
 	return;
 }
@@ -26,19 +24,11 @@ void GameState::render(Shader& spriteShader, Shader& laserShader) {
 	viewMatrix = glm::scale(viewMatrix, glm::vec3(currentViewZoom, currentViewZoom, currentViewZoom));
 
 	spriteShader.setUniformMat4("viewMatrix", viewMatrix);
+	laserShader.setUniformMat4("viewMatrix", viewMatrix);
 
 	for (auto it = entities.begin(); it != entities.end(); it++) {
 		// Render game objects
 		(*it)->render(spriteShader);
-	}
-
-	// Render any special laser object if any
-	for (auto it = entities.begin(); it != entities.end(); it++) {
-		// Render game objects
-		auto laser = dynamic_pointer_cast<LaserGameObject>(*it);
-		if (laser) {
-			laser->renderParticles(laserShader);
-		}
 	}
 }
 

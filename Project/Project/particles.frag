@@ -25,7 +25,7 @@ void main()
 			color.r * inverseFactor + objectColor.r * factor,
 			color.g * inverseFactor + objectColor.g * factor,
 			color.b * inverseFactor + objectColor.b * factor,
-			1.0
+			color.a
 		);
 	} else {
 		FragColor = color;

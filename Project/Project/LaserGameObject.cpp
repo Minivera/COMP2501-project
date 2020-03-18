@@ -91,17 +91,16 @@ bool LaserGameObject::checkLaserHits(GameObject& entity) {
 		|| LineOfSight::intersectsWith(lineOfSightRight, entityRectangle);
 }
 
-void LaserGameObject::render(Shader& spriteShader) {
-	return;
-}
+void LaserGameObject::render(Shader& spriteShader) {}
 
 void LaserGameObject::renderParticles(Shader& particlesShader) {
+	glBindTexture(GL_TEXTURE_2D, 3);
 	particlesShader.enable();
 	particlesShader.setAttributes();
 
 	// Setup the transformation matrix for the shader
 	// Start by moving to the position
-	glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position);
+	glm::mat4 transformationMatrix = glm::translate(glm::mat4(1.0f), position);
 
 	// Then undo part of the offset for the orbit
 	transformationMatrix = glm::translate(transformationMatrix, glm::vec3(-0.5, -0.5, 0));
@@ -110,15 +109,21 @@ void LaserGameObject::renderParticles(Shader& particlesShader) {
 	// Added a rotation matrix to rotate the sprite depending on the angle
 	transformationMatrix = glm::rotate(transformationMatrix, rotation, glm::vec3(0, 0, 1.0f));
 
+	// Add an offset so the laser is rescaled from that offset
+	transformationMatrix = glm::translate(transformationMatrix, glm::vec3(-0.9f, 0, 0));
+
+	// Added a scale matrix to scale the sprite so it can be rescaled
+	transformationMatrix = glm::scale(transformationMatrix, glm::vec3(10.0f, 1.0f, 1.0f));
+
 	// Attach the laser to the left of its position
-	transformationMatrix = glm::translate(transformationMatrix, glm::vec3(2.3, 0, 0));
+	transformationMatrix = glm::translate(transformationMatrix, glm::vec3(0.6, 0, 0));
 
 	// Set the transformation matrix in the shader
 	particlesShader.setUniformMat4("transformationMatrix", transformationMatrix);
-	particlesShader.setUniform1f("size", 6 * size);
+	particlesShader.setUniform1f("size", 6.0f * size);
 	particlesShader.setUniform1f("lifespanLeft", lifespan);
 	particlesShader.setUniform1f("lifespan", baseLifespan);
 
 	// Draw the entity
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 24000, GL_UNSIGNED_INT, 0);
 }

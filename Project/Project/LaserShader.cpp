@@ -53,12 +53,12 @@ void LaserShader::makeParticles()
 	// Create buffer for vertices
 	glGenBuffers(1, &vbo_laser);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_laser);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(particleatt), particleatt, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertex), vertex, GL_STATIC_DRAW);
 
 	// Create buffer for faces (index buffer)
 	glGenBuffers(1, &ebo_laser);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_laser);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(manyface), manyface, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(face), face, GL_STATIC_DRAW);
 
 	setupSprite = true;
 }

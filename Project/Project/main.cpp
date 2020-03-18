@@ -12,6 +12,7 @@
 #include <chrono>
 #include <thread>
 
+#include "Window.h"
 #include "Game.h"
 #include "LevelState.h"
 #include "GameObject.h"
@@ -21,6 +22,7 @@
 #include "WeaponGameObject.h"
 #include "TreasureGameObject.h"
 #include "ExitGameObject.h"
+#include "SpriteShader.h"
 #include "LaserShader.h"
 
 // Macro for printing exceptions
@@ -117,6 +119,10 @@ int main(void){
 		// Set up z-buffer for rendering
 		glEnable(GL_DEPTH_TEST);
 		glDepthFunc(GL_LESS);
+
+		// Enable Alpha blending
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		// Set up the textures
 		setallTexture(textures);

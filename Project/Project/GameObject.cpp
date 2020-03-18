@@ -78,9 +78,6 @@ void GameObject::render(Shader& spriteShader) {
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
-
-	// FIXME: Temporary bounding box debugging code
-	renderBoundingBox(spriteShader);
 }
 
 // Renders the GameObject using the shader

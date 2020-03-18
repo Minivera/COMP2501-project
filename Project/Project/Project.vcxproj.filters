@@ -141,9 +141,6 @@
     <ClCompile Include="Shader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
-    <ClCompile Include="SpriteShader.cpp">
-      <Filter>Source Files\Shaders</Filter>
-    </ClCompile>
     <ClCompile Include="Random.cpp">
       <Filter>Source Files\Utilities</Filter>
     </ClCompile>
@@ -152,6 +149,9 @@
     </ClCompile>
     <ClCompile Include="LineOfSight.cpp">
       <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="SpriteShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
     </ClCompile>
     <ClCompile Include="LaserShader.cpp">
       <Filter>Source Files\Shaders</Filter>
@@ -236,9 +236,6 @@
     <ClInclude Include="Shader.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
-    <ClInclude Include="SpriteShader.h">
-      <Filter>Header Files\Shaders</Filter>
-    </ClInclude>
     <ClInclude Include="AABB.h">
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
@@ -246,6 +243,9 @@
       <Filter>Header Files\Utilities</Filter>
     </ClInclude>
     <ClInclude Include="LaserShader.h">
+      <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="SpriteShader.h">
       <Filter>Header Files\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
@@ -261,6 +261,12 @@
       <Filter>shaders</Filter>
     </None>
     <None Include="laser.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="particles.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="particles.frag">
       <Filter>shaders</Filter>
     </None>
   </ItemGroup>

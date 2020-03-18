@@ -225,6 +225,8 @@
   <ItemGroup>
     <None Include="laser.frag" />
     <None Include="laser.vert" />
+    <None Include="particles.frag" />
+    <None Include="particles.vert" />
     <None Include="README.md" />
     <None Include="shader.frag" />
     <None Include="shader.vert" />
