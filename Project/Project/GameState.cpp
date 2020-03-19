@@ -16,7 +16,7 @@ void GameState::update(double deltaTime) {
 	}
 }
 
-void GameState::render(Shader& spriteShader, Shader& laserShader) {
+void GameState::render(Shader& spriteShader, Shader& particleShader, Shader& laserShader) {
 	// Apply position translate to the view matrix
 	glm::mat4 viewMatrix = glm::translate(glm::mat4(), currentViewPosition);
 

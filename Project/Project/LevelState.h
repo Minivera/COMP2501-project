@@ -1,6 +1,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <map>
 
 #include "GameState.h"
 #include "PlayerGameObject.h"
@@ -32,6 +33,9 @@ private:
 	// The table definition of that level from the fileSystem
 	vector<vector<string>> levelDefinition;
 
+	// Map of all the entities in the game and their position in the level definition file
+	map<pair<int, int>, shared_ptr<GameObject>> levelMap;
+
 	// The ID of this level in the global state machine.
 	int levelID;
 	// The ID of the next level in the global state machine.
@@ -47,7 +51,7 @@ public:
 	
 	void controls(glm::vec2 mousePos, double deltaTime);
 
-	void render(Shader& spriteShader, Shader& particlesShader);
+	void render(Shader& spriteShader, Shader& particleShader, Shader& laserShader);
 
 	void load();
 

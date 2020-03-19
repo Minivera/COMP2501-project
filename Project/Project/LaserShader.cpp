@@ -13,11 +13,6 @@ LaserShader::LaserShader(const char* vertPath, const char* fragPath) : Shader(ve
 void LaserShader::makeParticles()
 {
 	// Each particle is a square with four vertices and two triangles
-
-	// Number of attributes for vertices and faces
-	const int vertex_attr = 2;  // 2 attributes per vertex: 2D (or 3D) position (2)
-								//	const int face_att = 3; // Vertex indices (3)
-
 	GLfloat vertex[] = {
 		//  square (two triangles)
 		//  Position      Color             Texcoords
@@ -27,28 +22,10 @@ void LaserShader::makeParticles()
 		-0.5f, -0.5f,	 1.0f, 1.0f, 1.0f,		0.0f, 1.0f  // Bottom-left
 	};
 
-	GLfloat particleatt[4000 * vertex_attr];
-
-	for (int i = 0; i < 4000; i++)
-	{
-		// position	
-		particleatt[i * vertex_attr + 0] = vertex[(i % 4) * 7 + 0];
-		particleatt[i * vertex_attr + 1] = vertex[(i % 4) * 7 + 1];
-	}
-
-
 	GLuint face[] = {
 		0, 1, 2, // t1
 		2, 3, 0  //t2
 	};
-
-	GLuint manyface[4000 * 6];
-
-	for (int i = 0; i < 4000; i++)
-	{
-		for (int j = 0; j < 6; j++)
-			manyface[i * 6 + j] = face[j] + i * 4;
-	}
 
 	// Create buffer for vertices
 	glGenBuffers(1, &vbo_laser);

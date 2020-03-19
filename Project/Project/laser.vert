@@ -11,10 +11,6 @@ uniform float size;
 uniform float lifespanLeft;
 uniform float lifespan;
 
-// Attributes forwarded to the fragment shader
-out vec4 color_interp;
-out vec2 uv_interp;
-
 void main()
 {
 	float steps = size / 6;

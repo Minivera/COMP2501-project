@@ -10,6 +10,7 @@
 #include "EnemyGameObject.h"
 #include "FishGameObject.h"
 #include "JellyfishGameObject.h"
+#include "SmokerGameObject.h"
 #include "LaserGameObject.h"
 
 LevelState::LevelState(int levelID, int nextLevelID, const char* levelFile, shared_ptr<PlayerGameObject> player) {
@@ -51,13 +52,15 @@ void LevelState::loadLevel(bool reloading) {
 	double columnStart = -(totalColumns / 2);
 	double currentRow = rowStart;
 	// For each row in the level csv file
-	for (auto rowIt = levelDefinition.begin(); rowIt != levelDefinition.end(); rowIt++) {
+	for (int row = 0; row < totalRows; row++) {
 		double currentColumn = columnStart;
 
 		// For each column in the level CSV file
-		for (auto columnIt = (*rowIt).begin(); columnIt != (*rowIt).end(); columnIt++) {
+		for (int column = 0; column < totalColumns; column++) {
 			// Add the given entity to the game
-			string val = (*columnIt);
+			string val = levelDefinition.at(row).at(column);
+			shared_ptr<GameObject> obj;
+
 			if (val == NONE) {
 				// skip
 			}
@@ -65,125 +68,153 @@ void LevelState::loadLevel(bool reloading) {
 				player->setPosition(glm::vec3(currentColumn, currentRow, 0.0f));
 			}
 			else if (val == EXIT && !reloading) {
-				entities.push_back(make_shared<ExitGameObject>(glm::vec3(currentColumn, currentRow, 0.0f), ExitGameObject::exitTextureID, size));
+				obj = make_shared<ExitGameObject>(glm::vec3(currentColumn, currentRow, 0.0f), ExitGameObject::exitTextureID, size);
 			}
 			else if (val.find(TREASURE) != string::npos && !reloading) {
 				string textValue = val.substr(9);
 				int treasureValue = stoi(textValue);
-				entities.push_back(make_shared<TreasureGameObject>(treasureValue, glm::vec3(currentColumn, currentRow, 0.0f), TreasureGameObject::treasureTextureID, size));
+				obj = make_shared<TreasureGameObject>(treasureValue, glm::vec3(currentColumn, currentRow, 0.0f), TreasureGameObject::treasureTextureID, size);
 			}
 			else if (val == FISH) {
-				entities.push_back(make_shared<FishGameObject>(glm::vec3(currentColumn, currentRow, 0.0f), FishGameObject::fishTextureID, size));
+				obj = make_shared<FishGameObject>(glm::vec3(currentColumn, currentRow, 0.0f), EnemyGameObject::fishTextureID, size);
 			}
 			else if (val == JELLYFISH) {
-				entities.push_back(make_shared<JellyfishGameObject>(glm::vec3(currentColumn, currentRow, 0.0f), FishGameObject::jellyfishTextureID, size));
+				obj = make_shared<JellyfishGameObject>(glm::vec3(currentColumn, currentRow, 0.0f), EnemyGameObject::jellyfishTextureID, size);
 			}
 			else if (val == SMOKER) {
-				// TODO: Change for smoker object when implemented
-				entities.push_back(make_shared<JellyfishGameObject>(glm::vec3(currentColumn, currentRow, 0.0f), FishGameObject::smokerTextureID, size));
+				// Find the terrain directly above the current smoker. Since we're going from top to bottom, left to right, we should always have something above us.
+				for (int i = row - 1; i >= 0; i--) {
+					string current = levelDefinition.at(i).at(column);
+					if (current == CEILING_1 || current == CEILING_2 || current == FLOOR_1 || current == FLOOR_2 || current == WALL_L ||
+						current == WALL_R || current == SLANT_B_L || current == SLANT_T_L || current == SLANT_B_R || current == SLANT_T_R) {
+
+						auto found = levelMap.find(make_pair(i, column));
+						if (found == levelMap.end()) {
+							throw "Terrain definition found, but no terrain entity existed for smoker";
+						}
+
+						obj = make_shared<SmokerGameObject>(
+							dynamic_pointer_cast<TerrainGameObject>(found->second),
+							glm::vec3(currentColumn, currentRow, 0.0f),
+							EnemyGameObject::smokerTextureID,
+							EnemyGameObject::smokerFogTextureID,
+							size
+						);
+					}
+				}
+
+				if (obj == nullptr) {
+					throw "No terrain was found above a smoker";
+				}
 			}
 			else if (val == BG && !reloading) {
 				// TODO: Add a BG terrain type and texture
 			}
 			else if (val == CEILING_1 && !reloading) {
-				entities.push_back(make_shared<TerrainGameObject>(
+				obj = make_shared<TerrainGameObject>(
 					TerrainType::Ceilling,
 					glm::vec3(currentColumn, currentRow, 0.0f),
 					glm::vec3(1.0f, 1.0f, 1.0f),
 					0,
 					TerrainGameObject::ceiling1TextureID,
 					size
-				));
+				);
 			}
 			else if (val == CEILING_2 && !reloading) {
-				entities.push_back(make_shared<TerrainGameObject>(
+				obj = make_shared<TerrainGameObject>(
 					TerrainType::Ceilling,
 					glm::vec3(currentColumn, currentRow, 0.0f),
 					glm::vec3(1.0f, 1.0f, 1.0f),
 					0,
 					TerrainGameObject::ceiling2TextureID,
 					size
-				));
+				);
 			}
 			else if (val == FLOOR_1 && !reloading) {
-				entities.push_back(make_shared<TerrainGameObject>(
+				obj = make_shared<TerrainGameObject>(
 					TerrainType::Floor,
 					glm::vec3(currentColumn, currentRow, 0.0f),
 					glm::vec3(1.0f, 1.0f, 1.0f),
 					0,
 					TerrainGameObject::floor1TextureID,
 					size
-				));
+				);
 			}
 			else if (val == FLOOR_2 && !reloading) {
-				entities.push_back(make_shared<TerrainGameObject>(
+				obj = make_shared<TerrainGameObject>(
 					TerrainType::Floor,
 					glm::vec3(currentColumn, currentRow, 0.0f),
 					glm::vec3(1.0f, 1.0f, 1.0f),
 					0,
 					TerrainGameObject::floor2TextureID,
 					size
-				));
+				);
 			}
 			else if (val == WALL_L && !reloading) {
-				entities.push_back(make_shared<TerrainGameObject>(
+				obj = make_shared<TerrainGameObject>(
 					TerrainType::Wall,
 					glm::vec3(currentColumn + 0.5, currentRow, 0.0f),
 					glm::vec3(0.5f, 1.0f, 1.0f),
 					0,
 					TerrainGameObject::wallLeftTextureID,
 					size
-				));
+				);
 			}
 			else if (val == WALL_R && !reloading) {
-				entities.push_back(make_shared<TerrainGameObject>(
+				obj = make_shared<TerrainGameObject>(
 					TerrainType::Wall,
 					glm::vec3(currentColumn - 0.5, currentRow, 0.0f),
 					glm::vec3(0.5f, 1.0f, 1.0f),
 					0,
 					TerrainGameObject::wallRightTextureID,
 					size
-				));
+				);
 			}
 			else if (val == SLANT_T_L && !reloading) {
-				entities.push_back(make_shared<TerrainGameObject>(
+				obj = make_shared<TerrainGameObject>(
 					TerrainType::TopSlant,
 					glm::vec3(currentColumn - 0.1, currentRow + 0.1, 0.0f),
 					glm::vec3(0.9f, 0.9f, 1.0f),
 					0,
 					TerrainGameObject::slantTopLeftTextureID,
 					size
-				));
+				);
 			}
 			else if (val == SLANT_T_R && !reloading) {
-				entities.push_back(make_shared<TerrainGameObject>(
+				obj = make_shared<TerrainGameObject>(
 					TerrainType::TopSlant,
 					glm::vec3(currentColumn + 0.1, currentRow + 0.1, 0.0f),
 					glm::vec3(0.9f, 0.9f, 1.0f),
 					0,
 					TerrainGameObject::slantTopRightTextureID,
 					size
-				));
+				);
 			}
 			else if (val == SLANT_B_L && !reloading) {
-				entities.push_back(make_shared<TerrainGameObject>(
+				obj = make_shared<TerrainGameObject>(
 					TerrainType::BottomSlant,
 					glm::vec3(currentColumn - 0.1, currentRow - 0.1, 0.0f),
 					glm::vec3(0.9f, 0.9f, 1.0f),
 					0,
 					TerrainGameObject::slantBottomLeftTextureID,
 					size
-				));
+				);
 			}
 			else if (val == SLANT_B_R && !reloading) {
-				entities.push_back(make_shared<TerrainGameObject>(
+				obj = make_shared<TerrainGameObject>(
 					TerrainType::BottomSlant,
 					glm::vec3(currentColumn + 0.1, currentRow - 0.1, 0.0f),
 					glm::vec3(0.9f, 0.9f, 1.0f),
 					0,
 					TerrainGameObject::slantBottomRightTextureID,
 					size
-				));
+				);
+			}
+
+			// Insert the object in the entities and map if created
+			if (obj != nullptr) {
+				entities.push_back(obj);
+				levelMap.insert(make_pair(make_pair(row, column), obj));
 			}
 
 			currentColumn += 1;
@@ -239,7 +270,7 @@ void LevelState::controls(glm::vec2 mousePos, double deltaTime) {
 	}
 }
 
-void LevelState::render(Shader& spriteShader, Shader& particlesShader) {
+void LevelState::render(Shader& spriteShader, Shader& particleShader, Shader& laserShader) {
 	shared_ptr<PlayerGameObject> player = dynamic_pointer_cast<PlayerGameObject>(entities.at(0));
 
 	currentViewPosition = -player->getPosition() * currentViewZoom;
@@ -251,9 +282,8 @@ void LevelState::render(Shader& spriteShader, Shader& particlesShader) {
 	viewMatrix = glm::scale(viewMatrix, glm::vec3(currentViewZoom, currentViewZoom, currentViewZoom));
 
 	spriteShader.setUniformMat4("viewMatrix", viewMatrix);
-	particlesShader.setUniformMat4("viewMatrix", viewMatrix);
 
-	for (auto it = entities.begin(); it != entities.end(); it++) {
+    for (auto it = entities.begin(); it != entities.end(); it++) {
 		// Render game objects
 		(*it)->render(spriteShader);
 	}
@@ -262,6 +292,7 @@ void LevelState::render(Shader& spriteShader, Shader& particlesShader) {
 	glBindTexture(GL_TEXTURE_2D, midgroundTexture);
 	spriteShader.enable();
 	spriteShader.setAttributes();
+	spriteShader.setUniformMat4("viewMatrix", viewMatrix);
 
 	// Setup the transformation matrix for the shader
 	glm::mat4 transformationMatrix = glm::translate(glm::mat4(), player->getPosition());
@@ -294,12 +325,29 @@ void LevelState::render(Shader& spriteShader, Shader& particlesShader) {
 
 	glClear(GL_DEPTH_BUFFER_BIT);
 
+	laserShader.enable();
+	laserShader.setAttributes();
+	laserShader.setUniformMat4("viewMatrix", viewMatrix);
+
 	// Render any special laser object if any
 	for (auto it = entities.begin(); it != entities.end(); it++) {
 		// Render game objects
 		auto laser = dynamic_pointer_cast<LaserGameObject>(*it);
 		if (laser) {
-			laser->renderParticles(particlesShader);
+			laser->renderParticles(laserShader);
+		}
+	}
+
+	//spriteShader.enable();
+	//spriteShader.setAttributes();
+	spriteShader.setUniformMat4("viewMatrix", viewMatrix);
+
+	// Render every other particles
+	for (auto it = entities.begin(); it != entities.end(); it++) {
+		// Render game objects
+		auto laser = dynamic_pointer_cast<LaserGameObject>(*it);
+		if (!laser) {
+			(*it)->renderParticles(particleShader);
 		}
 	}
 }

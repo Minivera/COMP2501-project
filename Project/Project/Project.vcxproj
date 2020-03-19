@@ -176,6 +176,7 @@
     <ClCompile Include="LevelInterface.cpp" />
     <ClCompile Include="LevelState.cpp" />
     <ClCompile Include="LineOfSight.cpp" />
+    <ClCompile Include="ParticleShader.cpp" />
     <ClCompile Include="Pistol.cpp" />
     <ClCompile Include="PlayerGameObject.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -184,6 +185,7 @@
     <ClCompile Include="PlayerInventory.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="SmokerGameObject.cpp" />
     <ClCompile Include="SpriteShader.cpp" />
     <ClCompile Include="TerrainGameObject.cpp" />
     <ClCompile Include="TreasureGameObject.cpp" />
@@ -210,6 +212,7 @@
     <ClInclude Include="LevelInterface.h" />
     <ClInclude Include="LevelState.h" />
     <ClInclude Include="LineOfSight.h" />
+    <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="Pistol.h" />
     <ClInclude Include="PlayerGameObject.h" />
     <ClInclude Include="GameObject.h" />
@@ -217,6 +220,7 @@
     <ClInclude Include="PlayerInventory.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Shader.h" />
+    <ClInclude Include="SmokerGameObject.h" />
     <ClInclude Include="SpriteShader.h" />
     <ClInclude Include="TerrainGameObject.h" />
     <ClInclude Include="TreasureGameObject.h" />

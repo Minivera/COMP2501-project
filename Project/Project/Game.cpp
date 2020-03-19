@@ -25,7 +25,7 @@ Game::Game(const GLuint* textures) {
 	currentState = level1;
 }
 
-bool Game::loop(Window& window, Shader& spriteShader, Shader& laserShader, double deltaTime) {
+bool Game::loop(Window& window, Shader& spriteShader, Shader& particleShader, Shader& laserShader, double deltaTime) {
 	// Clear background
 	window.clear(viewportBackgroundColor);
 
@@ -45,7 +45,7 @@ bool Game::loop(Window& window, Shader& spriteShader, Shader& laserShader, doubl
 	currentState->update(deltaTime);
 
 	// Render the current state
-	currentState->render(spriteShader, laserShader);
+	currentState->render(spriteShader, particleShader, laserShader);
 
 	// Clean anything that needs to be cleaned on the current state
 	currentState->clean();

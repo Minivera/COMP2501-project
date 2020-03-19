@@ -40,27 +40,6 @@ bool LaserGameObject::checkLaserHits(GameObject& entity) {
 		0
 	);
 
-	// Invert y coordinates
-	selfPos.y = -selfPos.y;
-	otherPos.y = -otherPos.y;
-
-	// Align the coordinates on the axis to remove any minus coordinates
-	glm::vec3 alignment = glm::vec3(
-		glm::min(selfPos.x - 0.5f, otherPos.x - otherBoundingBox.x),
-		glm::min(selfPos.y - 0.5f, otherPos.y - otherBoundingBox.y),
-		0.0f
-	);
-
-	//If the alignment adjustment is smaller than 0, add the inverse to the position so we can align
-	if (alignment.x < 0) {
-		selfPos.x += -alignment.x;
-		otherPos.x += -alignment.x;
-	}
-	if (alignment.y < 0) {
-		selfPos.y += -alignment.y;
-		otherPos.y += -alignment.y;
-	}
-
 	// The laser width is a vector that add half the size perpendicular to the laser's angle
 	glm::vec3 laserWidth = glm::vec3(
 		cos(angle) + glm::radians(90.0f) * size / 2,
@@ -68,22 +47,18 @@ bool LaserGameObject::checkLaserHits(GameObject& entity) {
 		0
 	);
 
-	// Invert y again
-	laserWidth.y = -laserWidth.y;
-	sightLength.y = -sightLength.y;
-
 	auto posLaserLeft = selfPos - laserWidth;
 	auto posLaserRight = selfPos + laserWidth;
 
 	// Draw three lines of sight depending on the laser size, if we are on one or the other, there is a hit.
-	auto lineOfSightLeft = LineOfSight::drawLine(posLaserLeft.x , posLaserLeft.y, posLaserLeft.x + sightLength.x, posLaserLeft.y + sightLength.y);
-	auto lineOfSightCenter = LineOfSight::drawLine(selfPos.x, selfPos.y, selfPos.x + sightLength.x, selfPos.y + sightLength.y);
-	auto lineOfSightRight = LineOfSight::drawLine(posLaserRight.x, posLaserRight.y, posLaserRight.x + sightLength.x, posLaserRight.y + sightLength.y);
+	auto lineOfSightLeft = LineOfSight::drawLine(posLaserLeft.x , posLaserLeft.y, sightLength.x, sightLength.y);
+	auto lineOfSightCenter = LineOfSight::drawLine(selfPos.x, selfPos.y, sightLength.x, sightLength.y);
+	auto lineOfSightRight = LineOfSight::drawLine(posLaserRight.x, posLaserRight.y, sightLength.x, sightLength.y);
 	auto entityRectangle = LineOfSight::drawRectangle(
 		otherPos.x - otherBoundingBox.x / 2,
-		otherPos.y - otherBoundingBox.y / 2,
+		otherPos.y + otherBoundingBox.y / 2,
 		otherPos.x + otherBoundingBox.x / 2,
-		otherPos.y + otherBoundingBox.y / 2
+		otherPos.y - otherBoundingBox.y / 2
 	);
 
 	return LineOfSight::intersectsWith(lineOfSightLeft, entityRectangle)
@@ -94,7 +69,6 @@ bool LaserGameObject::checkLaserHits(GameObject& entity) {
 void LaserGameObject::render(Shader& spriteShader) {}
 
 void LaserGameObject::renderParticles(Shader& particlesShader) {
-	glBindTexture(GL_TEXTURE_2D, 3);
 	particlesShader.enable();
 	particlesShader.setAttributes();
 
@@ -125,5 +99,5 @@ void LaserGameObject::renderParticles(Shader& particlesShader) {
 	particlesShader.setUniform1f("lifespan", baseLifespan);
 
 	// Draw the entity
-	glDrawElements(GL_TRIANGLES, 24000, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }

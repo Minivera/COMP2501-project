@@ -25,6 +25,7 @@
 #include "ElectricityGameObject.h"
 #include "SpriteShader.h"
 #include "LaserShader.h"
+#include "ParticleShader.h"
 
 // Macro for printing exceptions
 #define PrintException(exception_object)\
@@ -114,6 +115,7 @@ int main(void){
 		// Setup window
 		Window window(window_width_g, window_height_g, window_title_g);
 		SpriteShader spriteShader("shader.vert", "shader.frag");
+		ParticleShader particleShader("particles.vert", "particles.frag");
 		LaserShader laserShader("laser.vert", "laser.frag");
 		spriteShader.setAttributes();
 		spriteShader.enable();
@@ -140,7 +142,7 @@ int main(void){
 			double deltaTime = currentTime - lastTime;
 			lastTime = currentTime;
 
-			running = game.loop(window, spriteShader, laserShader, deltaTime);
+			running = game.loop(window, spriteShader, particleShader, laserShader, deltaTime);
 		}
 	}
 	catch (std::exception &e){

@@ -27,5 +27,5 @@ public:
 
 	// Main loop method that should run for every update from the main method
 	// Returns if the game should still be running, return false to stop it
-	bool loop(Window& window, Shader& spriteShader, Shader& laserShader, double deltaTime);
+	bool loop(Window& window, Shader& spriteShader, Shader& particleShader, Shader& laserShader, double deltaTime);
 };

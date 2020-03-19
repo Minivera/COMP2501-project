@@ -1,7 +1,5 @@
 #include "EnemyGameObject.h"
 
-#include <glm/gtx/vector_angle.hpp>
-
 #include "WeaponGameObject.h"
 #include "TreasureGameObject.h"
 #include "PlayerGameObject.h"
@@ -15,13 +13,6 @@ bool EnemyGameObject::seesEntity(const glm::vec3& direction, const GameObject& o
 	glm::vec3 selfPos = position;
 	glm::vec3 otherPos = other.getPosition();
 	glm::vec2 otherBoundingBox = other.getBoundingBox();
-
-	/*GLfloat angle = glm::angle(glm::normalize(glm::vec2(selfPos.x, selfPos.y)), glm::normalize(glm::vec2(otherPos.x, otherPos.y)));
-	glm::vec3 sightLength = glm::vec3(
-		cos(angle) * sightRange,
-		sin(angle) * sightRange,
-		0
-	);*/
 
 	auto lineOfSight = LineOfSight::drawLine(selfPos.x, selfPos.y, direction.x, direction.y);
 	auto entityRectangle = LineOfSight::drawRectangle(
@@ -189,13 +180,16 @@ void EnemyGameObject::collide() {
 GLuint EnemyGameObject::fishTextureID;
 GLuint EnemyGameObject::jellyfishTextureID;
 GLuint EnemyGameObject::smokerTextureID;
+GLuint EnemyGameObject::smokerFogTextureID;
 
 int EnemyGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\enemies\\fish.png");
 	setFuncPtr(textures[offset + 1], "Assets\\enemies\\fish-big.png");
-	setFuncPtr(textures[offset + 2], "Assets\\enemies\\mine.png");
+	setFuncPtr(textures[offset + 2], "Assets\\enemies\\smoker.png");
+	setFuncPtr(textures[offset + 3], "Assets\\FX\\enemy-death.png");
 	fishTextureID = textures[offset + 0];
 	jellyfishTextureID = textures[offset + 1];
 	smokerTextureID = textures[offset + 2];
-	return offset + 3;
+	smokerFogTextureID = textures[offset + 3];
+	return offset + 4;
 }

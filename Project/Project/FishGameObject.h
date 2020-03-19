@@ -10,7 +10,7 @@ private:
 public:
 	FishGameObject(glm::vec3& entityPos, GLuint entityTexture, GLint entityNumElements);
 
-	// Overriden update method to have the fish chae the player when required
+	// Overriden update method to have the fish charge the player when required
 	virtual void update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime);
 };
 

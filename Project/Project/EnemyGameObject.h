@@ -60,6 +60,7 @@ public:
 	static GLuint fishTextureID;
 	static GLuint jellyfishTextureID;
 	static GLuint smokerTextureID;
+	static GLuint smokerFogTextureID;
 
 	// Static method to load the various enemy sprites from the filesystem
 	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);

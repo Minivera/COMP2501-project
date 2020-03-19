@@ -159,6 +159,12 @@
     <ClCompile Include="ElectricityGameObject.cpp">
       <Filter>Source Files\Entities\WeaponEntities</Filter>
     </ClCompile>
+    <ClCompile Include="SmokerGameObject.cpp">
+      <Filter>Source Files\Entities\EnemyEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleShader.cpp">
+      <Filter>Source Files\Shaders</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -253,6 +259,12 @@
     </ClInclude>
     <ClInclude Include="ElectricityGameObject.h">
       <Filter>Header Files\Entities\WeaponEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="SmokerGameObject.h">
+      <Filter>Header Files\Entities\EnemyEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleShader.h">
+      <Filter>Header Files\Shaders</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
