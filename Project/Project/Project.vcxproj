@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="BulletGameObject.cpp" />
+    <ClCompile Include="ElectricityGameObject.cpp" />
     <ClCompile Include="EnemyGameObject.cpp" />
     <ClCompile Include="ExitGameObject.cpp" />
     <ClCompile Include="FishGameObject.cpp" />
@@ -193,6 +194,7 @@
   <ItemGroup>
     <ClInclude Include="AABB.h" />
     <ClInclude Include="BulletGameObject.h" />
+    <ClInclude Include="ElectricityGameObject.h" />
     <ClInclude Include="EnemyGameObject.h" />
     <ClInclude Include="ExitGameObject.h" />
     <ClInclude Include="FishGameObject.h" />

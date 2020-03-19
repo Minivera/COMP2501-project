@@ -22,6 +22,7 @@
 #include "WeaponGameObject.h"
 #include "TreasureGameObject.h"
 #include "ExitGameObject.h"
+#include "ElectricityGameObject.h"
 #include "SpriteShader.h"
 #include "LaserShader.h"
 
@@ -31,7 +32,7 @@
 
 // Globals that define the OpenGL window and viewport
 const std::string window_title_g = "COMP2501 Project";
-const unsigned int textures_count = 23;
+const unsigned int textures_count = 24;
 const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 
@@ -102,6 +103,7 @@ void setallTexture(GLuint* textures) {
 	offset = EnemyGameObject::setTextures(setthisTexture, textures, offset);
 	offset = TerrainGameObject::setTextures(setthisTexture, textures, offset);
 	offset = ExitGameObject::setTextures(setthisTexture, textures, offset);
+	offset = ElectricityGameObject::setTextures(setthisTexture, textures, offset);
 }
 
 // Main function that builds and runs the game

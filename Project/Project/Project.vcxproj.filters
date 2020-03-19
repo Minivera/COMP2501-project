@@ -156,6 +156,9 @@
     <ClCompile Include="LaserShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="ElectricityGameObject.cpp">
+      <Filter>Source Files\Entities\WeaponEntities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -247,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="SpriteShader.h">
       <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="ElectricityGameObject.h">
+      <Filter>Header Files\Entities\WeaponEntities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
