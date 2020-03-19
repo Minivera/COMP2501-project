@@ -4,7 +4,7 @@
 #include "PlayerGameObject.h"
 
 ElectricityGameObject::ElectricityGameObject(double entityLifespan, glm::vec3& entitySpeed, glm::vec3& entityPosition, GLfloat entityAngle, GLuint entityTexture, GLint entityNumElements) :
-	GameObject(entityPosition, entitySpeed, glm::vec3(0.05, 0.05, 1), entityAngle, entityTexture, entityNumElements) {
+	GameObject(entityPosition, entitySpeed, glm::vec3(0.25, 0.25, 1), entityAngle, entityTexture, entityNumElements) {
 	lifespan = entityLifespan;
 	angle = entityAngle;
 	speed = entitySpeed;

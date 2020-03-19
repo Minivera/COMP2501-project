@@ -28,24 +28,27 @@ void JellyfishGameObject::update(std::vector<shared_ptr<GameObject>>& entities, 
 	}
 
 	bool readyToAttack = false;
-	if (currentState != EnemyState::DIE && currentState == EnemyState::IDLE && currentState != EnemyState::ATTACKING &&
-		seesEntity(viewRange, *player)) {
+	if (currentState != EnemyState::DIE && currentState != EnemyState::ATTACKING &&
+		glm::distance(playerPos, position) <= viewRange) {
 		readyToAttack = true;
 		// Check if we see any wall btween us and the player
 		for (auto it = entities.begin(); it != entities.end(); it++) {
 			// If we have a wall between us and the player
 			auto terrain = dynamic_pointer_cast<TerrainGameObject>(*it);
-			if (terrain && seesEntity(viewRange, *terrain) && glm::distance(playerPos, position) > glm::distance(terrain->getPosition(), position)) {
+			if (terrain && seesEntity(player->getPosition(), *terrain) && glm::distance(playerPos, position) > glm::distance(terrain->getPosition(), position)) {
 				readyToAttack = false;
 				break;
 			}
 		}
 
-		if (readyToAttack) {
+		if (readyToAttack && currentState == EnemyState::IDLE) {
+			// If we are not attacking, but should, start
 			currentState = EnemyState::ATTACK;
 		}
-		else {
+		else if (!readyToAttack && currentState == EnemyState::ATTACKING) {
+			// If we shouldn't attack, but we are attacking, stop.
 			currentState = EnemyState::IDLE;
+			velocity = glm::vec3();
 		}
 	}
 
@@ -83,12 +86,17 @@ void JellyfishGameObject::attack(std::vector<shared_ptr<GameObject>>& entities) 
 		position.x - playerPos.x
 	));
 
-	// Add an elecriticty game object to the vector of game objects
+	GLfloat attackAngle = glm::degrees(glm::atan(
+		playerPos.y - position.y,
+		playerPos.x - position.x
+	));
+
+	// Add an electricity game object to the vector of game objects
 	entities.push_back(make_shared<ElectricityGameObject>(
-		attackWaitTime,
+		attackRange,
 		glm::vec3(attackSpeed, 0, 0),
 		position,
-		rotation,
+		attackAngle,
 		ElectricityGameObject::projectileTextureID,
 		6
 	));

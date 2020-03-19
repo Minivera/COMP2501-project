@@ -237,10 +237,6 @@ void LevelState::controls(glm::vec2 mousePos, double deltaTime) {
 	if (glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {
 		player->attack();
 	}
-	if (glfwGetKey(Window::getWindow(), GLFW_KEY_Z) == GLFW_PRESS) {
-		// Demo command to trigger the player getting hurt
-		player->hurt();
-	}
 }
 
 void LevelState::render(Shader& spriteShader, Shader& particlesShader) {

@@ -32,7 +32,7 @@
 
 // Globals that define the OpenGL window and viewport
 const std::string window_title_g = "COMP2501 Project";
-const unsigned int textures_count = 24;
+const unsigned int textures_count = 50;
 const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 

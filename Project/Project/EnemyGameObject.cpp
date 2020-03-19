@@ -1,5 +1,7 @@
 #include "EnemyGameObject.h"
 
+#include <glm/gtx/vector_angle.hpp>
+
 #include "WeaponGameObject.h"
 #include "TreasureGameObject.h"
 #include "PlayerGameObject.h"
@@ -9,48 +11,24 @@
 EnemyGameObject::EnemyGameObject(glm::vec3& entityPos, GLuint entityTexture, GLint entityNumElements):
 	GameObject(entityPos, entityTexture, entityNumElements) {}
 
-bool EnemyGameObject::seesEntity(double sightRange, const GameObject& other) {
+bool EnemyGameObject::seesEntity(const glm::vec3& direction, const GameObject& other) {
 	glm::vec3 selfPos = position;
 	glm::vec3 otherPos = other.getPosition();
 	glm::vec2 otherBoundingBox = other.getBoundingBox();
 
-	glm::vec3 axis(-selfPos.y, selfPos.x, 0);
-	GLfloat selfCoords = glm::dot(otherPos, selfPos);
-	GLfloat axisCoords = glm::dot(otherPos, axis);
-	GLfloat angle = glm::atan(selfCoords, axisCoords);
+	/*GLfloat angle = glm::angle(glm::normalize(glm::vec2(selfPos.x, selfPos.y)), glm::normalize(glm::vec2(otherPos.x, otherPos.y)));
 	glm::vec3 sightLength = glm::vec3(
 		cos(angle) * sightRange,
 		sin(angle) * sightRange,
 		0
-	);
+	);*/
 
-	// Invert y coordinates
-	selfPos.y = -selfPos.y;
-	otherPos.y = -otherPos.y;
-
-	// Align the coordinates on the axis to remove any minus coordinates
-	glm::vec3 alignment = glm::vec3(
-		glm::min(selfPos.x, otherPos.x - otherBoundingBox.x),
-		glm::min(selfPos.y, otherPos.y - otherBoundingBox.y),
-		0.0f
-	);
-
-	//If the alignment adjustment is smaller than 0, add the inverse to the position so we can align
-	if (alignment.x < 0) {
-		selfPos.x += -alignment.x;
-		otherPos.x += -alignment.x;
-	}
-	if (alignment.y < 0) {
-		selfPos.y += -alignment.y;
-		otherPos.y += -alignment.y;
-	}
-
-	auto lineOfSight = LineOfSight::drawLine(selfPos.x, selfPos.y, selfPos.x + sightLength.x, selfPos.y + sightLength.y);
+	auto lineOfSight = LineOfSight::drawLine(selfPos.x, selfPos.y, direction.x, direction.y);
 	auto entityRectangle = LineOfSight::drawRectangle(
 		otherPos.x - otherBoundingBox.x / 2, 
-		otherPos.y - otherBoundingBox.y / 2,
+		otherPos.y + otherBoundingBox.y / 2,
 		otherPos.x + otherBoundingBox.x / 2,
-		otherPos.y + otherBoundingBox.y / 2
+		otherPos.y - otherBoundingBox.y / 2
 	);
 
 	return LineOfSight::intersectsWith(lineOfSight, entityRectangle);

@@ -36,10 +36,10 @@ public:
 
 	// Getters
 	inline const glm::vec3& getPosition() const { return position; };
-	inline glm::vec3& getVelocity() { return velocity; } const
-	inline GLfloat getAngle() { return angle; } const
-	inline glm::vec2& getBoundingBox() const { return boundingBox; };
-	inline bool isDirty() { return dirty; } const
+	inline const glm::vec3& getVelocity() const { return velocity; }
+	inline GLfloat getAngle() const { return angle; }
+	inline const glm::vec2& getBoundingBox() const { return boundingBox; };
+	inline bool isDirty() const { return dirty; }
 
 	// Setters
 	inline void setPosition(glm::vec3& newPosition) { position = newPosition; }

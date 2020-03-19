@@ -6,7 +6,7 @@ class FishGameObject: public EnemyGameObject
 {
 private:
 	// Range at which this entity will start chasing the player.
-	double viewRange = 6;
+	double viewRange = 4;
 public:
 	FishGameObject(glm::vec3& entityPos, GLuint entityTexture, GLint entityNumElements);
 

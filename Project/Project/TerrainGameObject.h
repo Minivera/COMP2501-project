@@ -10,7 +10,7 @@ private:
 public:
 	TerrainGameObject(TerrainType entityType, glm::vec3& entityPosition, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);
 
-	inline TerrainType getType() { return type; }
+	inline TerrainType getType() const { return type; }
 
 	// Variables that give the texture IDs for the texture of the entity
 	static GLuint ceiling1TextureID;

@@ -9,7 +9,7 @@ private:
 	double fleeRange = 2;
 
 	// Range at which this entity will start attacking the player.
-	double viewRange = 6;
+	double viewRange = 5;
 
 	// The time to track the time between attacks.
 	double attackTimer = 0;
@@ -19,6 +19,9 @@ private:
 
 	// Speed at which the weapon moves.
 	double attackSpeed = 100;
+
+	// How many units the attack will live for.
+	double attackRange = 350;
 
 	// Method to make the jelly fish attack the player
 	void attack(std::vector<shared_ptr<GameObject>>& entities);

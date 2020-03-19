@@ -36,7 +36,7 @@ protected:
 
 	EnemyGameObject(glm::vec3& entityPos, GLuint entityTexture, GLint entityNumElements);
 
-	virtual bool seesEntity(double sightRange, const GameObject& other);
+	virtual bool seesEntity(const glm::vec3& direction, const GameObject& other);
 public:
 	// Overriden update method to update the enemy and handle collisions
 	virtual void update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime);
