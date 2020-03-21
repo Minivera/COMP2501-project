@@ -13,6 +13,7 @@ Game::Game(const GLuint* textures) {
 		WeaponGameObject::pistolTextureID,
 		WeaponGameObject::laserTextureID,
 		WeaponGameObject::bulletTextureID,
+		PlayerGameObject::playerBubblesTextureID,
 		6
 	);
 

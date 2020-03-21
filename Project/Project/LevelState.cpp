@@ -100,6 +100,7 @@ void LevelState::loadLevel(bool reloading) {
 							EnemyGameObject::smokerFogTextureID,
 							size
 						);
+						break;
 					}
 				}
 
@@ -338,9 +339,9 @@ void LevelState::render(Shader& spriteShader, Shader& particleShader, Shader& la
 		}
 	}
 
-	//spriteShader.enable();
-	//spriteShader.setAttributes();
-	spriteShader.setUniformMat4("viewMatrix", viewMatrix);
+	particleShader.enable();
+	particleShader.setAttributes();
+	particleShader.setUniformMat4("viewMatrix", viewMatrix);
 
 	// Render every other particles
 	for (auto it = entities.begin(); it != entities.end(); it++) {

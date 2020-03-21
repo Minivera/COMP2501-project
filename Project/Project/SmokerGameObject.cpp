@@ -89,9 +89,14 @@ void SmokerGameObject::renderParticles(Shader& particlesShader) {
 	particlesShader.enable();
 	particlesShader.setAttributes();
 
-	particlesShader.setUniform1f("count", 6.0f);
-	particlesShader.setUniform1f("time", entityTime);
-	particlesShader.setUniform1f("distance", glm::distance(position, topTerrain->getPosition()));
+	auto otherPos = topTerrain->getPosition();
+	auto otherBox = topTerrain->getBoundingBox();
+	glm::vec3 boundPosition = glm::vec3(
+		otherPos.x + otherBox.x,
+		otherPos.y - otherBox.y,
+		otherPos.z
+	);
+	double distance = glm::distance(position, boundPosition);
 
 	// Setup the transformation matrix for the shader
 	// Start by moving to the position
@@ -100,12 +105,13 @@ void SmokerGameObject::renderParticles(Shader& particlesShader) {
 	// Added a scale matrix to scale the sprite so it can be rescaled
 	transformationMatrix = glm::scale(transformationMatrix, glm::vec3(0.5f, 0.5f, 1.0f));
 
-	// Move the entity to the center of the position
-	transformationMatrix = glm::translate(transformationMatrix, glm::vec3(-0.5f, 0, 0));
+	particlesShader.setUniform1f("count", 6.0f);
+	particlesShader.setUniform1f("time", entityTime);
+	particlesShader.setUniform1f("distance", distance * 2);
 
 	// Set the transformation matrix in the shader
 	particlesShader.setUniformMat4("transformationMatrix", transformationMatrix);
 
 	// Draw the entity
-	glDrawElements(GL_TRIANGLES, 24000, GL_UNSIGNED_INT, 0);
+	glDrawElements(GL_TRIANGLES, numElements * distance * 6, GL_UNSIGNED_INT, 0);
 }

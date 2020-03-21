@@ -54,15 +54,21 @@ private:
 	GLuint harpoonTexture;
 	GLuint pistolTexture;
 	GLuint laserTexture;
+
+	// Texture for the bubbles particle
+	GLuint bubblesTexture;
 public:
 	PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, GLuint entityHarpoonTexture, GLuint entityPistolTexture,
-		GLuint entityLaserTexture, GLuint entityBulletTexture, GLint entityNumElements);
+		GLuint entityLaserTexture, GLuint entityBulletTexture, GLuint entityBubblesTexture, GLint entityNumElements);
 
 	// Overriden update method to update the player and handle collisions
 	void update(std::vector<shared_ptr<GameObject>>& gameObjects, double deltaTime);
 
 	// Overriden render emthod to render both the player and the weapon they are carrying
 	void render(Shader& spriteShader);
+
+	// Overriden renderParticles method that will render some bubbles above the player
+	void renderParticles(Shader& particlesShader);
 
 	// Overriden clean method to clean anything the player needs cleaning.
 	void clean();
@@ -103,6 +109,7 @@ public:
 	static GLuint playerTextureID;
 	static GLuint playerMovingTextureID;
 	static GLuint playerHurtTextureID;
+	static GLuint playerBubblesTextureID;
 
 	// Static method to load the player textures.
 	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);

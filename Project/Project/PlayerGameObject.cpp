@@ -12,11 +12,12 @@
 */
 
 PlayerGameObject::PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, GLuint entityHarpoonTexture, GLuint entityPistolTexture, 
-	GLuint entityLaserTexture, GLuint entityBulletTexture, GLint entityNumElements)
+	GLuint entityLaserTexture, GLuint entityBulletTexture, GLuint entityBubblesTexture, GLint entityNumElements)
 	: GravityGameObject(entityPos, entityTexture, entityNumElements) {
 	harpoonTexture = entityHarpoonTexture;
 	pistolTexture = entityPistolTexture;
 	laserTexture = entityLaserTexture;
+	bubblesTexture = entityBubblesTexture;
 	boundingBox = glm::vec2(0.4, 0.6);
 
 	inventory = make_unique<PlayerInventory>(entityBulletTexture, entityNumElements);
@@ -270,6 +271,36 @@ void PlayerGameObject::render(Shader& spriteShader) {
 	spriteShader.setUniform1f("count", 0);
 }
 
+void PlayerGameObject::renderParticles(Shader& particlesShader) {
+	// Bind the entities texture
+	glBindTexture(GL_TEXTURE_2D, bubblesTexture);
+	particlesShader.enable();
+	particlesShader.setAttributes();
+
+	// Setup the transformation matrix for the shader
+	// Start by moving to the position
+	glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position);
+
+	// Move above the player
+	transformationMatrix = glm::translate(transformationMatrix, glm::vec3(0.1f, 0.4f, 0));
+
+	// Added a scale matrix to scale the sprite so it can be rescaled
+	transformationMatrix = glm::scale(transformationMatrix, glm::vec3(0.3f, 0.3f, 1.0f));
+
+	particlesShader.setUniform1f("count", 4.0f);
+	particlesShader.setUniform1f("time", playerTime);
+	particlesShader.setUniform1f("distance", 1.5f);
+
+	// Set the transformation matrix in the shader
+	particlesShader.setUniformMat4("transformationMatrix", transformationMatrix);
+
+	int count = random::randomInt(1, 3);
+	count = currentState == PlayerState::HURTING ? count * 4 : count;
+
+	// Draw the entity
+	glDrawElements(GL_TRIANGLES, numElements * count, GL_UNSIGNED_INT, 0);
+}
+
 void PlayerGameObject::clean() {
 	slowDownFactor = glm::vec2();
 	moved = false;
@@ -341,13 +372,16 @@ void PlayerGameObject::pickUpTreasure(int value) {
 GLuint PlayerGameObject::playerTextureID = 0;
 GLuint PlayerGameObject::playerMovingTextureID = 0;
 GLuint PlayerGameObject::playerHurtTextureID = 0;
+GLuint PlayerGameObject::playerBubblesTextureID = 0;
 
 int PlayerGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\player\\player-idle.png");
 	setFuncPtr(textures[offset + 1], "Assets\\player\\player-swiming.png");
 	setFuncPtr(textures[offset + 2], "Assets\\player\\player-hurt.png");
+	setFuncPtr(textures[offset + 3], "Assets\\FX\\bubbles.png");
 	playerTextureID = textures[offset + 0];
 	playerMovingTextureID = textures[offset + 1];
 	playerHurtTextureID = textures[offset + 2];
-	return offset + 3;
+	playerBubblesTextureID = textures[offset + 3];
+	return offset + 4;
 }
