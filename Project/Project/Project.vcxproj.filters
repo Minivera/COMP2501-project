@@ -61,6 +61,12 @@
     <Filter Include="Source Files\Shaders">
       <UniqueIdentifier>{7ba0b312-94d4-4240-981a-e02d1b037402}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Entities\PlayerEntities">
+      <UniqueIdentifier>{23b085dc-56c8-4281-b294-d85a7ed2860e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Entities\PlayerEntities">
+      <UniqueIdentifier>{8c3d3143-e62b-4399-9f5f-c7ca5968e1d1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -70,9 +76,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerGameObject.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="Game.cpp">
@@ -88,9 +91,6 @@
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="GravityGameObject.cpp">
-      <Filter>Source Files\Entities</Filter>
-    </ClCompile>
-    <ClCompile Include="TreasureGameObject.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
     <ClCompile Include="LevelInterface.cpp">
@@ -165,15 +165,24 @@
     <ClCompile Include="ParticleShader.cpp">
       <Filter>Source Files\Shaders</Filter>
     </ClCompile>
+    <ClCompile Include="Powerup.cpp">
+      <Filter>Source Files\Equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerGameObject.cpp">
+      <Filter>Source Files\Entities\PlayerEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="TreasureGameObject.cpp">
+      <Filter>Source Files\Entities\PlayerEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="PowerupGameObject.cpp">
+      <Filter>Source Files\Entities\PlayerEntities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="GameObject.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerGameObject.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="Game.h">
@@ -189,9 +198,6 @@
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="GravityGameObject.h">
-      <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="TreasureGameObject.h">
       <Filter>Header Files\Entities</Filter>
     </ClInclude>
     <ClInclude Include="LevelInterface.h">
@@ -265,6 +271,18 @@
     </ClInclude>
     <ClInclude Include="ParticleShader.h">
       <Filter>Header Files\Shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="Powerup.h">
+      <Filter>Header Files\Equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerGameObject.h">
+      <Filter>Header Files\Entities\PlayerEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="TreasureGameObject.h">
+      <Filter>Header Files\Entities\PlayerEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerupGameObject.h">
+      <Filter>Header Files\Entities\PlayerEntities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -183,6 +183,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="FileUtils.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
+    <ClCompile Include="Powerup.cpp" />
+    <ClCompile Include="PowerupGameObject.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="SmokerGameObject.cpp" />
@@ -218,6 +220,8 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="FileUtils.h" />
     <ClInclude Include="PlayerInventory.h" />
+    <ClInclude Include="Powerup.h" />
+    <ClInclude Include="PowerupGameObject.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="SmokerGameObject.h" />

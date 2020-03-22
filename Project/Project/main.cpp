@@ -23,6 +23,7 @@
 #include "TreasureGameObject.h"
 #include "ExitGameObject.h"
 #include "ElectricityGameObject.h"
+#include "PowerupGameObject.h"
 #include "SpriteShader.h"
 #include "LaserShader.h"
 #include "ParticleShader.h"
@@ -105,6 +106,7 @@ void setallTexture(GLuint* textures) {
 	offset = TerrainGameObject::setTextures(setthisTexture, textures, offset);
 	offset = ExitGameObject::setTextures(setthisTexture, textures, offset);
 	offset = ElectricityGameObject::setTextures(setthisTexture, textures, offset);
+	offset = PowerupGameObject::setTextures(setthisTexture, textures, offset);
 }
 
 // Main function that builds and runs the game

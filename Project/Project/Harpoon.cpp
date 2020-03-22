@@ -19,7 +19,7 @@ void Harpoon::upgrade() {
 	rechargeRate -= rechargeRate * rechargeRateByLevel;
 }
 
-void Harpoon::attack(glm::vec3 position, double angle, std::vector<shared_ptr<GameObject>>& gameObjects) {
+void Harpoon::attack(glm::vec3 position, double angle, double boost, std::vector<shared_ptr<GameObject>>& gameObjects) {
 	glm::vec3 harpoonTip = glm::vec3(
 		cos(glm::radians(angle)) * 0.5,
 		sin(glm::radians(angle)) * 0.5,
@@ -27,9 +27,9 @@ void Harpoon::attack(glm::vec3 position, double angle, std::vector<shared_ptr<Ga
 	);
 
 	gameObjects.push_back(make_shared<HarpoonGameObject>(
-		damage,
+		damage + damage * boost,
 		0.15,
 		position + harpoonTip
 	));
-	Weapon::attack(position, angle, gameObjects);
+	Weapon::attack(position, angle, boost, gameObjects);
 }

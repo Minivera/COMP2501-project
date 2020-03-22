@@ -9,15 +9,21 @@ namespace powerup {
 		{
 		case 0:
 			return Powerup{
-				PowerupType::Armor
+				PowerupType::Armor,
+				30,
+				0 // Always on
 			};
 		case 1:
 			return Powerup{
-				PowerupType::Air
+				PowerupType::Air,
+				0,
+				30 // will add 30 seconds of air back
 			};
 		case 2:
 			return Powerup{
-				PowerupType::Pepper
+				PowerupType::Pepper,
+				30,
+				0.5 //boost damage by 50%
 			};
 		default:
 			throw "Powerup type out of range";

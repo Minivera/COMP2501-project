@@ -26,7 +26,7 @@ PlayerGameObject::PlayerGameObject(glm::vec3 &entityPos, GLuint entityTexture, G
 void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime) {
 	playerTime += (float)deltaTime;
 
-	inventory->removeAir(deltaTime);
+	inventory->update(deltaTime);
 
 	// Reload the current weapon from the inventory
 	inventory->getEquipedWeapon().recharge(deltaTime);
@@ -45,7 +45,14 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 		auto treasure = dynamic_pointer_cast<TreasureGameObject>(*it);
 		if (currentState != PlayerState::HURTING && treasure && checkCollision(*(*it))) {
 			treasure->setDirty(true);
-			pickUpTreasure(treasure->getValue());
+			pickUp(treasure);
+		}
+
+		// Check if player is near some powerup they can pick up
+		auto powerup = dynamic_pointer_cast<PowerupGameObject>(*it);
+		if (currentState != PlayerState::HURTING && powerup && checkCollision(*(*it))) {
+			powerup->setDirty(true);
+			pickUp(powerup);
 		}
 
 		// Check if the player is getting hit by something
@@ -103,7 +110,7 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 	if (currentState == PlayerState::ATTACK) {
 		// We processed the attack state, now we're executing it.
 		currentState = PlayerState::ATTACKING;
-		inventory->getEquipedWeapon().attack(position, armRotation, entities);
+		inventory->getEquipedWeapon().attack(position, armRotation, inventory->damageBoost(), entities);
 
 		armMovement = inventory->getEquipedWeapon().getRechargeRate();
 	}
@@ -115,19 +122,18 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 		}
 	}
 
-	// Handle hurting mechanism
-	if (currentState == PlayerState::HURT) {
+	// Handle hurting mechanism if not invulnerable
+	if (currentState == PlayerState::HURT && !inventory->isInvulnerable()) {
 		// We processed the hurt state, now we're executing it.
 		currentState = PlayerState::HURTING;
 
 		invicibilityTimer = invicibleTime;
 
 		// Lose some treasure when hurt
-		int treasureLoss = inventory->getTreasure() * treasureLossFactor;
-		inventory->removeTreasure(treasureLoss);
+		int treasureLoss = inventory->loseTreasure();
 
 		// lose some air when hurt
-		inventory->removeAir(inventory->getAir() * airLossFactor);
+		inventory->loseAir();
 
 		// Drop treasure at current position
 		entities.push_back(make_shared<TreasureGameObject>(treasureLoss, position + glm::vec3(0, -0.3, 0), TreasureGameObject::treasureTextureID, numElements));
@@ -363,9 +369,15 @@ void PlayerGameObject::hurt() {
 	}
 }
 
-void PlayerGameObject::pickUpTreasure(int value) {
+void PlayerGameObject::pickUp(shared_ptr<TreasureGameObject> treasure) {
 	if (currentState != PlayerState::HURT && currentState != PlayerState::HURTING) {
-		inventory->addTreasure(value);
+		inventory->addToInventory(treasure);
+	}
+}
+
+void PlayerGameObject::pickUp(shared_ptr<PowerupGameObject> powerup) {
+	if (currentState != PlayerState::HURT && currentState != PlayerState::HURTING) {
+		inventory->addToInventory(powerup);
 	}
 }
 

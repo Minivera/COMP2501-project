@@ -31,12 +31,6 @@ private:
 	// The slow down effect on the acceleration from colliding with terrain
 	const double wallSlowEffect = 0.65;
 
-	// How much treasure is lost when getting hurt.
-	const double treasureLossFactor = 0.15;
-
-	// How much air is lost when getting hurt.
-	const double airLossFactor = 0.10;
-
 	// The length of time a player will stay invicible for.
 	const double invicibleTime = 0.95;
 
@@ -91,18 +85,15 @@ public:
 	// Method to trigger a player being hurt by something in the environment.
 	void hurt();
 
-	// Method that makes the player pick up some treasure.
-	void pickUpTreasure(int quantity);
+	// Method that makes the player pick up something.
+	void pickUp(shared_ptr<TreasureGameObject> treasure);
+	void pickUp(shared_ptr<PowerupGameObject> powerup);
 
 	// Getters
 	inline int getCurrentTreasure() { return inventory->getTreasure(); }
 	inline double getCurrentAir() { return inventory->getAir(); }
 
 	// Setters
-	inline void addTreasure(int newTreasure) { inventory->addTreasure(newTreasure); }
-	inline void addAir(double newAir) { inventory->addAir(newAir); }
-	inline void removeTreasure(int newTreasure) { inventory->removeTreasure(newTreasure); }
-	inline void removeAir(double newAir) { inventory->removeAir(newAir); }
  	inline void setArmRotation(double newRotation) { armRotation = newRotation; }
 
 	// Variables that give the texture IDs for the textures of this entity

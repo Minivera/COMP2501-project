@@ -19,13 +19,13 @@ void Laser::upgrade() {
 	size += size * sizeByLevel;
 }
 
-void Laser::attack(glm::vec3 position, double angle, std::vector<shared_ptr<GameObject>>& gameObjects) {
+void Laser::attack(glm::vec3 position, double angle, double boost, std::vector<shared_ptr<GameObject>>& gameObjects) {
 	gameObjects.push_back(make_shared<LaserGameObject>(
-		damage,
+		damage + damage * boost,
 		0.25,
 		size,
 		position,
 		angle
 		));
-	Weapon::attack(position, angle, gameObjects);
+	Weapon::attack(position, angle, boost, gameObjects);
 }

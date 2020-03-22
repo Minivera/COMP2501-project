@@ -21,7 +21,7 @@ void Pistol::upgrade() {
 	range += range * rangeByLevel;
 }
 
-void Pistol::attack(glm::vec3 position, double angle, std::vector<shared_ptr<GameObject>>& gameObjects) {
+void Pistol::attack(glm::vec3 position, double angle, double boost, std::vector<shared_ptr<GameObject>>& gameObjects) {
 	glm::vec3 pistolTip = glm::vec3(
 		cos(glm::radians(angle)) * 0.2,
 		sin(glm::radians(angle)) * 0.2,
@@ -29,7 +29,7 @@ void Pistol::attack(glm::vec3 position, double angle, std::vector<shared_ptr<Gam
 	);
 
 	gameObjects.push_back(make_shared<BulletGameObject>(
-		damage,
+		damage + damage * boost,
 		range,
 		glm::vec3(speed, 0, 0),
 		position + pistolTip,
@@ -37,5 +37,5 @@ void Pistol::attack(glm::vec3 position, double angle, std::vector<shared_ptr<Gam
 		texture,
 		numElements
 	));
-	Weapon::attack(position, angle, gameObjects);
+	Weapon::attack(position, angle, boost, gameObjects);
 }

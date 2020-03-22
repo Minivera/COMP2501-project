@@ -68,6 +68,48 @@ void PlayerInventory::equip(WeaponType type) {
 	}
 }
 
+void PlayerInventory::update(double deltaTime) {
+	currentAir -= deltaTime;
+	powerupTimer -= deltaTime;
+
+	// if the current powerup has expired, deactivate the powerup
+	if (powerupTimer <= 0) {
+		powerupTimer = -1;
+	}
+}
+
+void PlayerInventory::addToInventory(shared_ptr<TreasureGameObject> treasureEntity) {
+	currentTreasure += treasureEntity->getValue();
+}
+
+void PlayerInventory::addToInventory(shared_ptr<PowerupGameObject> powerupEntity) {
+	currentPowerup = powerupEntity->getPowerup();
+
+	if (currentPowerup.type == PowerupType::Air) {
+		currentAir += currentPowerup.duration;
+	}
+	else {
+		powerupTimer = currentPowerup.duration;
+	}
+}
+
+int PlayerInventory::loseTreasure() {
+	// If we got less than how much treasure we're set to lose, lose it all
+	if (currentTreasure <= treasureLossFactor) {
+		int treasureLost = currentTreasure;
+		currentTreasure = 0;
+		return treasureLost;
+	}
+
+	// Otherwise, lose our loss factor in treasure
+	currentTreasure -= treasureLossFactor;
+	return treasureLossFactor;
+}
+
+void PlayerInventory::loseAir() {
+	currentAir -= airLossFactor;
+}
+
 vector<reference_wrapper<Weapon>> PlayerInventory::getWeapons() {
 	vector<reference_wrapper<Weapon>> weapons = vector<reference_wrapper<Weapon>>();
 
