@@ -1,6 +1,7 @@
 #include "Game.h"
 #include "GameState.h"
 #include "LevelState.h"
+#include "MainMenuState.h"
 
 #include "PlayerGameObject.h"
 #include "WeaponGameObject.h"
@@ -18,12 +19,16 @@ Game::Game(const GLuint* textures) {
 	);
 
 	// Set the levels and other states here
-	shared_ptr<GameState> level1 = make_shared<LevelState>(0, 1, "Data\\levels\\level1.csv", player);
-	shared_ptr<GameState> level2 = make_shared<LevelState>(1, 0, "Data\\levels\\level1.csv", player);
+	shared_ptr<GameState> mainMenu = make_shared<MainMenuState>(player);
+	shared_ptr<GameState> level1 = make_shared<LevelState>(LEVEL_1_STATE, LEVEL_2_STATE, "Data\\levels\\level1.csv", player);
+	shared_ptr<GameState> level2 = make_shared<LevelState>(LEVEL_2_STATE, LEVEL_3_STATE, "Data\\levels\\level1.csv", player);
+	shared_ptr<GameState> level3 = make_shared<LevelState>(LEVEL_3_STATE, END_GAME, "Data\\levels\\level1.csv", player);
 
+	states.push_back(mainMenu);
 	states.push_back(level1);
 	states.push_back(level2);
-	currentState = level1;
+	states.push_back(level3);
+	currentState = mainMenu;
 }
 
 bool Game::loop(Window& window, Shader& spriteShader, Shader& particleShader, Shader& laserShader, double deltaTime) {

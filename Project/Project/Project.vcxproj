@@ -160,6 +160,7 @@
   <ItemGroup>
     <ClCompile Include="AABB.cpp" />
     <ClCompile Include="BulletGameObject.cpp" />
+    <ClCompile Include="ButtonGameObject.cpp" />
     <ClCompile Include="ElectricityGameObject.cpp" />
     <ClCompile Include="EnemyGameObject.cpp" />
     <ClCompile Include="ExitGameObject.cpp" />
@@ -167,6 +168,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameState.cpp" />
     <ClCompile Include="GravityGameObject.cpp" />
+    <ClCompile Include="GuiGameObject.cpp" />
     <ClCompile Include="Harpoon.cpp" />
     <ClCompile Include="HarpoonGameObject.cpp" />
     <ClCompile Include="JellyfishGameObject.cpp" />
@@ -176,6 +178,7 @@
     <ClCompile Include="LevelInterface.cpp" />
     <ClCompile Include="LevelState.cpp" />
     <ClCompile Include="LineOfSight.cpp" />
+    <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="ParticleShader.cpp" />
     <ClCompile Include="Pistol.cpp" />
     <ClCompile Include="PlayerGameObject.cpp" />
@@ -198,6 +201,7 @@
   <ItemGroup>
     <ClInclude Include="AABB.h" />
     <ClInclude Include="BulletGameObject.h" />
+    <ClInclude Include="ButtonGameObject.h" />
     <ClInclude Include="ElectricityGameObject.h" />
     <ClInclude Include="EnemyGameObject.h" />
     <ClInclude Include="ExitGameObject.h" />
@@ -205,6 +209,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GravityGameObject.h" />
+    <ClInclude Include="GuiGameObject.h" />
     <ClInclude Include="Harpoon.h" />
     <ClInclude Include="HarpoonGameObject.h" />
     <ClInclude Include="JellyfishGameObject.h" />
@@ -214,6 +219,7 @@
     <ClInclude Include="LevelInterface.h" />
     <ClInclude Include="LevelState.h" />
     <ClInclude Include="LineOfSight.h" />
+    <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="ParticleShader.h" />
     <ClInclude Include="Pistol.h" />
     <ClInclude Include="PlayerGameObject.h" />

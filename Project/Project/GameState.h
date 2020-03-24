@@ -11,6 +11,13 @@ using namespace std;
 
 const GLfloat BASE_GAME_ZOOM = 0.25f;
 
+constexpr int MAIN_MENU_STATE = 0;
+constexpr int LEVEL_1_STATE = 1;
+constexpr int LEVEL_2_STATE = 2;
+constexpr int LEVEL_3_STATE = 3;
+constexpr int END_GAME = 4;
+constexpr int PAUSE_MENU = 5;
+
 class GameState {
 protected:
 	// Current viewport position for this state

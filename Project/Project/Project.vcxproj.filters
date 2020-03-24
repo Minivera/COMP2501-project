@@ -67,6 +67,12 @@
     <Filter Include="Header Files\Entities\PlayerEntities">
       <UniqueIdentifier>{8c3d3143-e62b-4399-9f5f-c7ca5968e1d1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Entities\GuiEntities">
+      <UniqueIdentifier>{be0ef1bf-3021-4ee2-8d48-1720bdafed5a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entities\GuiEntities">
+      <UniqueIdentifier>{f6d967e2-7526-4cb7-a922-84f1d94776c2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -177,6 +183,15 @@
     <ClCompile Include="PowerupGameObject.cpp">
       <Filter>Source Files\Entities\PlayerEntities</Filter>
     </ClCompile>
+    <ClCompile Include="MainMenuState.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiGameObject.cpp">
+      <Filter>Source Files\Entities\GuiEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="ButtonGameObject.cpp">
+      <Filter>Source Files\Entities\GuiEntities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -283,6 +298,15 @@
     </ClInclude>
     <ClInclude Include="PowerupGameObject.h">
       <Filter>Header Files\Entities\PlayerEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="MainMenuState.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiGameObject.h">
+      <Filter>Header Files\Entities\GuiEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="ButtonGameObject.h">
+      <Filter>Header Files\Entities\GuiEntities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

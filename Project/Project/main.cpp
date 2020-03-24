@@ -24,6 +24,9 @@
 #include "ExitGameObject.h"
 #include "ElectricityGameObject.h"
 #include "PowerupGameObject.h"
+#include "MainMenuState.h"
+#include "ButtonGameObject.h"
+
 #include "SpriteShader.h"
 #include "LaserShader.h"
 #include "ParticleShader.h"
@@ -34,7 +37,7 @@
 
 // Globals that define the OpenGL window and viewport
 const std::string window_title_g = "COMP2501 Project";
-const unsigned int textures_count = 50;
+const unsigned int textures_count = 100;
 const unsigned int window_width_g = 800;
 const unsigned int window_height_g = 600;
 
@@ -95,9 +98,31 @@ void setthisTexture(GLuint w, char *fname) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
+void setthisTextureFromSheet(GLuint w, char* fname, int skipX, int skipY, int colLength, int rowHeight) {
+	glBindTexture(GL_TEXTURE_2D, w);
+
+	int width, height;
+	unsigned char* image = SOIL_load_image(fname, &width, &height, 0, SOIL_LOAD_RGBA);
+	glPixelStorei(GL_UNPACK_ROW_LENGTH, width);
+	glPixelStorei(GL_UNPACK_SKIP_PIXELS, skipX);
+	glPixelStorei(GL_UNPACK_SKIP_ROWS, skipY);
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, colLength, rowHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
+	SOIL_free_image_data(image);
+
+	// Texture Wrapping
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+	// Texture Filtering
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+}
+
 void setallTexture(GLuint* textures) {
 	glGenTextures(textures_count, textures);
 	int offset = LevelState::setTextures(setthisTexture, textures, 0);
+	offset = MainMenuState::setTextures(setthisTexture, textures, offset);
 	offset = GameObject::setTextures(setthisTexture, textures, offset);
 	offset = PlayerGameObject::setTextures(setthisTexture, textures, offset);
 	offset = WeaponGameObject::setTextures(setthisTexture, textures, offset);
@@ -107,6 +132,8 @@ void setallTexture(GLuint* textures) {
 	offset = ExitGameObject::setTextures(setthisTexture, textures, offset);
 	offset = ElectricityGameObject::setTextures(setthisTexture, textures, offset);
 	offset = PowerupGameObject::setTextures(setthisTexture, textures, offset);
+
+	offset = ButtonGameObject::setTextures(setthisTextureFromSheet, textures, offset);
 }
 
 // Main function that builds and runs the game

@@ -47,8 +47,8 @@ void SpriteShader::makeSprite()
 }
 
 void SpriteShader::setAttributes() {
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glDepthMask(GL_TRUE);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	glBindBuffer(GL_ARRAY_BUFFER, vbo_sprite);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_sprite);

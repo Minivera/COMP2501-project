@@ -12,7 +12,7 @@
 using namespace std;
 
 // Base viewport color
-const glm::vec3 viewportBackgroundColor(0.0, 0.0, 1.0);
+const glm::vec3 viewportBackgroundColor(0.1, 0.13, 0.17);
 
 class Game {
 private:
