@@ -2,6 +2,7 @@
 
 #include <memory>
 #include <vector>
+#include <tuple>
 
 #include "GameObject.h"
 #include "Shader.h"
@@ -11,12 +12,13 @@ using namespace std;
 
 const GLfloat BASE_GAME_ZOOM = 0.25f;
 
+// Indexs of the various states in the game object states vector. These should be consistent with that vector.
 constexpr int MAIN_MENU_STATE = 0;
 constexpr int LEVEL_1_STATE = 1;
 constexpr int LEVEL_2_STATE = 2;
 constexpr int LEVEL_3_STATE = 3;
-constexpr int END_GAME = 4;
-constexpr int PAUSE_MENU = 5;
+constexpr int END_GAME_STATE = 4;
+constexpr int PAUSE_MENU_STATE = 5;
 
 class GameState {
 protected:
@@ -45,6 +47,7 @@ public:
 	virtual void load();
 
 	// Utility method that is called at the end of every loop cycle to potentially transition to a new state.
-	// Return an integer to transition to a specific state within the game. Return -1 to not transition.
-	virtual int transtionState();
+	// Return a tuple made up of an integer to transition to a specific state within the game. Return -1 to not transition.
+	// The second element is a boolean that says if the next state should be reloaded or not.
+	virtual tuple<int, bool> transtionState();
 };

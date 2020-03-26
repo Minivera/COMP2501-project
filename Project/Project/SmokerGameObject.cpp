@@ -102,6 +102,9 @@ void SmokerGameObject::renderParticles(Shader& particlesShader) {
 	// Start by moving to the position
 	glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position);
 
+	// Move forward so the particles are rendered above everything
+	transformationMatrix = glm::translate(transformationMatrix, glm::vec3(0, 0, -1.0f));
+
 	// Added a scale matrix to scale the sprite so it can be rescaled
 	transformationMatrix = glm::scale(transformationMatrix, glm::vec3(0.5f, 0.5f, 1.0f));
 

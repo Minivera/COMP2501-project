@@ -58,7 +58,7 @@ void MainMenuState::render(Shader& spriteShader, Shader& particleShader, Shader&
 	glBindTexture(GL_TEXTURE_2D, backgroundTextureID);
 
 	// Setup the transformation matrix for the shader
-	glm::mat4 transformationMatrix = glm::translate(glm::mat4(), currentViewPosition);
+	glm::mat4 transformationMatrix = glm::translate(glm::mat4(), glm::vec3(0, 0, 1.1f));
 
 	// Added a scale matrix to scale the sprite so it can be rescaled
 	transformationMatrix = glm::scale(transformationMatrix, glm::vec3(2.0f / currentViewZoom, 2.0f / currentViewZoom, 1.0f));
@@ -71,10 +71,10 @@ void MainMenuState::render(Shader& spriteShader, Shader& particleShader, Shader&
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-int MainMenuState::transtionState() {
+tuple<int, bool> MainMenuState::transtionState() {
 	if (gameStarted) {
 		gameStarted = false;
-		return LEVEL_1_STATE;
+		return make_tuple(LEVEL_1_STATE, true);
 	}
 
 	return GameState::transtionState();

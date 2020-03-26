@@ -231,6 +231,9 @@ void LevelState::controls(glm::vec2 mousePos, double deltaTime) {
 
 	player->setArmRotation(angleToMouse);
 
+	if (glfwGetKey(Window::getWindow(), GLFW_KEY_ESCAPE) == GLFW_PRESS) {
+		pausing = true;
+	}
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_A) == GLFW_PRESS) {
 		player->addLeftAcceleration(deltaTime);
 	}
@@ -273,8 +276,9 @@ void LevelState::controls(glm::vec2 mousePos, double deltaTime) {
 
 void LevelState::render(Shader& spriteShader, Shader& particleShader, Shader& laserShader) {
 	shared_ptr<PlayerGameObject> player = dynamic_pointer_cast<PlayerGameObject>(entities.at(0));
+	glm::vec3 playerPos = player->getPosition();
 
-	currentViewPosition = -player->getPosition() * currentViewZoom;
+	currentViewPosition = -playerPos * currentViewZoom;
 
 	// Apply position translate to the view matrix
 	glm::mat4 viewMatrix = glm::translate(glm::mat4(), currentViewPosition);
@@ -296,7 +300,7 @@ void LevelState::render(Shader& spriteShader, Shader& particleShader, Shader& la
 	spriteShader.setUniformMat4("viewMatrix", viewMatrix);
 
 	// Setup the transformation matrix for the shader
-	glm::mat4 transformationMatrix = glm::translate(glm::mat4(), player->getPosition());
+	glm::mat4 transformationMatrix = glm::translate(glm::mat4(), glm::vec3(playerPos.x, playerPos.y, 1.1f));
 
 	// Added a scale matrix to scale the sprite so it can be rescaled
 	transformationMatrix = glm::scale(transformationMatrix, glm::vec3(8.0f, 8.0f, 1.0f));
@@ -312,7 +316,7 @@ void LevelState::render(Shader& spriteShader, Shader& particleShader, Shader& la
 	glBindTexture(GL_TEXTURE_2D, backgroundTexture);
 
 	// Setup the transformation matrix for the shader
-	transformationMatrix = glm::translate(glm::mat4(), player->getPosition());
+	transformationMatrix = glm::translate(glm::mat4(), glm::vec3(playerPos.x, playerPos.y, 1.1f));
 
 	// Added a scale matrix to scale the sprite so it can be rescaled
 	transformationMatrix = glm::scale(transformationMatrix, glm::vec3(8.0f, 8.0f, 1.0f));
@@ -323,8 +327,6 @@ void LevelState::render(Shader& spriteShader, Shader& particleShader, Shader& la
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-	glClear(GL_DEPTH_BUFFER_BIT);
 
 	laserShader.enable();
 	laserShader.setAttributes();
@@ -353,11 +355,16 @@ void LevelState::render(Shader& spriteShader, Shader& particleShader, Shader& la
 	}
 }
 
-int LevelState::transtionState() {
+tuple<int, bool> LevelState::transtionState() {
+	if (pausing) {
+		pausing = false;
+		return make_tuple(PAUSE_MENU_STATE, false);
+	}
+
 	// Check if player collides with the exit
 	for (auto it = entities.begin(); it != entities.end(); it++) {
 		if (dynamic_pointer_cast<ExitGameObject>(*it) && player->checkCollision(*(*it))) {
-			return nextLevelID;
+			return make_tuple(nextLevelID, true);
 		}
 	}
 

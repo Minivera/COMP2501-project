@@ -46,6 +46,9 @@ private:
 
 	// Method that will load the level entities in the game state when first loading or when reloading.
 	void loadLevel(bool reloading = false);
+
+	// Boolean that says if the game is about to pause in the next loop.
+	bool pausing = false;
 public:
 	LevelState(int levelID, int nextLevelID, const char* levelFile, shared_ptr<PlayerGameObject> player);
 	
@@ -55,7 +58,7 @@ public:
 
 	void load();
 
-	int transtionState();
+	tuple<int, bool> transtionState();
 
 	// Variables that give the texture IDs for the texture
 	static GLuint backgroundTextureID;

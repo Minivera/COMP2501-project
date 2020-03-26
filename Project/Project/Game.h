@@ -17,7 +17,7 @@ const glm::vec3 viewportBackgroundColor(0.1, 0.13, 0.17);
 class Game {
 private:
 	// The game's current State in the state machine
-	shared_ptr<GameState> currentState;
+	int currentState;
 
 	// The list of various states available in the state machines
 	vector<shared_ptr<GameState>> states;

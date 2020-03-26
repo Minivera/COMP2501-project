@@ -180,6 +180,7 @@
     <ClCompile Include="LineOfSight.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
     <ClCompile Include="ParticleShader.cpp" />
+    <ClCompile Include="PauseMenuState.cpp" />
     <ClCompile Include="Pistol.cpp" />
     <ClCompile Include="PlayerGameObject.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -221,6 +222,7 @@
     <ClInclude Include="LineOfSight.h" />
     <ClInclude Include="MainMenuState.h" />
     <ClInclude Include="ParticleShader.h" />
+    <ClInclude Include="PauseMenuState.h" />
     <ClInclude Include="Pistol.h" />
     <ClInclude Include="PlayerGameObject.h" />
     <ClInclude Include="GameObject.h" />

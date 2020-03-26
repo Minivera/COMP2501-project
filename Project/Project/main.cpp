@@ -25,6 +25,7 @@
 #include "ElectricityGameObject.h"
 #include "PowerupGameObject.h"
 #include "MainMenuState.h"
+#include "PauseMenuState.h"
 #include "ButtonGameObject.h"
 
 #include "SpriteShader.h"
@@ -123,6 +124,7 @@ void setallTexture(GLuint* textures) {
 	glGenTextures(textures_count, textures);
 	int offset = LevelState::setTextures(setthisTexture, textures, 0);
 	offset = MainMenuState::setTextures(setthisTexture, textures, offset);
+	offset = PauseMenuState::setTextures(setthisTexture, textures, offset);
 	offset = GameObject::setTextures(setthisTexture, textures, offset);
 	offset = PlayerGameObject::setTextures(setthisTexture, textures, offset);
 	offset = WeaponGameObject::setTextures(setthisTexture, textures, offset);
