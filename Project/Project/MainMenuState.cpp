@@ -1,6 +1,7 @@
 #include "MainMenuState.h"
 
 #include "ButtonGameObject.h"
+#include "UpgradeTableGameObject.h"
 
 MainMenuState::MainMenuState(shared_ptr<PlayerGameObject> player) {
 	player = player;
@@ -19,10 +20,17 @@ MainMenuState::MainMenuState(shared_ptr<PlayerGameObject> player) {
 		buttonScale,
 		6
 	);
+	auto upgradeTable = make_shared<UpgradeTableGameObject>(
+		player,
+		glm::vec3(2.0f, 0.0f, 1.0f),
+		glm::vec3(1.0f, 1.0f, 1.0f),
+		6
+	);
 
 	startButton->onClick(std::bind(&MainMenuState::onStart, this, std::placeholders::_1));
 	quitButton->onClick(std::bind(&MainMenuState::onQuit, this, std::placeholders::_1));
 
+	entities.push_back(upgradeTable);
 	entities.push_back(startButton);
 	entities.push_back(quitButton);
 }
@@ -31,11 +39,15 @@ void MainMenuState::controls(glm::vec2 mousePos, double deltaTime) {
 	mousePos.x /= currentViewZoom;
 	mousePos.y /= currentViewZoom;
 
-	for (auto it = entities.begin(); it != entities.end(); it++) {
-		// Run hoevered mechanism on all GUI elements
+	auto upgradeTable = dynamic_pointer_cast<UpgradeTableGameObject>(entities[0]);
 
+	// Also execute on the entities of the upgrade table
+	auto entitiesToCheck = vector<shared_ptr<GameObject>>(upgradeTable->getSubEntities());
+	entitiesToCheck.insert(entitiesToCheck.end(), entities.begin(), entities.end());
+
+	for (auto it = entitiesToCheck.begin(); it != entitiesToCheck.end(); it++) {
+		// Run hovered mechanism on all GUI elements
 		auto gui = dynamic_pointer_cast<GuiGameObject>(*it);
-
 		if (gui) {
 			gui->verifyMouseOver(mousePos);
 
@@ -56,6 +68,8 @@ void MainMenuState::render(Shader& spriteShader, Shader& particleShader, Shader&
 
 	// Bind the midground texture
 	glBindTexture(GL_TEXTURE_2D, backgroundTextureID);
+	spriteShader.enable();
+	spriteShader.setAttributes();
 
 	// Setup the transformation matrix for the shader
 	glm::mat4 transformationMatrix = glm::translate(glm::mat4(), glm::vec3(0, 0, 1.1f));
@@ -71,13 +85,13 @@ void MainMenuState::render(Shader& spriteShader, Shader& particleShader, Shader&
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-tuple<int, bool> MainMenuState::transtionState() {
+tuple<int, bool> MainMenuState::transitionState() {
 	if (gameStarted) {
 		gameStarted = false;
 		return make_tuple(LEVEL_1_STATE, true);
 	}
 
-	return GameState::transtionState();
+	return GameState::transitionState();
 }
 
 void MainMenuState::onStart(GuiGameObject& caller) {
@@ -90,7 +104,7 @@ void MainMenuState::onQuit(GuiGameObject& caller) {
 
 GLuint MainMenuState::backgroundTextureID = 0;
 
-int MainMenuState::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+int MainMenuState::setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\gui\\main-menu.png");
 	backgroundTextureID = textures[offset + 0];
 	return offset + 1;

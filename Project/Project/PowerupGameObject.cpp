@@ -17,7 +17,7 @@ GLuint PowerupGameObject::armorTextureID = 0;
 GLuint PowerupGameObject::airTextureID = 0;
 GLuint PowerupGameObject::pepperTextureID = 0;
 
-int PowerupGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+int PowerupGameObject::setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\objects\\armor.png");
 	setFuncPtr(textures[offset + 1], "Assets\\objects\\air.png");
 	setFuncPtr(textures[offset + 2], "Assets\\objects\\pepper.png");

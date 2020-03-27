@@ -27,6 +27,10 @@
 #include "MainMenuState.h"
 #include "PauseMenuState.h"
 #include "ButtonGameObject.h"
+#include "BoxGameObject.h"
+#include "TextRenderer.h"
+#include "TextGameObject.h"
+#include "PlayerInterfaceGameObject.h"
 
 #include "SpriteShader.h"
 #include "LaserShader.h"
@@ -82,7 +86,7 @@ int CreateSquare(void) {
 	return sizeof(face) / sizeof(GLuint);
 }
 
-void setthisTexture(GLuint w, char *fname) {
+void setthisTexture(GLuint w, const char *fname) {
 	glBindTexture(GL_TEXTURE_2D, w);
 
 	int width, height;
@@ -99,7 +103,7 @@ void setthisTexture(GLuint w, char *fname) {
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 }
 
-void setthisTextureFromSheet(GLuint w, char* fname, int skipX, int skipY, int colLength, int rowHeight) {
+void setthisTextureFromSheet(GLuint w, const char* fname, int skipX, int skipY, int colLength, int rowHeight) {
 	glBindTexture(GL_TEXTURE_2D, w);
 
 	int width, height;
@@ -134,7 +138,11 @@ void setallTexture(GLuint* textures) {
 	offset = ExitGameObject::setTextures(setthisTexture, textures, offset);
 	offset = ElectricityGameObject::setTextures(setthisTexture, textures, offset);
 	offset = PowerupGameObject::setTextures(setthisTexture, textures, offset);
+	offset = TextRenderer::setTextures(setthisTexture, textures, offset);
+	offset = TextGameObject::setTextures(setthisTexture, textures, offset);
+	offset = PlayerInterfaceGameObject::setTextures(setthisTexture, textures, offset);
 
+	offset = BoxGameObject::setTextures(setthisTextureFromSheet, textures, offset);
 	offset = ButtonGameObject::setTextures(setthisTextureFromSheet, textures, offset);
 }
 

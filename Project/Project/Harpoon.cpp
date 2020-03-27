@@ -2,6 +2,8 @@
 
 #include "HarpoonGameObject.h"
 
+const int Harpoon::costByLevel;
+
 // Harpoon is enabled by default
 Harpoon::Harpoon(): Weapon(true, baseDamage, baseSpeed, baseRechargeRate) {
 	// Constants seem to not work when called in super

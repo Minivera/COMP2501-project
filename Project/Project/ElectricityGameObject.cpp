@@ -40,7 +40,7 @@ void ElectricityGameObject::update(std::vector<shared_ptr<GameObject>>& entities
 
 GLuint ElectricityGameObject::projectileTextureID;
 
-int ElectricityGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+int ElectricityGameObject::setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\objects\\projectile.png");
 	projectileTextureID = textures[offset + 0];
 	return offset + 1;

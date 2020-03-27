@@ -26,5 +26,5 @@ public:
 
 	// Static method to load the terrain features from the sprite sheet
 	// Returns the number of loaded textures
-	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
+	static int setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset);
 };

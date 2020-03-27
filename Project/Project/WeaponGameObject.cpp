@@ -20,7 +20,7 @@ GLuint WeaponGameObject::pistolTextureID;
 GLuint WeaponGameObject::laserTextureID;
 GLuint WeaponGameObject::bulletTextureID;
 
-int WeaponGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+int WeaponGameObject::setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\objects\\trident-single.png");
 	setFuncPtr(textures[offset + 1], "Assets\\objects\\pistol.png");
 	setFuncPtr(textures[offset + 2], "Assets\\objects\\laser.png");

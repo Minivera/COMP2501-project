@@ -172,7 +172,7 @@ CollisionSides GameObject::getCollisionSide(const GameObject& other) {
 
 GLuint GameObject::boundingBoxTextureID = 0;
 
-int GameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+int GameObject::setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\FX\\bounding-box.png");
 	boundingBoxTextureID = textures[offset + 0];
 	return offset + 1;

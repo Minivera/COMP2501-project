@@ -4,7 +4,9 @@
 #include <map>
 
 #include "GameState.h"
+
 #include "PlayerGameObject.h"
+#include "PlayerInterfaceGameObject.h"
 
 constexpr auto NONE = "NONE";
 constexpr auto ENTRY = "ENTRY";
@@ -29,6 +31,9 @@ class LevelState: public GameState {
 private:
 	// The shared player entity, used to keep it up to date within level.
 	shared_ptr<PlayerGameObject> player;
+
+	// Defines the interface for the player that should be displayed at all times.
+	shared_ptr<PlayerInterfaceGameObject> playerInterface;
 
 	// The table definition of that level from the fileSystem
 	vector<vector<string>> levelDefinition;
@@ -58,12 +63,12 @@ public:
 
 	void load();
 
-	tuple<int, bool> transtionState();
+	tuple<int, bool> transitionState();
 
 	// Variables that give the texture IDs for the texture
 	static GLuint backgroundTextureID;
 	static GLuint midgroundTextureID;
 
 	// Static method to load the background and midground textures.
-	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
+	static int setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset);
 };

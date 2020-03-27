@@ -182,7 +182,7 @@ GLuint EnemyGameObject::jellyfishTextureID;
 GLuint EnemyGameObject::smokerTextureID;
 GLuint EnemyGameObject::smokerFogTextureID;
 
-int EnemyGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+int EnemyGameObject::setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\enemies\\fish.png");
 	setFuncPtr(textures[offset + 1], "Assets\\enemies\\fish-big.png");
 	setFuncPtr(textures[offset + 2], "Assets\\enemies\\smoker.png");

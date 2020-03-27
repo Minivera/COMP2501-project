@@ -26,12 +26,12 @@ public:
 
 	void render(Shader& spriteShader, Shader& particleShader, Shader& laserShader);
 
-	tuple<int, bool> transtionState();
+	tuple<int, bool> transitionState();
 
 	// Variables that give the texture IDs for the texture
 	static GLuint backgroundTextureID;
 
 	// Static method to load the background and midground textures.
-	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
+	static int setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset);
 };
 

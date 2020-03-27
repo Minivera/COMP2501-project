@@ -22,6 +22,6 @@ public:
 	static GLuint bulletTextureID;
 
 	// Static method to load the weapon textures from the file system
-	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
+	static int setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset);
 };
 

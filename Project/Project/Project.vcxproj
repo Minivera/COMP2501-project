@@ -159,6 +159,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AABB.cpp" />
+    <ClCompile Include="AirCounterGameObject.cpp" />
+    <ClCompile Include="BoxGameObject.cpp" />
     <ClCompile Include="BulletGameObject.cpp" />
     <ClCompile Include="ButtonGameObject.cpp" />
     <ClCompile Include="ElectricityGameObject.cpp" />
@@ -171,11 +173,11 @@
     <ClCompile Include="GuiGameObject.cpp" />
     <ClCompile Include="Harpoon.cpp" />
     <ClCompile Include="HarpoonGameObject.cpp" />
+    <ClCompile Include="IconGameObject.cpp" />
     <ClCompile Include="JellyfishGameObject.cpp" />
     <ClCompile Include="Laser.cpp" />
     <ClCompile Include="LaserGameObject.cpp" />
     <ClCompile Include="LaserShader.cpp" />
-    <ClCompile Include="LevelInterface.cpp" />
     <ClCompile Include="LevelState.cpp" />
     <ClCompile Include="LineOfSight.cpp" />
     <ClCompile Include="MainMenuState.cpp" />
@@ -186,6 +188,7 @@
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="FileUtils.cpp" />
+    <ClCompile Include="PlayerInterfaceGameObject.cpp" />
     <ClCompile Include="PlayerInventory.cpp" />
     <ClCompile Include="Powerup.cpp" />
     <ClCompile Include="PowerupGameObject.cpp" />
@@ -194,13 +197,19 @@
     <ClCompile Include="SmokerGameObject.cpp" />
     <ClCompile Include="SpriteShader.cpp" />
     <ClCompile Include="TerrainGameObject.cpp" />
+    <ClCompile Include="TextGameObject.cpp" />
+    <ClCompile Include="TextRenderer.cpp" />
+    <ClCompile Include="TreasureCounterGameObject.cpp" />
     <ClCompile Include="TreasureGameObject.cpp" />
+    <ClCompile Include="UpgradeTableGameObject.cpp" />
     <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="WeaponGameObject.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AABB.h" />
+    <ClInclude Include="AirCounterGameObject.h" />
+    <ClInclude Include="BoxGameObject.h" />
     <ClInclude Include="BulletGameObject.h" />
     <ClInclude Include="ButtonGameObject.h" />
     <ClInclude Include="ElectricityGameObject.h" />
@@ -213,11 +222,11 @@
     <ClInclude Include="GuiGameObject.h" />
     <ClInclude Include="Harpoon.h" />
     <ClInclude Include="HarpoonGameObject.h" />
+    <ClInclude Include="IconGameObject.h" />
     <ClInclude Include="JellyfishGameObject.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="LaserGameObject.h" />
     <ClInclude Include="LaserShader.h" />
-    <ClInclude Include="LevelInterface.h" />
     <ClInclude Include="LevelState.h" />
     <ClInclude Include="LineOfSight.h" />
     <ClInclude Include="MainMenuState.h" />
@@ -227,6 +236,7 @@
     <ClInclude Include="PlayerGameObject.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="FileUtils.h" />
+    <ClInclude Include="PlayerInterfaceGameObject.h" />
     <ClInclude Include="PlayerInventory.h" />
     <ClInclude Include="Powerup.h" />
     <ClInclude Include="PowerupGameObject.h" />
@@ -235,7 +245,11 @@
     <ClInclude Include="SmokerGameObject.h" />
     <ClInclude Include="SpriteShader.h" />
     <ClInclude Include="TerrainGameObject.h" />
+    <ClInclude Include="TextGameObject.h" />
+    <ClInclude Include="TextRenderer.h" />
+    <ClInclude Include="TreasureCounterGameObject.h" />
     <ClInclude Include="TreasureGameObject.h" />
+    <ClInclude Include="UpgradeTableGameObject.h" />
     <ClInclude Include="Weapon.h" />
     <ClInclude Include="WeaponGameObject.h" />
     <ClInclude Include="Window.h" />

@@ -99,9 +99,6 @@
     <ClCompile Include="GravityGameObject.cpp">
       <Filter>Source Files\Entities</Filter>
     </ClCompile>
-    <ClCompile Include="LevelInterface.cpp">
-      <Filter>Source Files\Game</Filter>
-    </ClCompile>
     <ClCompile Include="PlayerInventory.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
@@ -195,6 +192,30 @@
     <ClCompile Include="PauseMenuState.cpp">
       <Filter>Source Files\Game</Filter>
     </ClCompile>
+    <ClCompile Include="BoxGameObject.cpp">
+      <Filter>Source Files\Entities\GuiEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRenderer.cpp">
+      <Filter>Source Files\Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="UpgradeTableGameObject.cpp">
+      <Filter>Source Files\Entities\GuiEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="TextGameObject.cpp">
+      <Filter>Source Files\Entities\GuiEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="IconGameObject.cpp">
+      <Filter>Source Files\Entities\GuiEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="TreasureCounterGameObject.cpp">
+      <Filter>Source Files\Entities\GuiEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="AirCounterGameObject.cpp">
+      <Filter>Source Files\Entities\GuiEntities</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerInterfaceGameObject.cpp">
+      <Filter>Source Files\Entities\GuiEntities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -217,9 +238,6 @@
     </ClInclude>
     <ClInclude Include="GravityGameObject.h">
       <Filter>Header Files\Entities</Filter>
-    </ClInclude>
-    <ClInclude Include="LevelInterface.h">
-      <Filter>Header Files\Game</Filter>
     </ClInclude>
     <ClInclude Include="PlayerInventory.h">
       <Filter>Header Files\Game</Filter>
@@ -313,6 +331,30 @@
     </ClInclude>
     <ClInclude Include="PauseMenuState.h">
       <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="BoxGameObject.h">
+      <Filter>Header Files\Entities\GuiEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="TextRenderer.h">
+      <Filter>Header Files\Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="UpgradeTableGameObject.h">
+      <Filter>Header Files\Entities\GuiEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="TextGameObject.h">
+      <Filter>Header Files\Entities\GuiEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="IconGameObject.h">
+      <Filter>Header Files\Entities\GuiEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="TreasureCounterGameObject.h">
+      <Filter>Header Files\Entities\GuiEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="AirCounterGameObject.h">
+      <Filter>Header Files\Entities\GuiEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerInterfaceGameObject.h">
+      <Filter>Header Files\Entities\GuiEntities</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

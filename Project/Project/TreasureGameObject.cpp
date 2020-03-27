@@ -7,7 +7,7 @@ TreasureGameObject::TreasureGameObject(int entityValue, glm::vec3& entityPositio
 
 GLuint TreasureGameObject::treasureTextureID = 0;
 
-int TreasureGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+int TreasureGameObject::setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\objects\\treasure-big.png");
 	treasureTextureID = textures[offset + 0];
 	return offset + 1;

@@ -52,7 +52,7 @@ public:
 	static GLuint boundingBoxTextureID;
 
 	// Static method to load the treasure textures.
-	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
+	static int setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset);
 protected:
 	GameObject(glm::vec3& entityPosition, GLuint entityTexture, GLint entityNumElements);
 	GameObject(glm::vec3& entityPosition, glm::vec3& entityScale, GLfloat entityRotation, GLuint entityTexture, GLint entityNumElements);

@@ -5,7 +5,7 @@ ExitGameObject::ExitGameObject(glm::vec3& entityPos, GLuint texture, GLint entit
 
 GLuint ExitGameObject::exitTextureID = 0;
 
-int ExitGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+int ExitGameObject::setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\environment\\exit.png");
 	exitTextureID = textures[offset + 0];
 	return offset + 1;

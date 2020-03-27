@@ -16,7 +16,7 @@ GLuint TerrainGameObject::slantTopRightTextureID = 0;
 GLuint TerrainGameObject::slantBottomLeftTextureID = 0;
 GLuint TerrainGameObject::slantBottomRightTextureID = 0;
 
-int TerrainGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+int TerrainGameObject::setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\environment\\tiles-top-1.png");
 	setFuncPtr(textures[offset + 1], "Assets\\environment\\tiles-top-2.png");
 	setFuncPtr(textures[offset + 2], "Assets\\environment\\tiles-bottom-1.png");

@@ -24,6 +24,15 @@ LevelState::LevelState(int levelID, int nextLevelID, const char* levelFile, shar
 	levelDefinition = FileUtils::LoadCsvLevel(levelFile, ";");
 
 	loadLevel();
+
+	playerInterface = make_shared<PlayerInterfaceGameObject>(
+		player,
+		glm::vec3(),
+		glm::vec3(4.0f, 2.0f, 1.0f),
+		PlayerInterfaceGameObject::backgroundTextureID,
+		6
+	);
+	entities.push_back(playerInterface);
 }
 
 void LevelState::loadLevel(bool reloading) {
@@ -286,6 +295,8 @@ void LevelState::render(Shader& spriteShader, Shader& particleShader, Shader& la
 	// Apply zoom scaling to the view matrix
 	viewMatrix = glm::scale(viewMatrix, glm::vec3(currentViewZoom, currentViewZoom, currentViewZoom));
 
+	playerInterface->setPosition(glm::vec3(playerPos.x + 2.0f, playerPos.y - 4.0f, -2.0f));
+
 	spriteShader.setUniformMat4("viewMatrix", viewMatrix);
 
     for (auto it = entities.begin(); it != entities.end(); it++) {
@@ -355,7 +366,7 @@ void LevelState::render(Shader& spriteShader, Shader& particleShader, Shader& la
 	}
 }
 
-tuple<int, bool> LevelState::transtionState() {
+tuple<int, bool> LevelState::transitionState() {
 	if (pausing) {
 		pausing = false;
 		return make_tuple(PAUSE_MENU_STATE, false);
@@ -368,7 +379,12 @@ tuple<int, bool> LevelState::transtionState() {
 		}
 	}
 
-	return GameState::transtionState();
+	// Check if the player is out of air
+	if (player->getCurrentAir() < 0) {
+		return make_tuple(MAIN_MENU_STATE, false);
+	}
+
+	return GameState::transitionState();
 }
 
 void LevelState::load() {
@@ -378,7 +394,7 @@ void LevelState::load() {
 GLuint LevelState::backgroundTextureID = 0;
 GLuint LevelState::midgroundTextureID = 0;
 
-int LevelState::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+int LevelState::setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\environment\\background.png");
 	setFuncPtr(textures[offset + 1], "Assets\\environment\\midground.png");
 	backgroundTextureID = textures[offset + 0];

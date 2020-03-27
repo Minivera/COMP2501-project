@@ -20,6 +20,6 @@ public:
 	static GLuint abandonButtonActiveTextureID;
 
 	// Static method to load the button's textures.
-	static int setTextures(void (setFuncPtr)(GLuint w, char* fname, int skipX, int skipY, int rowHeight, int colLength), GLuint* textures, int offset);
+	static int setTextures(void (setFuncPtr)(GLuint w, const char* fname, int skipX, int skipY, int rowHeight, int colLength), GLuint* textures, int offset);
 };
 

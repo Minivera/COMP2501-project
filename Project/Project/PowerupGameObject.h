@@ -19,6 +19,6 @@ public:
 	static GLuint pepperTextureID;
 
 	// Static method to load the treasure textures.
-	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
+	static int setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset);
 };
 

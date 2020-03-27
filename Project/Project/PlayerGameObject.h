@@ -76,8 +76,8 @@ public:
 
 	// Inventory management methods
 	void changeWeapon(WeaponType type);
-	void unlock(WeaponType type);
-	void upgrade(WeaponType type);
+	bool unlock(WeaponType type);
+	bool upgrade(WeaponType type);
 
 	// Method to trigger a player's attack cycle, which will be executed during the next update cycle.
 	void attack();
@@ -91,6 +91,7 @@ public:
 
 	// Getters
 	inline int getCurrentTreasure() { return inventory->getTreasure(); }
+	inline double getBaseAir() { return inventory->getBaseAir(); }
 	inline double getCurrentAir() { return inventory->getAir(); }
 
 	// Setters
@@ -103,5 +104,5 @@ public:
 	static GLuint playerBubblesTextureID;
 
 	// Static method to load the player textures.
-	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
+	static int setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset);
 };

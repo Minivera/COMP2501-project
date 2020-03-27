@@ -49,5 +49,5 @@ public:
 	// Utility method that is called at the end of every loop cycle to potentially transition to a new state.
 	// Return a tuple made up of an integer to transition to a specific state within the game. Return -1 to not transition.
 	// The second element is a boolean that says if the next state should be reloaded or not.
-	virtual tuple<int, bool> transtionState();
+	virtual tuple<int, bool> transitionState();
 };

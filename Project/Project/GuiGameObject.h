@@ -13,6 +13,9 @@ protected:
 	// Check if the current GUI element is clicked by the player.
 	bool clicked = false;
 
+	// Set if this element is clickable, true by default. If false, it will not trigger the click event listener.
+	bool clickable = true;
+
 	// Event listeners that will be called when something happens on the entity
 	function<void(GuiGameObject & caller)> onClickListener;
 

@@ -2,6 +2,8 @@
 
 #include "BulletGameObject.h"
 
+const int Pistol::costByLevel;
+
 Pistol::Pistol(GLuint bulletTexture, GLint entityNumElements): Weapon(false, baseDamage, baseSpeed, baseRechargeRate) {
 	texture = bulletTexture;
 	numElements = entityNumElements;

@@ -348,16 +348,12 @@ void PlayerGameObject::changeWeapon(WeaponType type) {
 	}
 }
 
-void PlayerGameObject::unlock(WeaponType type) {
-	if (currentState == PlayerState::NONE) {
-		inventory->unlock(type);
-	}
+bool PlayerGameObject::unlock(WeaponType type) {
+	return inventory->unlock(type);
 }
 
-void PlayerGameObject::upgrade(WeaponType type) {
-	if (currentState == PlayerState::NONE) {
-		inventory->upgrade(type);
-	}
+bool PlayerGameObject::upgrade(WeaponType type) {
+	return inventory->upgrade(type);
 }
 
 void PlayerGameObject::attack() {
@@ -389,7 +385,7 @@ GLuint PlayerGameObject::playerMovingTextureID = 0;
 GLuint PlayerGameObject::playerHurtTextureID = 0;
 GLuint PlayerGameObject::playerBubblesTextureID = 0;
 
-int PlayerGameObject::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+int PlayerGameObject::setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\player\\player-idle.png");
 	setFuncPtr(textures[offset + 1], "Assets\\player\\player-swiming.png");
 	setFuncPtr(textures[offset + 2], "Assets\\player\\player-hurt.png");

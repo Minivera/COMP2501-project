@@ -25,7 +25,7 @@ private:
 	Weapon* equipedWeapon;
 
 	// Attribute that counts how much treasure the player has available.
-	int currentTreasure = 0;
+	int currentTreasure = 100; // Start the player with some money
 
 	// Attribute that counts the current air from the player in seconds.
 	double currentAir = baseAir;
@@ -45,10 +45,10 @@ public:
 	PlayerInventory(GLuint bulletTexture, GLint entityNumElements);
 
 	// Method that unlocks a specific weapon.
-	void unlock(WeaponType type);
+	bool unlock(WeaponType type);
 
 	// Method that upgrades a specific weapon.
-	void upgrade(WeaponType type);
+	bool upgrade(WeaponType type);
 
 	// Method that makes the inventory equip the specific weapon type.
 	void equip(WeaponType type);
@@ -70,6 +70,7 @@ public:
 	// Getters
 	inline Weapon& getEquipedWeapon() { return *equipedWeapon; }
 	inline int getTreasure() { return currentTreasure; }
+	inline double getBaseAir() { return baseAir; }
 	inline double getAir() { return currentAir; }
 	inline Powerup& getPowerup() { return currentPowerup; }
 	inline double getPowerupTimer() { return powerupTimer; }

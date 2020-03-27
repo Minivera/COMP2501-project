@@ -2,6 +2,8 @@
 
 #include "LaserGameObject.h"
 
+const int Laser::costByLevel;
+
 Laser::Laser(): Weapon(false, baseDamage, baseSpeed, baseRechargeRate) {
 	// Constants seem to not work when called in super
 	damage = baseDamage;

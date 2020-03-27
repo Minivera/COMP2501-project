@@ -71,7 +71,7 @@ void PauseMenuState::render(Shader& spriteShader, Shader& particleShader, Shader
 	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
-tuple<int, bool> PauseMenuState::transtionState() {
+tuple<int, bool> PauseMenuState::transitionState() {
 	if (gameResumed) {
 		gameResumed = false;
 		return make_tuple(pausedState, false);
@@ -82,7 +82,7 @@ tuple<int, bool> PauseMenuState::transtionState() {
 		return make_tuple(MAIN_MENU_STATE, false);
 	}
 
-	return GameState::transtionState();
+	return GameState::transitionState();
 }
 
 void PauseMenuState::onResume(GuiGameObject& caller) {
@@ -95,7 +95,7 @@ void PauseMenuState::onAbandon(GuiGameObject& caller) {
 
 GLuint PauseMenuState::backgroundTextureID = 0;
 
-int PauseMenuState::setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset) {
+int PauseMenuState::setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\gui\\pause-menu.png");
 	backgroundTextureID = textures[offset + 0];
 	return offset + 1;

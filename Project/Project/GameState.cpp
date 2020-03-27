@@ -52,6 +52,6 @@ void GameState::load() {
 	entities = vector<shared_ptr<GameObject>>();
 }
 
-tuple<int, bool> GameState::transtionState() {
+tuple<int, bool> GameState::transitionState() {
 	return make_tuple<int, bool>(-1, false);
 }

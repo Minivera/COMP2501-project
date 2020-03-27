@@ -8,40 +8,60 @@ PlayerInventory::PlayerInventory(GLuint bulletTexture, GLint entityNumElements) 
 	equipedWeapon = harpoon.get();
 }
 
-void PlayerInventory::unlock(WeaponType type) {
+bool PlayerInventory::unlock(WeaponType type) {
 	switch (type)
 	{
 	case WeaponType::Harpoon:
-		harpoon->unlock();
+		if (currentTreasure > Harpoon::costByLevel) {
+			currentTreasure -= Harpoon::costByLevel;
+			harpoon->unlock();
+			return true;
+		}
 		break;
 	case WeaponType::Pistol:
-		pistol->unlock();
+		if (currentTreasure > Pistol::costByLevel) {
+			currentTreasure -= Pistol::costByLevel;
+			pistol->unlock();
+			return true;
+		}
 		break;
 	case WeaponType::Laser:
-		laser->unlock();
+		if (currentTreasure > Laser::costByLevel) {
+			currentTreasure -= Laser::costByLevel;
+			laser->unlock();
+			return true;
+		}
 		break;
 	}
+	return false;
 }
 
-void PlayerInventory::upgrade(WeaponType type) {
+bool PlayerInventory::upgrade(WeaponType type) {
 	switch (type)
 	{
 	case WeaponType::Harpoon:
-		if (harpoon->isEnabled() && harpoon->isUpgradable()) {
+		if (harpoon->isEnabled() && harpoon->isUpgradable() && currentTreasure > Harpoon::costByLevel * harpoon->getLevel()) {
+			currentTreasure -= Harpoon::costByLevel * harpoon->getLevel();
 			harpoon->upgrade();
+			return true;
 		}
 		break;
 	case WeaponType::Pistol:
-		if (pistol->isEnabled() && pistol->isUpgradable()) {
+		if (pistol->isEnabled() && pistol->isUpgradable() && currentTreasure > Pistol::costByLevel* pistol->getLevel()) {
+			currentTreasure -= Pistol::costByLevel * pistol->getLevel();
 			pistol->upgrade();
+			return true;
 		}
 		break;
 	case WeaponType::Laser:
-		if (laser->isEnabled() && laser->isUpgradable()) {
+		if (laser->isEnabled() && laser->isUpgradable() && currentTreasure > Laser::costByLevel* laser->getLevel()) {
+			currentTreasure -= Laser::costByLevel * laser->getLevel();
 			laser->upgrade();
+			return true;
 		}
 		break;
 	}
+	return false;
 }
 
 void PlayerInventory::equip(WeaponType type) {

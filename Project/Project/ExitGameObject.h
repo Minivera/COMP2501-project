@@ -11,6 +11,6 @@ public:
 	static GLuint exitTextureID;
 
 	// Static method to load the various enemy sprites from the filesystem
-	static int setTextures(void (setFuncPtr)(GLuint w, char* fname), GLuint* textures, int offset);
+	static int setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset);
 };
 

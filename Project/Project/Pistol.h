@@ -26,5 +26,8 @@ public:
 
 	// Method to trigger the weapon's attack. Does not handle the weapon's fring rate (Speed).
 	virtual void attack(glm::vec3 position, double angle, double boost, std::vector<shared_ptr<GameObject>>& gameObjects);
+
+	// The cost to unlock and upgrade the weapon.
+	static const int costByLevel = 250;
 };
 

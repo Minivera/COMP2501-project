@@ -63,7 +63,7 @@ bool Game::loop(Window& window, Shader& spriteShader, Shader& particleShader, Sh
 	localState->clean();
 
 	// Attempt to transition to a new state
-	tuple<int, bool> newState = localState->transtionState();
+	tuple<int, bool> newState = localState->transitionState();
 	if (get<0>(newState) >= 0) {
 		// Make sure to save the current state in the pause menu.
 		if (get<0>(newState) == PAUSE_MENU_STATE) {

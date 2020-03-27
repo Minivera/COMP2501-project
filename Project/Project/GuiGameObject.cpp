@@ -23,7 +23,7 @@ void GuiGameObject::verifyMouseOver(glm::vec2 mousePos) {
 }
 
 void GuiGameObject::verifyClick() {
-	if (hovered) {
+	if (hovered && clickable) {
 		clicked = true;
 
 		if (onClickListener != nullptr) {
