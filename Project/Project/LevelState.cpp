@@ -297,6 +297,8 @@ void LevelState::render(Shader& spriteShader, Shader& particleShader, Shader& la
 
 	playerInterface->setPosition(glm::vec3(playerPos.x + 2.0f, playerPos.y - 4.0f, -2.0f));
 
+	spriteShader.enable();
+	spriteShader.setAttributes();
 	spriteShader.setUniformMat4("viewMatrix", viewMatrix);
 
     for (auto it = entities.begin(); it != entities.end(); it++) {
@@ -306,8 +308,6 @@ void LevelState::render(Shader& spriteShader, Shader& particleShader, Shader& la
 
 	// Bind the midground texture
 	glBindTexture(GL_TEXTURE_2D, midgroundTexture);
-	spriteShader.enable();
-	spriteShader.setAttributes();
 	spriteShader.setUniformMat4("viewMatrix", viewMatrix);
 
 	// Setup the transformation matrix for the shader

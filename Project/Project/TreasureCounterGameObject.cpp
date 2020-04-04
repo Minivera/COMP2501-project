@@ -11,9 +11,6 @@ void TreasureCounterGameObject::render(Shader& spriteShader) {
 	string treasureString = to_string(amount);
 
 	// Render the treasure, then the text centered
-	spriteShader.enable();
-	spriteShader.setAttributes();
-
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	// Setup the world matrix for both our rendered object

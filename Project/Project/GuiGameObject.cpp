@@ -43,8 +43,6 @@ void GuiGameObject::render(Shader& spriteShader) {
 
 	// Bind the entities texture
 	glBindTexture(GL_TEXTURE_2D, selectedTexture);
-	spriteShader.enable();
-	spriteShader.setAttributes();
 
 	// Setup the transformation matrix for the shader
 	// Start by moving to the position

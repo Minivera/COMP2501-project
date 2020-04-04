@@ -15,9 +15,6 @@ void TextGameObject::render(Shader& spriteShader) {
 	}
 	else {
 		// Otherwise, use the text renderer and hope it display properly.
-		spriteShader.enable();
-		spriteShader.setAttributes();
-
 		// Start by moving to the position
 		glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position);
 

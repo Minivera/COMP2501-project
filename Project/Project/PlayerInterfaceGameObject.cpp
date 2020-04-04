@@ -62,8 +62,6 @@ void PlayerInterfaceGameObject::render(Shader& spriteShader) {
 
 	// Then render the background
 	glBindTexture(GL_TEXTURE_2D, texture);
-	spriteShader.enable();
-	spriteShader.setAttributes();
 
 	// Move to position and then move to front
 	glm::mat4 transformationMatrix = glm::translate(glm::mat4(), position);

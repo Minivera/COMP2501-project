@@ -69,9 +69,6 @@ bool LaserGameObject::checkLaserHits(GameObject& entity) {
 void LaserGameObject::render(Shader& spriteShader) {}
 
 void LaserGameObject::renderParticles(Shader& particlesShader) {
-	particlesShader.enable();
-	particlesShader.setAttributes();
-
 	// Setup the transformation matrix for the shader
 	// Start by moving to the position
 	glm::mat4 transformationMatrix = glm::translate(glm::mat4(1.0f), position);

@@ -98,8 +98,6 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 void EnemyGameObject::render(Shader& spriteShader) {
 	// Bind the entities texture
 	glBindTexture(GL_TEXTURE_2D, texture);
-	spriteShader.enable();
-	spriteShader.setAttributes(); 
 	
 	spriteShader.setUniform1f("count", 4.0f);
 	spriteShader.setUniform1f("time", entityTime);

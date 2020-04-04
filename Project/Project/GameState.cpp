@@ -27,6 +27,9 @@ void GameState::render(Shader& spriteShader, Shader& particleShader, Shader& las
 	laserShader.setUniformMat4("viewMatrix", viewMatrix);
 	particleShader.setUniformMat4("viewMatrix", viewMatrix);
 
+	spriteShader.enable();
+	spriteShader.setAttributes();
+
 	for (auto it = entities.begin(); it != entities.end(); it++) {
 		// Render game objects
 		(*it)->render(spriteShader);

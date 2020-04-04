@@ -54,8 +54,6 @@ void SmokerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 void SmokerGameObject::render(Shader& spriteShader) {
 	// Bind the entities texture
 	glBindTexture(GL_TEXTURE_2D, texture);
-	spriteShader.enable();
-	spriteShader.setAttributes();
 
 	spriteShader.setUniform1f("count", 0);
 	spriteShader.setUniform1f("time", entityTime);
@@ -86,8 +84,6 @@ void SmokerGameObject::render(Shader& spriteShader) {
 void SmokerGameObject::renderParticles(Shader& particlesShader) {
 	// Bind the entities texture
 	glBindTexture(GL_TEXTURE_2D, smokeTexture);
-	particlesShader.enable();
-	particlesShader.setAttributes();
 
 	auto otherPos = topTerrain->getPosition();
 	auto otherBox = topTerrain->getBoundingBox();

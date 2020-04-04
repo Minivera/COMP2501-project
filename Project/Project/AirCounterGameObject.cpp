@@ -22,10 +22,6 @@ void AirCounterGameObject::render(Shader& spriteShader) {
 	stringstream builder;
 	builder << minutes << ":" << std::setw(2) << std::setfill('0') << seconds;
 
-	// Render the treasure, then the text centered
-	spriteShader.enable();
-	spriteShader.setAttributes();
-
 	glBindTexture(GL_TEXTURE_2D, texture);
 
 	// Setup the world matrix for both our rendered object

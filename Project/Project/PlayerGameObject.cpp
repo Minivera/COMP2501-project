@@ -73,6 +73,7 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 		// Prevent movement on the side we collided with the wall
 		auto collisionSide = getCollisionSide(*collidesWith);
 		if ((velocity.x > 0 && collisionSide == CollisionSides::Left) || (velocity.x < 0 && collisionSide == CollisionSides::Right)) {
+			velocity.y = acceleration.y = 0;
 			velocity.x = acceleration.x = 0;
 		}
 	}
@@ -236,9 +237,6 @@ void PlayerGameObject::render(Shader& spriteShader) {
 		break;
 	}
 
-	spriteShader.enable();
-	spriteShader.setAttributes();
-
 	// Set the transformation matrix in the shader
 	spriteShader.setUniformMat4("transformationMatrix", weaponMatrix);
 
@@ -275,8 +273,6 @@ void PlayerGameObject::render(Shader& spriteShader) {
 void PlayerGameObject::renderParticles(Shader& particlesShader) {
 	// Bind the entities texture
 	glBindTexture(GL_TEXTURE_2D, bubblesTexture);
-	particlesShader.enable();
-	particlesShader.setAttributes();
 
 	// Setup the transformation matrix for the shader
 	// Start by moving to the position

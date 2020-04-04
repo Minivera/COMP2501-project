@@ -54,8 +54,6 @@ void GameObject::update(std::vector<shared_ptr<GameObject>>& gameObjects, double
 void GameObject::render(Shader& spriteShader) {
 	// Bind the entities texture
 	glBindTexture(GL_TEXTURE_2D, texture);
-	spriteShader.enable();
-	spriteShader.setAttributes();
 
 	// Setup the transformation matrix for the shader
 	// Start by moving to the position
