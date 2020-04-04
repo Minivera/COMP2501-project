@@ -118,7 +118,14 @@ void LevelState::loadLevel(bool reloading) {
 				}
 			}
 			else if (val == BG && !reloading) {
-				// TODO: Add a BG terrain type and texture
+				obj = make_shared<TerrainGameObject>(
+					TerrainType::BG,
+					glm::vec3(currentColumn, currentRow, 0.0f),
+					glm::vec3(1.0f, 1.0f, 1.0f),
+					0,
+					TerrainGameObject::bgTextureID,
+					size
+				);
 			}
 			else if (val == CEILING_1 && !reloading) {
 				obj = make_shared<TerrainGameObject>(
@@ -163,8 +170,8 @@ void LevelState::loadLevel(bool reloading) {
 			else if (val == WALL_L && !reloading) {
 				obj = make_shared<TerrainGameObject>(
 					TerrainType::Wall,
-					glm::vec3(currentColumn + 0.5, currentRow, 0.0f),
-					glm::vec3(0.5f, 1.0f, 1.0f),
+					glm::vec3(currentColumn, currentRow, 0.0f),
+					glm::vec3(1.0f, 1.0f, 1.0f),
 					0,
 					TerrainGameObject::wallLeftTextureID,
 					size
@@ -173,8 +180,8 @@ void LevelState::loadLevel(bool reloading) {
 			else if (val == WALL_R && !reloading) {
 				obj = make_shared<TerrainGameObject>(
 					TerrainType::Wall,
-					glm::vec3(currentColumn - 0.5, currentRow, 0.0f),
-					glm::vec3(0.5f, 1.0f, 1.0f),
+					glm::vec3(currentColumn, currentRow, 0.0f),
+					glm::vec3(1.0f, 1.0f, 1.0f),
 					0,
 					TerrainGameObject::wallRightTextureID,
 					size

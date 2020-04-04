@@ -2,7 +2,7 @@
 
 #include "GameObject.h"
 
-enum class TerrainType { Floor, Wall, Ceilling, TopSlant, BottomSlant };
+enum class TerrainType { BG, Floor, Wall, Ceilling, TopSlant, BottomSlant };
 
 class TerrainGameObject: public GameObject {
 private:
@@ -13,6 +13,7 @@ public:
 	inline TerrainType getType() const { return type; }
 
 	// Variables that give the texture IDs for the texture of the entity
+	static GLuint bgTextureID;
 	static GLuint ceiling1TextureID;
 	static GLuint ceiling2TextureID;
 	static GLuint floor1TextureID;
