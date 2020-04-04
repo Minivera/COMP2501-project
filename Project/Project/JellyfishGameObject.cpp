@@ -17,14 +17,38 @@ void JellyfishGameObject::update(std::vector<shared_ptr<GameObject>>& entities, 
 	auto playerPos = player->getPosition();
 
 	// Check the distance between ourselves and the player. If the player is too close, try to flee.
-	/*if (currentState != EnemyState::DIE && currentState != EnemyState::FLEEING && glm::distance(playerPos, position) <= fleeRange) {
-		currentState = EnemyState::FLEE;
-  		return EnemyGameObject::update(entities, deltaTime);
-	}*/
+	if (currentState != EnemyState::DIE && currentState != EnemyState::FLEEING && glm::distance(playerPos, position) <= fleeRange) {
+		bool readyToFlee = true;
+		// Check if we see any wall between us and the player
+		for (auto it = entities.begin(); it != entities.end(); it++) {
+			// If we have a wall between us and the player
+			auto terrain = dynamic_pointer_cast<TerrainGameObject>(*it);
+			if (terrain && seesEntity(player->getPosition(), *terrain) && glm::distance(playerPos, position) > glm::distance(terrain->getPosition(), position)) {
+				readyToFlee = false;
+				break;
+			}
+		}
+
+		if (readyToFlee && currentState == EnemyState::IDLE) {
+			// If we are not fleeing, but should, start
+			currentState = EnemyState::FLEE;
+		}
+		else if (!readyToFlee && currentState == EnemyState::FLEEING) {
+			// If we shouldn't flee, but we are fleeing, stop.
+			currentState = EnemyState::IDLE;
+			velocity = glm::vec3();
+		}
+	}
 
 	// If currently fleeing, stop when the player is far enough
 	if (currentState == EnemyState::FLEEING && glm::distance(playerPos, position) > fleeRange) {
 		currentState = EnemyState::IDLE;
+		velocity = glm::vec3();
+	}
+
+	if (currentState == EnemyState::FLEE || currentState == EnemyState::FLEEING) {
+		// If we are feeling, ignore all attack mechanisms
+		return EnemyGameObject::update(entities, deltaTime);
 	}
 
 	bool readyToAttack = false;

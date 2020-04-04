@@ -9,10 +9,10 @@ private:
 	GLint numElements;
 
 	// How far the bullet will go.
-	double range = 200;
+	double range = 1.0;
 
 	const int baseDamage = 5;
-	const double baseSpeed = 150;
+	const double baseSpeed = 4.0;
 	const double baseRechargeRate = 0.15;
 
 	// Multipliers to apply when leveling up the harpoon

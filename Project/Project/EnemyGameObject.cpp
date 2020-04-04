@@ -2,7 +2,9 @@
 
 #include "WeaponGameObject.h"
 #include "TreasureGameObject.h"
+#include "PowerupGameObject.h"
 #include "PlayerGameObject.h"
+#include "TerrainGameObject.h"
 #include "Random.h"
 #include "LineOfSight.h"
 
@@ -23,6 +25,36 @@ bool EnemyGameObject::seesEntity(const glm::vec3& direction, const GameObject& o
 	);
 
 	return LineOfSight::intersectsWith(lineOfSight, entityRectangle);
+}
+
+void EnemyGameObject::preventCollisions(std::vector<shared_ptr<GameObject>>& entities) {
+	shared_ptr<TerrainGameObject> collidesWith;
+
+	// Attemps to collide with something
+	for (auto it = entities.begin(); it != entities.end(); it++) {
+		// Checks if the current object collides with a wall
+		auto terrain = dynamic_pointer_cast<TerrainGameObject>(*it);
+		if (terrain && checkCollision(*(*it))) {
+			collidesWith = terrain;
+			break;
+		}
+	}
+
+	// If colloding with a wall, process which side has been collided with
+	if (collidesWith != nullptr && (collidesWith->getType() == TerrainType::Wall ||
+		collidesWith->getType() == TerrainType::BottomSlant || collidesWith->getType() == TerrainType::TopSlant)) {
+		// Prevent movement on the side we collided with the wall
+		velocity.y = 0;
+		velocity.x = 0;
+	}
+	else if (collidesWith != nullptr && (collidesWith->getType() == TerrainType::Floor || collidesWith->getType() == TerrainType::BottomSlant)) {
+		// If colliding with the floor or a bottom facing slant, stop downward movement
+		velocity.y = velocity.y < 0 ? 0 : velocity.y;
+	}
+	else if (collidesWith != nullptr && (collidesWith->getType() == TerrainType::Ceilling || collidesWith->getType() == TerrainType::TopSlant)) {
+		// If colliding with the ceiling or a top facing slant, stop upward movement
+		velocity.y = velocity.y > 0 ? 0 : velocity.y;
+	}
 }
 
 void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime) {
@@ -65,7 +97,7 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 		collisonTimer -= deltaTime;
 
 		angle = angleToCollision;
-		velocity = glm::vec3(1, 0, 0);
+		velocity = glm::vec3(0.2, 0, 0);
 	}
 
 	if (currentState == EnemyState::CHASE) {
@@ -80,16 +112,41 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 		));
 
 		// Move towards the player
-		glm::vec3 desiredVelocity = glm::normalize(playerPos - position) * maxSpeed * float(deltaTime);
+		glm::vec3 desiredVelocity = glm::normalize(playerPos - position) * maxSpeed;
 		glm::vec3 steering = desiredVelocity - velocity;
+		velocity += steering;
+	}
+
+	if (currentState == EnemyState::FLEE) {
+		// We process the flee state, now we're executing it.
+		currentState = EnemyState::FLEEING;
+	}
+	else if (currentState == EnemyState::FLEEING) {
+		// Calculate the angle between self and player
+		rotation = glm::degrees(glm::atan(
+			position.y - playerPos.y,
+			position.x - playerPos.x
+		)) + 180;
+
+		// Move away the player
+		glm::vec3 desiredVelocity = glm::normalize(playerPos - position) * maxSpeed;
+		glm::vec3 steering = -desiredVelocity - velocity;
 		velocity += steering;
 	}
 	
 	if (currentState == EnemyState::DIE) {
-		// Drop treasure and set as dirty
+		// Drop treasure or powerup and set as dirty
 		dirty = true;
-		entities.push_back(make_shared<TreasureGameObject>(random::randomInt(1, 3) * 5, position + glm::vec3(0, -0.3, 0), TreasureGameObject::treasureTextureID, numElements));
+		if (random::randomFloat(0.0f, 1.0f) < 0.65f) {
+			// 65% change to drop treasure
+			entities.push_back(make_shared<TreasureGameObject>(random::randomInt(1, 3) * 5, position + glm::vec3(0, -0.3, 0), TreasureGameObject::treasureTextureID, numElements));
+		}
+		else {
+			entities.push_back(make_shared<PowerupGameObject>(position + glm::vec3(0, -0.3, 0), numElements));
+		}
 	}
+
+	preventCollisions(entities);
 
 	GameObject::update(entities, deltaTime);
 }

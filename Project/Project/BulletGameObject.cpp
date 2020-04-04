@@ -19,12 +19,12 @@ void BulletGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 		}
 	}
 
-	lifespan -= speed.x * deltaTime;
+	lifespan -= deltaTime;
 	if (lifespan <= 0) {
 		dirty = true;
 	}
 
-	velocity.x = speed.x * deltaTime;
+	velocity.x = speed.x;
 
 	GameObject::update(entities, deltaTime);
 }

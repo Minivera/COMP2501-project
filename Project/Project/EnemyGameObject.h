@@ -17,7 +17,7 @@ protected:
 	EnemyState currentState = EnemyState::IDLE;
 
 	// Max speed of the base enemy.
-	const GLfloat maxSpeed = 45.0;
+	const GLfloat maxSpeed = 1.5;
 
 	// The length of time an enemy will stay invicible for.
 	const double invicibleTime = 0.95;
@@ -34,9 +34,14 @@ protected:
 	// The enemy health meter
 	int health = 0;
 
+	// Protected constructor so the class acnnot be instanciated.
 	EnemyGameObject(glm::vec3& entityPos, GLuint entityTexture, GLint entityNumElements);
 
+	// Method that checks if the current entity sees another entity through a ray casting algorithm
 	virtual bool seesEntity(const glm::vec3& direction, const GameObject& other);
+
+	// Method that will stop the entitie's movement if it hits a wall.
+	void preventCollisions(std::vector<shared_ptr<GameObject>>& entities);
 public:
 	// Overriden update method to update the enemy and handle collisions
 	virtual void update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime);

@@ -28,7 +28,7 @@ void ElectricityGameObject::update(std::vector<shared_ptr<GameObject>>& entities
 		}
 	}
 
-	lifespan -= speed.x * deltaTime;
+	lifespan -= deltaTime;
 	if (lifespan <= 0) {
 		dirty = true;
 	}

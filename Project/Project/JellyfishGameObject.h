@@ -6,7 +6,7 @@ class JellyfishGameObject: public EnemyGameObject
 {
 private:
 	// Range at which this entity will flee away from the player.
-	double fleeRange = 2;
+	double fleeRange = 3;
 
 	// Range at which this entity will start attacking the player.
 	double viewRange = 5;
@@ -18,10 +18,10 @@ private:
 	double attackWaitTime = 1.5;
 
 	// Speed at which the weapon moves.
-	double attackSpeed = 100;
+	double attackSpeed = 3.5;
 
 	// How many units the attack will live for.
-	double attackRange = 350;
+	double attackRange = 1.5;
 
 	// Method to make the jelly fish attack the player
 	void attack(std::vector<shared_ptr<GameObject>>& entities);
