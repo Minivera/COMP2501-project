@@ -26,7 +26,7 @@ private:
 public:
 	PauseMenuState(shared_ptr<PlayerGameObject> player);
 
-	void controls(glm::vec2 mousePos, double deltaTime);
+	void controls(glm::vec2 mousePos);
 
 	void render(Shader& spriteShader, Shader& particleShader, Shader& laserShader);
 

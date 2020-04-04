@@ -7,6 +7,8 @@ namespace LineOfSight
 	struct Line {
 		glm::vec2 start;
 		glm::vec2 dir;
+
+		float angle() const;
 	};
 
 	struct Rectangle {

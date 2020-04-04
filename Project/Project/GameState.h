@@ -32,7 +32,7 @@ protected:
 	vector<shared_ptr<GameObject>> entities;
 public:
 	// Method that handles inputs from the user
-	virtual void controls(glm::vec2 mousePos, double deltaTime);
+	virtual void controls(glm::vec2 mousePos);
 
 	// Method that handles updating all entities within that game state
 	virtual void update(double deltaTime);

@@ -5,6 +5,7 @@
 #include "EnemyGameObject.h"
 #include "Window.h"
 #include "Random.h"
+#include "LineOfSight.h"
 
 /*
 	PlayerGameObject inherits from GameObject
@@ -58,52 +59,40 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 		// Check if the player is getting hit by something
 		auto enemy = dynamic_pointer_cast<EnemyGameObject>(*it);
 		if (currentState != PlayerState::HURT && currentState != PlayerState::HURTING && enemy && checkCollision(*(*it))) {
-			hurt();
 			enemy->collide();
-			glm::vec3 enemyVelocity = enemy->getVelocity();
-			GLfloat enemyAngle = enemy->getAngle();
-			collidedVelicity = -glm::vec3(
-				cos(glm::radians(enemyAngle)) * enemyVelocity.x - sin(glm::radians(enemyAngle)) * enemyVelocity.y,
-				sin(glm::radians(enemyAngle)) * enemyVelocity.x + cos(glm::radians(enemyAngle)) * enemyVelocity.y,
-				0
-			);
+			hurt(*enemy);
 		}
 	}
 	
 	// If colloding with a wall, process which side has been collided with
 	if (collidesWith != nullptr && (collidesWith->getType() == TerrainType::Wall ||
-		collidesWith->getType() == TerrainType::BottomSlant || collidesWith->getType() == TerrainType::TopSlant) && moved) {
-		// If colliding with a wall, deactivate gravity, stop any movement and slowly move down
+		collidesWith->getType() == TerrainType::BottomSlant || collidesWith->getType() == TerrainType::TopSlant)) {
+		// If colliding with a wall, deactivate gravity
 		gravityActivated = false;
-		velocity.y = glm::max(-maxSpeed * wallSlowEffect * deltaTime, velocity.y - slowDownFactor.y / wallSlowEffect);
+
 		// Prevent movement on the side we collided with the wall
 		auto collisionSide = getCollisionSide(*collidesWith);
-		if (velocity.x > 0 && collisionSide == CollisionSides::Left) {
-			velocity.x = 0;
-		}
-		else if (velocity.x < 0 && collisionSide == CollisionSides::Right) {
-			velocity.x = 0;
+		if ((velocity.x > 0 && collisionSide == CollisionSides::Left) || (velocity.x < 0 && collisionSide == CollisionSides::Right)) {
+			velocity.x = acceleration.x = 0;
 		}
 	}
 	else if (collidesWith != nullptr && (collidesWith->getType() == TerrainType::Floor || collidesWith->getType() == TerrainType::BottomSlant)) {
 		// If colliding with the floor or a bottom facing slant, slow down movement
+		velocity.y = acceleration.y < 0 ? 0 : velocity.y;
 		velocity.x *= wallSlowEffect;
 	}
-	else if (collidesWith != nullptr && (collidesWith->getType() == TerrainType::Ceilling || collidesWith->getType() == TerrainType::TopSlant) && moved) {
+	else if (collidesWith != nullptr && (collidesWith->getType() == TerrainType::Ceilling || collidesWith->getType() == TerrainType::TopSlant)) {
 		// If colliding with the ceiling or a top facing slant, slow down movement and stop lift
-		velocity.y = 0;
+		velocity.y = acceleration.y = 0;
 		velocity.x *= wallSlowEffect;
 	}
 
-	// Slow the entity based on its slow down factor
-	if (collidesWith == nullptr && velocity.x > 0 && !moved) {
-		velocity.x = glm::max(0.0f, velocity.x - slowDownFactor.x);
-	} else if (collidesWith == nullptr && velocity.x < 0 && !moved) {
-		velocity.x = glm::min(0.0f, velocity.x - slowDownFactor.x);
+	// Check if we are moving and, if yes, apply friction
+	if (velocity.x != 0) {
+		acceleration += glm::vec3(-velocity.x, 0.0f, 0.0f);
 	}
-
-	if (collidesWith == nullptr && velocity.y > 0 && !moved) {
-		velocity.y = glm::max(0.0f, velocity.y - slowDownFactor.y);
+	else {
+		acceleration.x = 0;
 	}
 
 	// Handle attack mechanism
@@ -141,6 +130,12 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 		invicibilityTimer -= deltaTime;
 
 		velocity = -collidedVelicity;
+	}
+
+	// If we're accelerating more than the velocity, then we should stop
+	glm::vec3 change = velocity * (float)deltaTime + acceleration * 0.5f * (float)deltaTime * (float)deltaTime;
+	if ((velocity.x > 0 && change.x < 0) || (velocity.x < 0 && change.x > 0)) {
+		velocity.x = acceleration.x = 0;
 	}
 
 	GravityGameObject::update(entities, deltaTime);
@@ -255,7 +250,7 @@ void PlayerGameObject::render(Shader& spriteShader) {
 		glBindTexture(GL_TEXTURE_2D, playerHurtTextureID);
 		spriteShader.setUniform1f("count", 5.0f);
 	}
-	else if (moved) {
+	else if (velocity.x != 0 || velocity.y != 0) {
 		glBindTexture(GL_TEXTURE_2D, playerMovingTextureID);
 		spriteShader.setUniform1f("count", 7.0f);
 	}
@@ -311,8 +306,6 @@ void PlayerGameObject::renderParticles(Shader& particlesShader) {
 }
 
 void PlayerGameObject::clean() {
-	slowDownFactor = glm::vec2();
-	moved = false;
 	gravityActivated = true;
 
 	if (currentState == PlayerState::HURTING && invicibilityTimer <= 0) {
@@ -321,25 +314,17 @@ void PlayerGameObject::clean() {
 	}
 }
 
-void PlayerGameObject::addLiftAcceleration(double deltaTime) {
-	double movement = baseAcceleration * deltaTime;
-	velocity = glm::vec3(velocity.x, glm::min(velocity.y + movement, maxSpeed * deltaTime), velocity.z);
-	slowDownFactor.y = velocity.y / 50;
-	moved = true;
+void PlayerGameObject::addLiftAcceleration() {
+	acceleration.y = 0;
+	velocity = glm::vec3(velocity.x, glm::min(velocity.y + baseAcceleration, maxSpeed), velocity.z);
 }
 
-void PlayerGameObject::addLeftAcceleration(double deltaTime) {
-	double movement = baseAcceleration * deltaTime;
-	velocity = glm::vec3(glm::max(velocity.x - movement, -(maxSpeed * deltaTime)), velocity.y, velocity.z);
-	slowDownFactor.x = velocity.x / 50;
-	moved = true;
+void PlayerGameObject::addLeftAcceleration() {
+	velocity = glm::vec3(glm::max(velocity.x - baseAcceleration, -(maxSpeed)), velocity.y, velocity.z);
 }
 
-void PlayerGameObject::addRightAcceleration(double deltaTime) {
-	double movement = baseAcceleration * deltaTime;
-	velocity = glm::vec3(glm::min(velocity.x + movement, maxSpeed * deltaTime), velocity.y, velocity.z);
-	slowDownFactor.x = velocity.x / 50;
-	moved = true;
+void PlayerGameObject::addRightAcceleration() {
+	velocity = glm::vec3(glm::min(velocity.x + baseAcceleration, maxSpeed), velocity.y, velocity.z);
 }
 
 void PlayerGameObject::changeWeapon(WeaponType type) {
@@ -362,9 +347,16 @@ void PlayerGameObject::attack() {
 	}
 }
 
-void PlayerGameObject::hurt() {
+void PlayerGameObject::hurt(GameObject& enemy) {
 	if (currentState != PlayerState::HURT && currentState != PlayerState::HURTING) {
 		currentState = PlayerState::HURT;
+
+		GLfloat enemyAngle = LineOfSight::drawLine(enemy.getPosition().x, enemy.getPosition().y, position.x, position.y).angle();
+		collidedVelicity = -glm::vec3(
+			cos(glm::radians(enemyAngle)) * baseAcceleration,
+			sin(glm::radians(enemyAngle)) * baseAcceleration,
+			0
+		);
 	}
 }
 

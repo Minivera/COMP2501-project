@@ -11,8 +11,6 @@ enum class PlayerState { NONE, HURT, HURTING, ATTACK, ATTACKING };
 class PlayerGameObject : public GravityGameObject {
 private:
 	// Attribute that command the slow down of the player when moving
-	bool moved = false;
-	glm::vec2 slowDownFactor;
 	glm::vec3 collidedVelicity;
 
 	// Counter that counts how long the player has lived. Useful for animation and things like that.
@@ -23,10 +21,10 @@ private:
 	PlayerState currentState = PlayerState::NONE;
 
 	// Maximum speed of the player in units per milliseconds
-	const double maxSpeed = 50.0;
+	const double maxSpeed = 2.0;
 
 	// The base acceleration of the player in units per milliseconds
-	const double baseAcceleration = 5.0;
+	const double baseAcceleration = 0.15;
 
 	// The slow down effect on the acceleration from colliding with terrain
 	const double wallSlowEffect = 0.65;
@@ -68,11 +66,11 @@ public:
 	void clean();
 
 	// Method that adds lift acceleration to the player so they can fight gravity.
-	void addLiftAcceleration(double deltaTime);
+	void addLiftAcceleration();
 
 	// Two methods that enable the player to gain momentum going left or right.
-	void addLeftAcceleration(double deltaTime);
-	void addRightAcceleration(double deltaTime);
+	void addLeftAcceleration();
+	void addRightAcceleration();
 
 	// Inventory management methods
 	void changeWeapon(WeaponType type);
@@ -83,7 +81,7 @@ public:
 	void attack();
 
 	// Method to trigger a player being hurt by something in the environment.
-	void hurt();
+	void hurt(GameObject& enemy);
 
 	// Method that makes the player pick up something.
 	void pickUp(shared_ptr<TreasureGameObject> treasure);

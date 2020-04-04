@@ -5,7 +5,7 @@
 class GravityGameObject: public GameObject {
 protected:
 	// Defines the global acceleration of gravity for all gravity based entities.
-	const GLfloat gravityAccel = 1.6f;
+	const GLfloat gravityAccel = -9.8f;
 
 	// Defines if the gravity is activate on this entity
 	bool gravityActivated = true;

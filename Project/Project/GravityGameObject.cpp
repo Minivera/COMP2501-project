@@ -13,6 +13,12 @@ GravityGameObject::GravityGameObject(glm::vec3& entityPosition, glm::vec3& entit
 	GameObject(entityPosition, entityVelocity, entityScale, entityRotation, entityTexture, entityNumElements) {}
 
 void GravityGameObject::update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime) {
+	if (!gravityActivated) {
+		// If we deactivated gravity, stop it from affecting the entity
+		acceleration.y = 0;
+		return GameObject::update(entities, deltaTime);
+	}
+
 	bool collidesWithFloor = false;
 
 	for (auto it = entities.begin(); it != entities.end(); it++) {
@@ -24,13 +30,13 @@ void GravityGameObject::update(std::vector<shared_ptr<GameObject>>& entities, do
 		}
 	}
 
-	if (gravityActivated && !collidesWithFloor) {
-		velocity += glm::vec3(0, -gravityAccel * deltaTime, 0);
+	if (collidesWithFloor) {
+		// If we have a collision, stop gravity
+		acceleration.y = 0;
 	}
-
-	// Still stop any downward movement if we happened to collide with an object
-	if (collidesWithFloor && velocity.y < 0) {
-		velocity.y = 0;
+	else {
+		// If we don't have any collision, apply gravity
+		acceleration += glm::vec3(0.0f, gravityAccel, 0.0f);
 	}
 
 	GameObject::update(entities, deltaTime);

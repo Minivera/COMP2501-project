@@ -1,6 +1,12 @@
 #include "LineOfSight.h"
 
+#include <glm/gtx/vector_angle.hpp>
+
 namespace LineOfSight {
+    float Line::angle() const {
+        return glm::angle(glm::normalize(glm::vec3(start, 0.0f)), glm::normalize(glm::vec3(dir, 0.0f)));
+    }
+
 	Line drawLine(float x1, float y1, float x2, float y2) {
 		Line line = {
 			glm::vec2(x1, y1),

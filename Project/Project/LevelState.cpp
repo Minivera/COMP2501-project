@@ -233,7 +233,7 @@ void LevelState::loadLevel(bool reloading) {
 	}
 }
 
-void LevelState::controls(glm::vec2 mousePos, double deltaTime) {
+void LevelState::controls(glm::vec2 mousePos) {
 	shared_ptr<PlayerGameObject> player = dynamic_pointer_cast<PlayerGameObject>(entities.at(0));
 
 	double angleToMouse = glm::degrees(glm::atan(mousePos.y, mousePos.x));
@@ -244,13 +244,13 @@ void LevelState::controls(glm::vec2 mousePos, double deltaTime) {
 		pausing = true;
 	}
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_A) == GLFW_PRESS) {
-		player->addLeftAcceleration(deltaTime);
+		player->addLeftAcceleration();
 	}
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_D) == GLFW_PRESS) {
-		player->addRightAcceleration(deltaTime);
+		player->addRightAcceleration();
 	}
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_SPACE) == GLFW_PRESS) {
-		player->addLiftAcceleration(deltaTime);
+		player->addLiftAcceleration();
 	}
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_1) == GLFW_PRESS) {
 		if (glfwGetKey(Window::getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {

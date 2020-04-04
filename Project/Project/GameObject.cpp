@@ -47,7 +47,7 @@ void GameObject::update(std::vector<shared_ptr<GameObject>>& gameObjects, double
 	);
 
 	// Update object position with Euler integration
-	position += rotatedVelocity * (float)deltaTime;
+	position += rotatedVelocity * (float)deltaTime + 0.5f * acceleration * (float)deltaTime * (float)deltaTime;
 }
 
 // Renders the GameObject using the shader

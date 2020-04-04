@@ -35,7 +35,7 @@ MainMenuState::MainMenuState(shared_ptr<PlayerGameObject> player) {
 	entities.push_back(quitButton);
 }
 
-void MainMenuState::controls(glm::vec2 mousePos, double deltaTime) {
+void MainMenuState::controls(glm::vec2 mousePos) {
 	mousePos.x /= currentViewZoom;
 	mousePos.y /= currentViewZoom;
 
@@ -58,7 +58,7 @@ void MainMenuState::controls(glm::vec2 mousePos, double deltaTime) {
 		}
 	}
 
-	return GameState::controls(mousePos, deltaTime);
+	return GameState::controls(mousePos);
 }
 
 void MainMenuState::render(Shader& spriteShader, Shader& particleShader, Shader& laserShader) {

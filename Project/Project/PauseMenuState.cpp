@@ -27,7 +27,7 @@ PauseMenuState::PauseMenuState(shared_ptr<PlayerGameObject> player) {
 	entities.push_back(abandonButton);
 }
 
-void PauseMenuState::controls(glm::vec2 mousePos, double deltaTime) {
+void PauseMenuState::controls(glm::vec2 mousePos) {
 	mousePos.x /= currentViewZoom;
 	mousePos.y /= currentViewZoom;
 
@@ -46,7 +46,7 @@ void PauseMenuState::controls(glm::vec2 mousePos, double deltaTime) {
 		}
 	}
 
-	return GameState::controls(mousePos, deltaTime);
+	return GameState::controls(mousePos);
 }
 
 void PauseMenuState::render(Shader& spriteShader, Shader& particleShader, Shader& laserShader) {

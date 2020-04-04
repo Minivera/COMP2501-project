@@ -21,7 +21,7 @@ void SmokerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 	auto player = dynamic_pointer_cast<PlayerGameObject>(entities.at(0));
 	if (player && seesEntity(topTerrain->getPosition(), *player)) {
 		// If we do, hurt the player
-		player->hurt();
+		player->hurt(*this);
 	}
 
 	// Attemps to collide with something

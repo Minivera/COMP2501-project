@@ -1,6 +1,6 @@
 #include "GameState.h"
 
-void GameState::controls(glm::vec2 mousePos, double deltatime) {
+void GameState::controls(glm::vec2 mousePos) {
 	return;
 }
 

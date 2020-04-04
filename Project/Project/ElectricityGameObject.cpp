@@ -14,7 +14,7 @@ void ElectricityGameObject::update(std::vector<shared_ptr<GameObject>>& entities
 	auto player = dynamic_pointer_cast<PlayerGameObject>(entities.at(0));
 
 	if (player && checkCollision(*player)) {
-		player->hurt();
+		player->hurt(*this);
 		dirty = true;
 		return;
 	}
@@ -33,7 +33,7 @@ void ElectricityGameObject::update(std::vector<shared_ptr<GameObject>>& entities
 		dirty = true;
 	}
 
-	velocity.x = speed.x * deltaTime;
+	velocity.x = speed.x;
 
 	GameObject::update(entities, deltaTime);
 }

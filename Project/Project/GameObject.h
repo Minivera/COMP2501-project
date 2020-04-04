@@ -64,6 +64,7 @@ protected:
 	// Object's Transform Variables
 	glm::vec3 position;
 	glm::vec3 velocity;
+	glm::vec3 acceleration;
 	glm::vec3 scale;
 	GLfloat rotation = 0.0f;
 

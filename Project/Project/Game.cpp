@@ -51,7 +51,7 @@ bool Game::loop(Window& window, Shader& spriteShader, Shader& particleShader, Sh
 	auto localState = states.at(currentState);
 
 	// Execute the controls method on the current state
-	localState->controls(glm::vec2(cursorX, cursorY), deltaTime);
+	localState->controls(glm::vec2(cursorX, cursorY));
 
 	// Update the current state
 	localState->update(deltaTime);
