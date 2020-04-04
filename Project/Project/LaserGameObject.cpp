@@ -4,7 +4,7 @@
 #include "EnemyGameObject.h"
 
 LaserGameObject::LaserGameObject(int weaponDamage, double entityLifespan, GLfloat entitySize, glm::vec3& entityPosition, GLfloat entityAngle) :
-	WeaponGameObject(weaponDamage, entityPosition, glm::vec3(), glm::vec3(4, entitySize, 1), entityAngle, 0, 0) {
+	WeaponGameObject(weaponDamage, entityPosition, glm::vec3(), glm::vec3(), entityAngle, 0, 0) {
 	baseLifespan = entityLifespan;
 	lifespan = entityLifespan;
 	angle = entityAngle;
