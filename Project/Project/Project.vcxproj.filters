@@ -216,6 +216,9 @@
     <ClCompile Include="PlayerInterfaceGameObject.cpp">
       <Filter>Source Files\Entities\GuiEntities</Filter>
     </ClCompile>
+    <ClCompile Include="GameWorld.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Window.h">
@@ -355,6 +358,9 @@
     </ClInclude>
     <ClInclude Include="PlayerInterfaceGameObject.h">
       <Filter>Header Files\Entities\GuiEntities</Filter>
+    </ClInclude>
+    <ClInclude Include="GameWorld.h">
+      <Filter>Header Files\Game</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

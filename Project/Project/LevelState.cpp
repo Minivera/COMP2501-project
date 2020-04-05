@@ -37,6 +37,7 @@ LevelState::LevelState(int levelID, int nextLevelID, const char* levelFile, shar
 
 void LevelState::loadLevel(bool reloading) {
 	int size = 6;
+	vector<vector<WorldCellDefinition>> worldCells;
 
 	if (reloading) {
 		// If reloading, go through the vector to remove all enemies
@@ -64,11 +65,16 @@ void LevelState::loadLevel(bool reloading) {
 	for (int row = 0; row < totalRows; row++) {
 		double currentColumn = columnStart;
 
+		worldCells.push_back(vector<WorldCellDefinition>());
+
 		// For each column in the level CSV file
 		for (int column = 0; column < totalColumns; column++) {
 			// Add the given entity to the game
 			string val = levelDefinition.at(row).at(column);
 			shared_ptr<GameObject> obj;
+
+			// Defines if the current cell is blocking terrain.
+			bool blockingTerrain = false;
 
 			if (val == NONE) {
 				// skip
@@ -118,6 +124,7 @@ void LevelState::loadLevel(bool reloading) {
 				}
 			}
 			else if (val == BG && !reloading) {
+				blockingTerrain = true;
 				obj = make_shared<TerrainGameObject>(
 					TerrainType::BG,
 					glm::vec3(currentColumn, currentRow, 0.0f),
@@ -128,6 +135,7 @@ void LevelState::loadLevel(bool reloading) {
 				);
 			}
 			else if (val == CEILING_1 && !reloading) {
+				blockingTerrain = true;
 				obj = make_shared<TerrainGameObject>(
 					TerrainType::Ceilling,
 					glm::vec3(currentColumn, currentRow, 0.0f),
@@ -138,6 +146,7 @@ void LevelState::loadLevel(bool reloading) {
 				);
 			}
 			else if (val == CEILING_2 && !reloading) {
+				blockingTerrain = true;
 				obj = make_shared<TerrainGameObject>(
 					TerrainType::Ceilling,
 					glm::vec3(currentColumn, currentRow, 0.0f),
@@ -148,6 +157,7 @@ void LevelState::loadLevel(bool reloading) {
 				);
 			}
 			else if (val == FLOOR_1 && !reloading) {
+				blockingTerrain = true;
 				obj = make_shared<TerrainGameObject>(
 					TerrainType::Floor,
 					glm::vec3(currentColumn, currentRow, 0.0f),
@@ -158,6 +168,7 @@ void LevelState::loadLevel(bool reloading) {
 				);
 			}
 			else if (val == FLOOR_2 && !reloading) {
+				blockingTerrain = true;
 				obj = make_shared<TerrainGameObject>(
 					TerrainType::Floor,
 					glm::vec3(currentColumn, currentRow, 0.0f),
@@ -168,6 +179,7 @@ void LevelState::loadLevel(bool reloading) {
 				);
 			}
 			else if (val == WALL_L && !reloading) {
+				blockingTerrain = true;
 				obj = make_shared<TerrainGameObject>(
 					TerrainType::Wall,
 					glm::vec3(currentColumn, currentRow, 0.0f),
@@ -178,6 +190,7 @@ void LevelState::loadLevel(bool reloading) {
 				);
 			}
 			else if (val == WALL_R && !reloading) {
+				blockingTerrain = true;
 				obj = make_shared<TerrainGameObject>(
 					TerrainType::Wall,
 					glm::vec3(currentColumn, currentRow, 0.0f),
@@ -188,6 +201,7 @@ void LevelState::loadLevel(bool reloading) {
 				);
 			}
 			else if (val == SLANT_T_L && !reloading) {
+				blockingTerrain = true;
 				obj = make_shared<TerrainGameObject>(
 					TerrainType::TopSlant,
 					glm::vec3(currentColumn - 0.1, currentRow + 0.1, 0.0f),
@@ -198,6 +212,7 @@ void LevelState::loadLevel(bool reloading) {
 				);
 			}
 			else if (val == SLANT_T_R && !reloading) {
+				blockingTerrain = true;
 				obj = make_shared<TerrainGameObject>(
 					TerrainType::TopSlant,
 					glm::vec3(currentColumn + 0.1, currentRow + 0.1, 0.0f),
@@ -208,6 +223,7 @@ void LevelState::loadLevel(bool reloading) {
 				);
 			}
 			else if (val == SLANT_B_L && !reloading) {
+				blockingTerrain = true;
 				obj = make_shared<TerrainGameObject>(
 					TerrainType::BottomSlant,
 					glm::vec3(currentColumn - 0.1, currentRow - 0.1, 0.0f),
@@ -218,6 +234,7 @@ void LevelState::loadLevel(bool reloading) {
 				);
 			}
 			else if (val == SLANT_B_R && !reloading) {
+				blockingTerrain = true;
 				obj = make_shared<TerrainGameObject>(
 					TerrainType::BottomSlant,
 					glm::vec3(currentColumn + 0.1, currentRow - 0.1, 0.0f),
@@ -234,9 +251,19 @@ void LevelState::loadLevel(bool reloading) {
 				levelMap.insert(make_pair(make_pair(row, column), obj));
 			}
 
+			worldCells.at(row).push_back(WorldCellDefinition{
+				blockingTerrain,
+				glm::vec3(currentColumn, currentRow, 0.0f)
+			});
+
 			currentColumn += 1;
 		}
 		currentRow -= 1;
+	}
+
+	if (!reloading) {
+		// If not reloading, set the game world
+		world = make_shared<GameWorld>(worldCells);
 	}
 }
 

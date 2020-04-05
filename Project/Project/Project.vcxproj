@@ -169,6 +169,7 @@
     <ClCompile Include="FishGameObject.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameState.cpp" />
+    <ClCompile Include="GameWorld.cpp" />
     <ClCompile Include="GravityGameObject.cpp" />
     <ClCompile Include="GuiGameObject.cpp" />
     <ClCompile Include="Harpoon.cpp" />
@@ -218,6 +219,7 @@
     <ClInclude Include="FishGameObject.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="GameWorld.h" />
     <ClInclude Include="GravityGameObject.h" />
     <ClInclude Include="GuiGameObject.h" />
     <ClInclude Include="Harpoon.h" />

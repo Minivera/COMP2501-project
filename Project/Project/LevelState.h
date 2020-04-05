@@ -5,6 +5,7 @@
 
 #include "GameState.h"
 
+#include "GameWorld.h"
 #include "PlayerGameObject.h"
 #include "PlayerInterfaceGameObject.h"
 
@@ -40,6 +41,9 @@ private:
 
 	// Map of all the entities in the game and their position in the level definition file
 	map<pair<int, int>, shared_ptr<GameObject>> levelMap;
+
+	// The game world for this level. Used for pathfinding.
+	shared_ptr<GameWorld> world;
 
 	// The ID of this level in the global state machine.
 	int levelID;
