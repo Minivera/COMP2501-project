@@ -28,7 +28,7 @@ void FishGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doubl
 			}
 		}
 
-		if (chasing && currentState == EnemyState::IDLE) {
+		if (chasing && waiting()) {
 			// If we are not chasing, but should, start
  			currentState = EnemyState::CHASE;
 		}

@@ -39,7 +39,7 @@ void MainMenuState::controls(glm::vec2 mousePos) {
 	mousePos.x /= currentViewZoom;
 	mousePos.y /= currentViewZoom;
 
-	auto upgradeTable = dynamic_pointer_cast<UpgradeTableGameObject>(entities[0]);
+	auto upgradeTable = dynamic_pointer_cast<UpgradeTableGameObject>(entities.at(0));
 
 	// Also execute on the entities of the upgrade table
 	auto entitiesToCheck = vector<shared_ptr<GameObject>>(upgradeTable->getSubEntities());

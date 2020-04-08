@@ -29,7 +29,7 @@ void JellyfishGameObject::update(std::vector<shared_ptr<GameObject>>& entities, 
 			}
 		}
 
-		if (readyToFlee && currentState == EnemyState::IDLE) {
+		if (readyToFlee && waiting()) {
 			// If we are not fleeing, but should, start
 			currentState = EnemyState::FLEE;
 		}
@@ -65,7 +65,7 @@ void JellyfishGameObject::update(std::vector<shared_ptr<GameObject>>& entities, 
 			}
 		}
 
-		if (readyToAttack && currentState == EnemyState::IDLE) {
+		if (readyToAttack && waiting()) {
 			// If we are not attacking, but should, start
 			currentState = EnemyState::ATTACK;
 		}

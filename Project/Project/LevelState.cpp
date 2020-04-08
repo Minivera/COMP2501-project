@@ -265,6 +265,14 @@ void LevelState::loadLevel(bool reloading) {
 		// If not reloading, set the game world
 		world = make_shared<GameWorld>(worldCells);
 	}
+
+	// Set the game world on all enemy entities
+	for (auto it = entities.begin(); it != entities.end(); it++) {
+		auto enemy = dynamic_pointer_cast<EnemyGameObject>(*it);
+		if (enemy) {
+			enemy->setWorld(world);
+		}
+	}
 }
 
 void LevelState::controls(glm::vec2 mousePos) {
@@ -287,29 +295,12 @@ void LevelState::controls(glm::vec2 mousePos) {
 		player->addLiftAcceleration();
 	}
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_1) == GLFW_PRESS) {
-		if (glfwGetKey(Window::getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-			player->upgrade(WeaponType::Harpoon);
-		}
 		player->changeWeapon(WeaponType::Harpoon);
 	}
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_2) == GLFW_PRESS) {
-		// Command for the demo, unlocks the weapon
-		if (glfwGetKey(Window::getWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-			player->unlock(WeaponType::Pistol);
-		}
-		else if (glfwGetKey(Window::getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-			player->upgrade(WeaponType::Pistol);
-		}
 		player->changeWeapon(WeaponType::Pistol);
 	}
 	if (glfwGetKey(Window::getWindow(), GLFW_KEY_3) == GLFW_PRESS) {
-		// Command for the demo, unlocks the weapon
-		if (glfwGetKey(Window::getWindow(), GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS) {
-			player->unlock(WeaponType::Laser);
-		}
-		else if (glfwGetKey(Window::getWindow(), GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
-			player->upgrade(WeaponType::Laser);
-		}
 		player->changeWeapon(WeaponType::Laser);
 	}
 	if (glfwGetMouseButton(Window::getWindow(), GLFW_MOUSE_BUTTON_LEFT) == GLFW_PRESS) {

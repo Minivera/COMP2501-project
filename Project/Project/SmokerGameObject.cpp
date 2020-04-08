@@ -114,3 +114,7 @@ void SmokerGameObject::renderParticles(Shader& particlesShader) {
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, numElements * distance * 6, GL_UNSIGNED_INT, 0);
 }
+
+void SmokerGameObject::setWorld(shared_ptr<GameWorld> world) {
+	this->levelWorld = world;
+}

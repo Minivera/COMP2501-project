@@ -25,7 +25,7 @@ private:
 	Weapon* equipedWeapon;
 
 	// Attribute that counts how much treasure the player has available.
-	int currentTreasure = 1500; // Start the player with some money
+	int currentTreasure = 150; // Start the player with some money
 
 	// Attribute that counts the current air from the player in seconds.
 	double currentAir = baseAir;

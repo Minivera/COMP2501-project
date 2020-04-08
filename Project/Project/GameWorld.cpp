@@ -2,6 +2,12 @@
 
 #include <queue>
 
+#include "Random.h"
+
+WorldVertex::WorldVertex(glm::vec3 position) {
+	this->position = position;
+}
+
 void WorldVertex::connect(shared_ptr<WorldVertex> vertex, int edgeCost) {
 	if (this == vertex.get()) {
 		return;
@@ -44,7 +50,7 @@ void Path::update(glm::vec3 position) {
 	// Check if we need to update, which only happens if we are not at our objective
 	if (currentIndex < path.size() - 1) {
 		// Check if we are closer to the current element of the path or the next one.
-		if (glm::distance(position, path.at(currentIndex)->position) > glm::distance(position, path.at(currentIndex + 1)->position)) {
+		if (glm::distance(position, path.at(currentIndex)->getPosition()) < glm::distance(position, path.at(currentIndex + 1)->getPosition())) {
 			currentIndex++;
 		}
 	}
@@ -61,8 +67,7 @@ GameWorld::GameWorld(vector<vector<WorldCellDefinition>>& worldDefinition) {
 				continue;
 			}
 
-			auto vertex = make_shared<WorldVertex>();
-			vertex->position = worldDefinition.at(row).at(column).position;
+			auto vertex = make_shared<WorldVertex>(worldDefinition.at(row).at(column).position);
 			vertices.push_back(vertex);
 			cellsMap.insert(make_pair(make_tuple(row, column), vertex));
 		}
@@ -97,9 +102,42 @@ GameWorld::GameWorld(vector<vector<WorldCellDefinition>>& worldDefinition) {
 	}
 }
 
+shared_ptr<WorldVertex> GameWorld::closestNodeToPosition(glm::vec3 position) {
+	// loop through all the vertices and compare their positions
+	for (auto it = vertices.begin(); it != vertices.end(); it++) {
+		if (glm::distance(position, (*it)->getPosition()) < 1.0f) {
+			return *it;
+		}
+	}
+	return nullptr;
+}
+
+shared_ptr<Path> GameWorld::randomizedPathfind(shared_ptr<WorldVertex> start, float distance) {
+	for (int i = 0; i < vertices.size(); i++) {
+		auto element = vertices.at(i);
+
+		// If we found our start vertex, select a random vetex within the selected distance
+		if (element == start) {
+			vector<shared_ptr<WorldVertex>> closeVertices;
+
+			// Start looping in the vertices again to find all those that are closer than the distance
+			for (auto it = vertices.begin(); it != vertices.end(); it++) {
+				if (element != (*it) && glm::distance(element->getPosition(), (*it)->getPosition()) <= distance) {
+					closeVertices.push_back(*it);
+				}
+			}
+
+			// Pathfind from the given start node to the random node
+			return pathfind(start, vertices.at(random::randomInt(0, closeVertices.size() - 1)));
+		}
+	}
+
+	return pathfind(start, *(vertices.end() - 1));
+}
+
 // Utility struct for the purposes of pathfinding
 struct QNode {
-	shared_ptr<WorldVertex> node;
+	WorldVertex* node;
 	int cost;
 };
 
@@ -113,20 +151,19 @@ public:
 	}
 };
 
-Path& GameWorld::pathfind(shared_ptr<WorldVertex> start, shared_ptr<WorldVertex> end) {
-
+shared_ptr<Path> GameWorld::pathfind(shared_ptr<WorldVertex> start, shared_ptr<WorldVertex> end) {
 	// Priority queue used in pathfinding.
 	// it is created using the NodeTuple struct with a min compare function called compareNode
 	priority_queue <QNode, vector<QNode>, compareNode> pq;
 
-	std::vector<shared_ptr<WorldVertex>> pathNodes;
+	std::vector<WorldVertex*> pathNodes;
 	// Reset all the nodes costs
 	for (auto it = vertices.begin(); it != vertices.end(); it++) {
-		(*it)->calculatedCost = 0;
+		(*it)->setCalculatedCost(INT_MAX);
 	}
 
 	// The startnode is added to the pq with cost 0
-	QNode startNode = { start, 0 };
+	QNode startNode = { start.get(), 0 };
 	pq.push(startNode);
 
 	// Now that the pq is setup, we can start the algorithm
@@ -137,55 +174,53 @@ Path& GameWorld::pathfind(shared_ptr<WorldVertex> start, shared_ptr<WorldVertex>
 		QNode lowest = pq.top();
 
 		// If the current node is the end node, done!
-		if (lowest.node == end) {
+		if (lowest.node == end.get()) {
 			break;
 		}
 
 		// Open node
-		vector<WorldEdge> neighbours = lowest.node->edges;
+		vector<WorldEdge> neighbours = lowest.node->getEdges();
 		for (int i = 0; i < neighbours.size(); i++) {
 			// Compute cost to get to neighbouring node
-			// Cost = the cost to get the corrent node + cost to traverse the edge
 
 			WorldEdge currentEdge = neighbours.at(i);
 			WorldVertex& node = lowest.node->getConnectingNode(currentEdge);
 
-			// Calculate distance as part of the algorithm to obtain the A* algorithm
-			int nodeCost = lowest.cost + glm::distance(currentEdge.node1->position, currentEdge.node2->position) * neighbours.at(i).cost;
+			// Calculate the cost to get the corrent node + cost to traverse the edge
+			int nodeCost = lowest.cost + neighbours.at(i).cost;
 
 			//if current node cost is higher than calculated, update node, and add QNode to queue			
-			if (node.calculatedCost > nodeCost) {
-				node.calculatedCost = nodeCost;
-				node.prev = lowest.node;
+			if (node.getCalculatedCost() > nodeCost) {
+				node.setCalculatedCost(nodeCost);
+				node.setPrev(lowest.node);
 
-				shared_ptr<WorldVertex> nodePtr(&node);
-				QNode updatedNode = { nodePtr, nodeCost };
+				QNode updatedNode = { &node, nodeCost };
 				pq.push(updatedNode);
 			}
 		}
 
-		// Remove node form queue
+		// Remove node from queue
 		pq.pop();
 	}
 
 	// Queue is done, go in reverse from END to START to determine path
-	shared_ptr<WorldVertex> currentNode = end->prev;
+	WorldVertex* currentNode = end->getPrev();
 
 	// While the current node isn't null, or the end, mark the current node as on the path
-	pathNodes.push_back(end);
-	while (currentNode != NULL && currentNode != start) {
+	pathNodes.push_back(end.get());
+	while (currentNode != NULL && currentNode != start.get()) {
 		pathNodes.push_back(currentNode);
 
 		// This can lead to an infinite loop between two node, for some reason
-		currentNode = currentNode->prev;
+		currentNode = currentNode->getPrev();
 	}
 	pathNodes.push_back(currentNode);
 
 	std::reverse(pathNodes.begin(), pathNodes.end());
 
-	return Path{
+	return make_shared<Path>(
 		pathNodes,
-		0,
+		1, // 1 because 0 is the current node
 		end
-	};
+	);
 }

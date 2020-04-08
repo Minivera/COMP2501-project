@@ -8,7 +8,7 @@
 #include "Random.h"
 #include "LineOfSight.h"
 
-EnemyGameObject::EnemyGameObject(glm::vec3& entityPos, GLuint entityTexture, GLint entityNumElements):
+EnemyGameObject::EnemyGameObject(glm::vec3& entityPos, GLuint entityTexture, GLint entityNumElements) :
 	GameObject(entityPos, entityTexture, entityNumElements) {}
 
 bool EnemyGameObject::seesEntity(const glm::vec3& direction, const GameObject& other) {
@@ -101,7 +101,7 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 	}
 
 	if (currentState == EnemyState::CHASE) {
-		// We process the chase state, now we're executing it.
+		// We processed the chase state, now we're executing it.
 		currentState = EnemyState::CHASING;
 	}
 	else if (currentState == EnemyState::CHASING) {
@@ -118,7 +118,7 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 	}
 
 	if (currentState == EnemyState::FLEE) {
-		// We process the flee state, now we're executing it.
+		// We processed the flee state, now we're executing it.
 		currentState = EnemyState::FLEEING;
 	}
 	else if (currentState == EnemyState::FLEEING) {
@@ -132,6 +132,25 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 		glm::vec3 desiredVelocity = glm::normalize(playerPos - position) * maxSpeed;
 		glm::vec3 steering = -desiredVelocity - velocity;
 		velocity += steering;
+	}
+
+	if (currentState == EnemyState::WANDER) {
+		// We processed the wander state, now we're executing it.
+		currentState = EnemyState::WANDERING;
+	}
+	else if (currentState == EnemyState::WANDERING) {
+		// Update the current path based on the position
+		currentPath->update(position);
+
+		// If the path is complete, proceed to generate another one
+		if (currentPath->complete()) {
+			currentPath = levelWorld->randomizedPathfind(currentPath->getObjective(), pathfindDistance);
+		}
+
+		// Start chasing the path
+		glm::vec3 desiredVelocity = glm::normalize(currentPath->currentNode()->getPosition() - position);
+		velocity = glm::vec3(desiredVelocity.x * maxSpeed, desiredVelocity.y * maxSpeed, 0.0f);
+		rotation = glm::degrees(glm::atan(desiredVelocity.x, desiredVelocity.y)) + 90.0f;
 	}
 	
 	if (currentState == EnemyState::DIE) {
@@ -147,6 +166,11 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 	}
 
 	preventCollisions(entities);
+
+	// If we're idle, try wandering
+	if (currentState == EnemyState::IDLE) {
+		currentState = EnemyState::WANDER;
+	}
 
 	GameObject::update(entities, deltaTime);
 }
@@ -230,6 +254,12 @@ void EnemyGameObject::collide() {
 		currentState = EnemyState::COLLIDE;
 		angleToCollision -= glm::degrees(glm::atan(velocity.x, velocity.y));
 	}
+}
+
+void EnemyGameObject::setWorld(shared_ptr<GameWorld> world) {
+	this->levelWorld = world;
+
+	currentPath = levelWorld->randomizedPathfind(levelWorld->closestNodeToPosition(position), pathfindDistance);
 }
 
 GLuint EnemyGameObject::fishTextureID;

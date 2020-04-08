@@ -23,5 +23,8 @@ public:
 
 	// Overriden renderParticles method that will render the smoke particles in the air
 	void renderParticles(Shader& particlesShader);
+	
+	// Overriden setWorld setter that will prevent pathfinding on this entity.
+	void setWorld(shared_ptr<GameWorld> world);
 };
 
