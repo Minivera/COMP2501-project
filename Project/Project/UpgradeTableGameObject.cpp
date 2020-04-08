@@ -521,7 +521,7 @@ void UpgradeTableGameObject::loadInterface() {
 	textPos.y -= yIncrement;
 	markerPos.y -= yIncrement; 
 	
-	auto upgradeAirCost = make_shared<TreasureCounterGameObject>(
+	upgradeAirCost = make_shared<TreasureCounterGameObject>(
 		PlayerInventory::airCost * player->getAirLevel(),
 		boxPos,
 		counterScale,
@@ -532,7 +532,7 @@ void UpgradeTableGameObject::loadInterface() {
 	textPos.x += xIncrement;
 	markerPos.x += xIncrement;
 
-	auto upgradeSuitCost = make_shared<TreasureCounterGameObject>(
+	upgradeSuitCost = make_shared<TreasureCounterGameObject>(
 		PlayerInventory::treasureLossCost * player->getSuitLevel(),
 		boxPos,
 		counterScale,
@@ -543,7 +543,7 @@ void UpgradeTableGameObject::loadInterface() {
 	textPos.x += xIncrement;
 	markerPos.x += xIncrement;
 
-	auto upgradeFlippersCost = make_shared<TreasureCounterGameObject>(
+	upgradeFlippersCost = make_shared<TreasureCounterGameObject>(
 		PlayerInventory::flipperCost * player->getFlippersLevel(),
 		boxPos,
 		counterScale,
@@ -742,6 +742,14 @@ void UpgradeTableGameObject::update(std::vector<shared_ptr<GameObject>>& entitie
 	treasureCounter->setAmount(player->getCurrentTreasure());
 
 	airCounter->setAmount(player->getBaseAir());
+
+	upgradeAirCost->setAmount(PlayerInventory::airCost * player->getAirLevel());
+	upgradeSuitCost->setAmount(PlayerInventory::treasureLossCost * player->getSuitLevel());
+	upgradeFlippersCost->setAmount(PlayerInventory::flipperCost * player->getFlippersLevel());
+
+	for (auto it = subEntities.begin(); it != subEntities.end(); it++) {
+		(*it)->update(entities, deltaTime);
+	}
 
 	GameObject::update(entities, deltaTime);
 }

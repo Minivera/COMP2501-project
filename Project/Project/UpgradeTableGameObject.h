@@ -19,6 +19,11 @@ private:
 	// Reference to the air counter in the interface that should update when the players gains more base air.
 	shared_ptr<AirCounterGameObject> airCounter;
 
+	// References to the cost counters for the infinite suit upgrades
+	shared_ptr<TreasureCounterGameObject> upgradeAirCost;
+	shared_ptr<TreasureCounterGameObject> upgradeSuitCost;
+	shared_ptr<TreasureCounterGameObject> upgradeFlippersCost;
+
 	// Vector with all the entities to render within this entity.
 	vector<shared_ptr<GameObject>> subEntities;
 

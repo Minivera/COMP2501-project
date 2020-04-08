@@ -19,6 +19,9 @@ public:
 	// Overriden render method that will defer to the game object or the text renderer.
 	void render(Shader& spriteShader);
 
+	// Setters
+	inline void setWord(const string& newWord) { word = newWord; }
+
 	static GLuint textureFor(string word) { return knownWords.at(word); }
 
 	// Static method to load the text textures.

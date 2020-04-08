@@ -23,11 +23,12 @@ void GuiGameObject::verifyMouseOver(glm::vec2 mousePos) {
 }
 
 void GuiGameObject::verifyClick() {
-	if (hovered && clickable) {
+	if (hovered && clickable && clickTimer <= 0) {
 		clicked = true;
 
 		if (onClickListener != nullptr) {
 			onClickListener(*this);
+			clickTimer = clickWaitTime;
 		}
 	}
 }
@@ -58,6 +59,17 @@ void GuiGameObject::render(Shader& spriteShader) {
 
 	// Draw the entity
 	glDrawElements(GL_TRIANGLES, numElements, GL_UNSIGNED_INT, 0);
+}
+
+void GuiGameObject::update(std::vector<shared_ptr<GameObject>>& gameObjects, double deltaTime) {
+	if (clickTimer > 0) {
+		clickTimer -= deltaTime;
+	}
+	else {
+		clickTimer = 0;
+	}
+
+	GameObject::update(gameObjects, deltaTime);
 }
 
 void GuiGameObject::clean() {
