@@ -9,19 +9,29 @@
 #include "TreasureGameObject.h"
 #include "PowerupGameObject.h"
 
-constexpr float AIR_INCREASE = 1.5f;
-
 enum class WeaponType { Harpoon, Pistol, Laser };
+enum class UpgradeType { Harpoon, Pistol, Laser, Suit, Flippers, Air };
 
 class PlayerInventory
 {
 private:
+	// Constants that define the various amount to add for each update
+	const double airIncrease = 30.0f; // Adds 30 second of air per upgrade
+	const double treasureLossDecrease = 0.5f; // lose 5 less treasure on hit
+
+	// Constants that define the current level for the player
+	int airLevel = 1;
+	int suitLevel = 1;
+	int flippersLevel = 1;
+
 	unique_ptr<Harpoon> harpoon;
 	unique_ptr<Pistol> pistol;
 	unique_ptr<Laser> laser;
 
+	// The base level of air the player gets when starting a new dive
 	double baseAir = 2.0 * 60.0; // 2 minutes of air by default
 
+	// The currently equiped weapon for the player
 	Weapon* equipedWeapon;
 
 	// Attribute that counts how much treasure the player has available.
@@ -48,7 +58,7 @@ public:
 	bool unlock(WeaponType type);
 
 	// Method that upgrades a specific weapon.
-	bool upgrade(WeaponType type);
+	bool upgrade(UpgradeType type);
 
 	// Method that makes the inventory equip the specific weapon type.
 	void equip(WeaponType type);
@@ -68,16 +78,26 @@ public:
 	vector<reference_wrapper<Weapon>> getWeapons();
 
 	// Getters
-	inline Weapon& getEquipedWeapon() { return *equipedWeapon; }
-	inline int getTreasure() { return currentTreasure; }
-	inline double getBaseAir() { return baseAir; }
-	inline double getAir() { return currentAir; }
-	inline Powerup& getPowerup() { return currentPowerup; }
-	inline double getPowerupTimer() { return powerupTimer; }
+	inline Weapon& getEquipedWeapon() const { return *equipedWeapon; }
+	inline int getTreasure() const { return currentTreasure; }
+	inline double getBaseAir() const { return baseAir; }
+	inline double getAir() const { return currentAir; }
+	inline Powerup& getPowerup() const { return currentPowerup; }
+	inline double getPowerupTimer() const { return powerupTimer; }
 	WeaponType getEquipedWeaponType();
 
+	// Upgrade related getters
+	inline int getAirLevel() const{ return airLevel; }
+	inline int getSuitLevel() const{ return suitLevel; }
+	inline int getFlippersLevel() const{ return flippersLevel; }
+
 	// Powerup related getters
-	inline double damageBoost() { return currentPowerup.type == PowerupType::Pepper && powerupTimer > 0 ? currentPowerup.effect : 0; }
-	inline bool isInvulnerable() { return currentPowerup.type == PowerupType::Armor && powerupTimer > 0; }
+	inline double damageBoost() const { return currentPowerup.type == PowerupType::Pepper && powerupTimer > 0 ? currentPowerup.effect : 0; }
+	inline bool isInvulnerable() const { return currentPowerup.type == PowerupType::Armor && powerupTimer > 0; }
+
+	// Constants that define the cost of each upgrades
+	static const int airCost = 300;
+	static const int treasureLossCost = 250;
+	static const int flipperCost = 500;
 };
 

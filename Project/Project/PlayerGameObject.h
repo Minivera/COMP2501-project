@@ -21,10 +21,13 @@ private:
 	PlayerState currentState = PlayerState::NONE;
 
 	// Maximum speed of the player in units per milliseconds
-	const double maxSpeed = 2.0;
+	double maxSpeed = 2.0;
 
 	// The base acceleration of the player in units per milliseconds
 	const double baseAcceleration = 0.15;
+
+	// How much the player gains in speed per upgrade.
+	const double speedIncrease = 0.10;
 
 	// The slow down effect on the acceleration from colliding with terrain
 	const double wallSlowEffect = 0.65;
@@ -75,7 +78,7 @@ public:
 	// Inventory management methods
 	void changeWeapon(WeaponType type);
 	bool unlock(WeaponType type);
-	bool upgrade(WeaponType type);
+	bool upgrade(UpgradeType type);
 
 	// Method to trigger a player's attack cycle, which will be executed during the next update cycle.
 	void attack();
@@ -88,9 +91,14 @@ public:
 	void pickUp(shared_ptr<PowerupGameObject> powerup);
 
 	// Getters
-	inline int getCurrentTreasure() { return inventory->getTreasure(); }
-	inline double getBaseAir() { return inventory->getBaseAir(); }
-	inline double getCurrentAir() { return inventory->getAir(); }
+	inline int getCurrentTreasure() const { return inventory->getTreasure(); }
+	inline double getBaseAir() const { return inventory->getBaseAir(); }
+	inline double getCurrentAir() const { return inventory->getAir(); }
+
+	// Upgrade related getters
+	inline int getAirLevel() const { return inventory->getAirLevel(); }
+	inline int getSuitLevel() const { return inventory->getSuitLevel(); }
+	inline int getFlippersLevel() const { return inventory->getFlippersLevel(); }
 
 	// Setters
  	inline void setArmRotation(double newRotation) { armRotation = newRotation; }
@@ -100,6 +108,7 @@ public:
 	static GLuint playerMovingTextureID;
 	static GLuint playerHurtTextureID;
 	static GLuint playerBubblesTextureID;
+	static GLuint playerFlippersTextureID;
 
 	// Static method to load the player textures.
 	static int setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset);

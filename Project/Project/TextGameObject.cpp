@@ -32,7 +32,10 @@ int TextGameObject::setTextures(void (setFuncPtr)(GLuint w, const char* fname), 
 	setFuncPtr(textures[offset + 1], "Assets\\gui\\unlock.png");
 	knownWords.insert(make_pair("unlock", textures[offset + 1]));
 
-	setFuncPtr(textures[offset + 2], "Assets\\gui\\level.png");
-	knownWords.insert(make_pair("level", textures[offset + 2]));
-	return offset + 3;
+	setFuncPtr(textures[offset + 2], "Assets\\gui\\upgrade.png");
+	knownWords.insert(make_pair("upgrade", textures[offset + 2]));
+
+	setFuncPtr(textures[offset + 3], "Assets\\gui\\level.png");
+	knownWords.insert(make_pair("level", textures[offset + 3]));
+	return offset + 4;
 }

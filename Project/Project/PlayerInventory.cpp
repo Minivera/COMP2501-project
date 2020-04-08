@@ -36,27 +36,50 @@ bool PlayerInventory::unlock(WeaponType type) {
 	return false;
 }
 
-bool PlayerInventory::upgrade(WeaponType type) {
+bool PlayerInventory::upgrade(UpgradeType type) {
 	switch (type)
 	{
-	case WeaponType::Harpoon:
+	case UpgradeType::Harpoon:
 		if (harpoon->isEnabled() && harpoon->isUpgradable() && currentTreasure > Harpoon::costByLevel * harpoon->getLevel()) {
 			currentTreasure -= Harpoon::costByLevel * harpoon->getLevel();
 			harpoon->upgrade();
 			return true;
 		}
 		break;
-	case WeaponType::Pistol:
-		if (pistol->isEnabled() && pistol->isUpgradable() && currentTreasure > Pistol::costByLevel* pistol->getLevel()) {
+	case UpgradeType::Pistol:
+		if (pistol->isEnabled() && pistol->isUpgradable() && currentTreasure >= Pistol::costByLevel* pistol->getLevel()) {
 			currentTreasure -= Pistol::costByLevel * pistol->getLevel();
 			pistol->upgrade();
 			return true;
 		}
 		break;
-	case WeaponType::Laser:
-		if (laser->isEnabled() && laser->isUpgradable() && currentTreasure > Laser::costByLevel* laser->getLevel()) {
+	case UpgradeType::Laser:
+		if (laser->isEnabled() && laser->isUpgradable() && currentTreasure >= Laser::costByLevel* laser->getLevel()) {
 			currentTreasure -= Laser::costByLevel * laser->getLevel();
 			laser->upgrade();
+			return true;
+		}
+		break;
+	case UpgradeType::Air:
+		if (currentTreasure >= airCost * airLevel) {
+			currentTreasure -= airCost * airLevel;
+			baseAir += airIncrease;
+			airLevel++;
+			return true;
+		}
+		break;
+	case UpgradeType::Suit:
+		if (currentTreasure >= treasureLossCost * suitLevel) {
+			currentTreasure -= treasureLossCost * suitLevel;
+			treasureLossFactor -= treasureLossDecrease;
+			suitLevel++;
+			return true;
+		}
+		break;
+	case UpgradeType::Flippers:
+		if (currentTreasure >= flipperCost * flippersLevel) {
+			currentTreasure -= flipperCost * flippersLevel;
+			flippersLevel++;
 			return true;
 		}
 		break;

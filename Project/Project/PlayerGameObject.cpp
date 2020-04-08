@@ -333,7 +333,14 @@ bool PlayerGameObject::unlock(WeaponType type) {
 	return inventory->unlock(type);
 }
 
-bool PlayerGameObject::upgrade(WeaponType type) {
+bool PlayerGameObject::upgrade(UpgradeType type) {
+	if (type == UpgradeType::Flippers) {
+		if (inventory->upgrade(type)) {
+			maxSpeed += speedIncrease;
+			return true;
+		}
+		return false;
+	}
 	return inventory->upgrade(type);
 }
 
@@ -372,15 +379,18 @@ GLuint PlayerGameObject::playerTextureID = 0;
 GLuint PlayerGameObject::playerMovingTextureID = 0;
 GLuint PlayerGameObject::playerHurtTextureID = 0;
 GLuint PlayerGameObject::playerBubblesTextureID = 0;
+GLuint PlayerGameObject::playerFlippersTextureID = 0;
 
 int PlayerGameObject::setTextures(void (setFuncPtr)(GLuint w, const char* fname), GLuint* textures, int offset) {
 	setFuncPtr(textures[offset + 0], "Assets\\player\\player-idle.png");
 	setFuncPtr(textures[offset + 1], "Assets\\player\\player-swiming.png");
 	setFuncPtr(textures[offset + 2], "Assets\\player\\player-hurt.png");
 	setFuncPtr(textures[offset + 3], "Assets\\FX\\bubbles.png");
+	setFuncPtr(textures[offset + 4], "Assets\\objects\\flippers.png");
 	playerTextureID = textures[offset + 0];
 	playerMovingTextureID = textures[offset + 1];
 	playerHurtTextureID = textures[offset + 2];
 	playerBubblesTextureID = textures[offset + 3];
-	return offset + 4;
+	playerFlippersTextureID = textures[offset + 4];
+	return offset + 5;
 }

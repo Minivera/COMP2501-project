@@ -444,6 +444,120 @@ void UpgradeTableGameObject::loadInterface() {
 	textPos.y -= yIncrement;
 	markerPos.y -= yIncrement;
 
+	// Add a margin
+	boxPos.x += xIncrement / 2;
+	textPos.x += xIncrement / 2;
+	markerPos.x += xIncrement / 2;
+
+	auto upgradeAir = make_shared<BoxGameObject>(
+		boxPos,
+		boxScale,
+		6
+	);
+	auto upgradeAirText = make_shared<TextGameObject>(
+		"upgrade",
+		textPos,
+		textScale,
+		6
+	);
+	auto upgradeAirMarker = make_shared<IconGameObject>(
+		markerPos,
+		markerScale,
+		0.0f,
+		PowerupGameObject::airTextureID,
+		6
+	);
+	upgradeAir->onClick(std::bind(&UpgradeTableGameObject::upgradeAir, this, std::placeholders::_1));
+	boxPos.x += xIncrement;
+	textPos.x += xIncrement;
+	markerPos.x += xIncrement;
+
+	auto upgradeSuit = make_shared<BoxGameObject>(
+		boxPos,
+		boxScale,
+		6
+	);
+	auto upgradeSuitText = make_shared<TextGameObject>(
+		"upgrade",
+		textPos,
+		textScale,
+		6
+	);
+	auto upgradeSuitMarker = make_shared<IconGameObject>(
+		markerPos,
+		markerScale,
+		0.0f,
+		PowerupGameObject::armorTextureID,
+		6
+	);
+	upgradeSuit->onClick(std::bind(&UpgradeTableGameObject::upgradeSuit, this, std::placeholders::_1));
+	boxPos.x += xIncrement;
+	textPos.x += xIncrement;
+	markerPos.x += xIncrement;
+
+	auto upgradeFlippers = make_shared<BoxGameObject>(
+		boxPos,
+		boxScale,
+		6
+	);
+	auto upgradeFlippersText = make_shared<TextGameObject>(
+		"upgrade",
+		textPos,
+		textScale,
+		6
+	);
+	auto upgradeFlippersMarker = make_shared<IconGameObject>(
+		markerPos,
+		markerScale,
+		-90.0f,
+		PlayerGameObject::playerFlippersTextureID,
+		6
+	);
+	upgradeFlippers->onClick(std::bind(&UpgradeTableGameObject::upgradeFlippers, this, std::placeholders::_1));
+	boxPos.x -= xIncrement * 2;
+	textPos.x -= xIncrement * 2;
+	markerPos.x -= xIncrement * 2;
+	boxPos.y -= yIncrement;
+	textPos.y -= yIncrement;
+	markerPos.y -= yIncrement; 
+	
+	auto upgradeAirCost = make_shared<TreasureCounterGameObject>(
+		PlayerInventory::airCost * player->getAirLevel(),
+		boxPos,
+		counterScale,
+		TreasureGameObject::treasureTextureID,
+		6
+	);
+	boxPos.x += xIncrement;
+	textPos.x += xIncrement;
+	markerPos.x += xIncrement;
+
+	auto upgradeSuitCost = make_shared<TreasureCounterGameObject>(
+		PlayerInventory::treasureLossCost * player->getSuitLevel(),
+		boxPos,
+		counterScale,
+		TreasureGameObject::treasureTextureID,
+		6
+	);
+	boxPos.x += xIncrement;
+	textPos.x += xIncrement;
+	markerPos.x += xIncrement;
+
+	auto upgradeFlippersCost = make_shared<TreasureCounterGameObject>(
+		PlayerInventory::flipperCost * player->getFlippersLevel(),
+		boxPos,
+		counterScale,
+		TreasureGameObject::treasureTextureID,
+		6
+	);
+
+	boxPos.x -= xIncrement * 2;
+	textPos.x -= xIncrement * 2;
+	markerPos.x -= xIncrement * 2;
+	boxPos.y -= yIncrement;
+	textPos.y -= yIncrement;
+	markerPos.y -= yIncrement;
+
 	subEntities.push_back(unlockHarpoon);
 	subEntities.push_back(unlockHarpoonText);
 	subEntities.push_back(unlockHarpoonMarker);
@@ -505,6 +619,22 @@ void UpgradeTableGameObject::loadInterface() {
 	subEntities.push_back(upgradeLaser1Cost);
 	subEntities.push_back(upgradeLaser2Cost);
 	subEntities.push_back(upgradeLaser3Cost);
+
+	subEntities.push_back(upgradeAir);
+	subEntities.push_back(upgradeAirText);
+	subEntities.push_back(upgradeAirMarker);
+
+	subEntities.push_back(upgradeSuit);
+	subEntities.push_back(upgradeSuitText);
+	subEntities.push_back(upgradeSuitMarker);
+
+	subEntities.push_back(upgradeFlippers);
+	subEntities.push_back(upgradeFlippersText);
+	subEntities.push_back(upgradeFlippersMarker);
+
+	subEntities.push_back(upgradeAirCost);
+	subEntities.push_back(upgradeSuitCost);
+	subEntities.push_back(upgradeFlippersCost);
 	
 	// Load the player information
 	treasureCounter = make_shared<TreasureCounterGameObject>(
@@ -530,19 +660,19 @@ void UpgradeTableGameObject::loadInterface() {
 }
 
 void UpgradeTableGameObject::upgradeHarpoon1(GuiGameObject& caller) {
-	if (player->upgrade(WeaponType::Harpoon)) {
+	if (player->upgrade(UpgradeType::Harpoon)) {
 		dynamic_cast<BoxGameObject&>(caller).complete();
 	}
 }
 
 void UpgradeTableGameObject::upgradeHarpoon2(GuiGameObject& caller) {
-	if (player->upgrade(WeaponType::Harpoon)) {
+	if (player->upgrade(UpgradeType::Harpoon)) {
 		dynamic_cast<BoxGameObject&>(caller).complete();
 	}
 }
 
 void UpgradeTableGameObject::upgradeHarpoon3(GuiGameObject& caller) {
-	if (player->upgrade(WeaponType::Harpoon)) {
+	if (player->upgrade(UpgradeType::Harpoon)) {
 		dynamic_cast<BoxGameObject&>(caller).complete();
 	}
 }
@@ -554,19 +684,19 @@ void UpgradeTableGameObject::unlockPistol(GuiGameObject& caller) {
 }
 
 void UpgradeTableGameObject::upgradePistol1(GuiGameObject& caller) {
-	if (player->upgrade(WeaponType::Pistol)) {
+	if (player->upgrade(UpgradeType::Pistol)) {
 		dynamic_cast<BoxGameObject&>(caller).complete();
 	}
 }
 
 void UpgradeTableGameObject::upgradePistol2(GuiGameObject& caller) {
-	if (player->upgrade(WeaponType::Pistol)) {
+	if (player->upgrade(UpgradeType::Pistol)) {
 		dynamic_cast<BoxGameObject&>(caller).complete();
 	}
 }
 
 void UpgradeTableGameObject::upgradePistol3(GuiGameObject& caller) {
-	if (player->upgrade(WeaponType::Pistol)) {
+	if (player->upgrade(UpgradeType::Pistol)) {
 		dynamic_cast<BoxGameObject&>(caller).complete();
 	}
 }
@@ -578,21 +708,33 @@ void UpgradeTableGameObject::unlockLaser(GuiGameObject& caller) {
 }
 
 void UpgradeTableGameObject::upgradeLaser1(GuiGameObject& caller) {
-	if (player->upgrade(WeaponType::Laser)) {
+	if (player->upgrade(UpgradeType::Laser)) {
 		dynamic_cast<BoxGameObject&>(caller).complete();
 	}
 }
 
 void UpgradeTableGameObject::upgradeLaser2(GuiGameObject& caller) {
-	if (player->upgrade(WeaponType::Laser)) {
+	if (player->upgrade(UpgradeType::Laser)) {
 		dynamic_cast<BoxGameObject&>(caller).complete();
 	}
 }
 
 void UpgradeTableGameObject::upgradeLaser3(GuiGameObject& caller) {
-	if (player->upgrade(WeaponType::Laser)) {
+	if (player->upgrade(UpgradeType::Laser)) {
 		dynamic_cast<BoxGameObject&>(caller).complete();
 	}
+}
+
+void UpgradeTableGameObject::upgradeSuit(GuiGameObject& caller) {
+	player->upgrade(UpgradeType::Suit);
+}
+
+void UpgradeTableGameObject::upgradeAir(GuiGameObject& caller) {
+	player->upgrade(UpgradeType::Air);
+}
+
+void UpgradeTableGameObject::upgradeFlippers(GuiGameObject& caller) {
+	player->upgrade(UpgradeType::Flippers);
 }
 
 void UpgradeTableGameObject::update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime) {

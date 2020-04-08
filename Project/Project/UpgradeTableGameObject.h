@@ -25,7 +25,7 @@ private:
 	// Method that loads the interface for the upgrade table;
 	void loadInterface();
 
-	// Upgrade methos to bind to the event listeners of the various boxes.
+	// Upgrade methods to bind to the event listeners of the various boxes.
 	void upgradeHarpoon1(GuiGameObject& caller);
 	void upgradeHarpoon2(GuiGameObject& caller);
 	void upgradeHarpoon3(GuiGameObject& caller);
@@ -37,6 +37,9 @@ private:
 	void upgradeLaser1(GuiGameObject& caller);
 	void upgradeLaser2(GuiGameObject& caller);
 	void upgradeLaser3(GuiGameObject& caller);
+	void upgradeAir(GuiGameObject& caller);
+	void upgradeSuit(GuiGameObject& caller);
+	void upgradeFlippers(GuiGameObject& caller);
 public:
 	UpgradeTableGameObject(shared_ptr<PlayerGameObject> player, glm::vec3 entityPos, glm::vec3& entityScale, GLint entityNumElements);
 
