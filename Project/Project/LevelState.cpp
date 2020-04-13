@@ -308,6 +308,24 @@ void LevelState::controls(glm::vec2 mousePos) {
 	}
 }
 
+void LevelState::update(double deltaTime) {
+	vector<shared_ptr<GameObject>> currentEntities(entities);
+
+	for (auto it = currentEntities.begin(); it != currentEntities.end(); it++) {
+		// Get the current object
+		shared_ptr<GameObject> currentGameObject = *it;
+
+		// Check if the entity is within render distance of the player
+		if (glm::distance(player->getPosition(), currentGameObject->getPosition()) > renderDistance) {
+			// If we're beyond the distance, ignore update
+			continue;
+		}
+
+		// Update game objects
+		currentGameObject->update(entities, deltaTime);
+	}
+}
+
 void LevelState::render(Shader& spriteShader, Shader& particleShader, Shader& laserShader) {
 	shared_ptr<PlayerGameObject> player = dynamic_pointer_cast<PlayerGameObject>(entities.at(0));
 	glm::vec3 playerPos = player->getPosition();

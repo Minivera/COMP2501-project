@@ -44,7 +44,7 @@ private:
 	int treasureLossFactor = 30;
 
 	// How much air is lost when getting hurt.
-	double airLossFactor = 0.10; // 10 second by default
+	double airLossFactor = 25; // 25 second by default
 
 	// The current powerup in inventory. Will always be set, but might not be active.
 	Powerup& currentPowerup = Powerup{};

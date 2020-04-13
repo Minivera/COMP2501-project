@@ -30,6 +30,11 @@ constexpr auto SLANT_B_R = "SLANT_B_R";
 
 class LevelState: public GameState {
 private:
+	// Distance within which entities should be updated and rendered. Stop any aciton on entities outside this
+	// distance to save performance and prevent AI bugs. It also allows us to better design levels as entities will
+	// not move a hundred tiles away while the player cannot see them.
+	const double renderDistance = 8.0;
+
 	// The shared player entity, used to keep it up to date within level.
 	shared_ptr<PlayerGameObject> player;
 
@@ -61,12 +66,19 @@ private:
 public:
 	LevelState(int levelID, int nextLevelID, const char* levelFile, shared_ptr<PlayerGameObject> player);
 	
+	// Method that allows the player to control the player character using the keyboard and mouse.
 	void controls(glm::vec2 mousePos);
 
+	// Overriden update method used to prevent processing updates on far away entities.
+	void update(double deltaTime);
+
+	// Overriden render method that allows rendering the paralax background in addition to the entities.
 	void render(Shader& spriteShader, Shader& particleShader, Shader& laserShader);
 
+	// Overriden load method that will reload the level, respawing all ennemies.
 	void load();
 
+	// Overriden transitionState method to switch to another state when pressing the menu key or moving to another level.
 	tuple<int, bool> transitionState();
 
 	// Variables that give the texture IDs for the texture

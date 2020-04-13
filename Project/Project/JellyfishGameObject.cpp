@@ -29,7 +29,7 @@ void JellyfishGameObject::update(std::vector<shared_ptr<GameObject>>& entities, 
 			}
 		}
 
-		if (readyToFlee && waiting()) {
+		if (readyToFlee) {
 			// If we are not fleeing, but should, start
 			currentState = EnemyState::FLEE;
 		}
@@ -80,6 +80,7 @@ void JellyfishGameObject::update(std::vector<shared_ptr<GameObject>>& entities, 
 		// If we received an attack signal, process it
 		attackTimer = attackWaitTime;
 		currentState = EnemyState::ATTACKING;
+		velocity = glm::vec3(0.0f);
 		attack(entities);
 	}
 	if (currentState == EnemyState::ATTACKING) {

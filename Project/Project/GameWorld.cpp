@@ -209,9 +209,13 @@ shared_ptr<Path> GameWorld::pathfind(shared_ptr<WorldVertex> start, shared_ptr<W
 	// While the current node isn't null, or the end, mark the current node as on the path
 	pathNodes.push_back(end.get());
 	while (currentNode != NULL && currentNode != start.get()) {
-		pathNodes.push_back(currentNode);
-
 		// This can lead to an infinite loop between two node, for some reason
+		// So make sure we prevent that by stopping if we're looping on nodes
+		if (std::find(pathNodes.begin(), pathNodes.end(), currentNode) != pathNodes.end()) {
+			break;
+		}
+
+		pathNodes.push_back(currentNode);
 		currentNode = currentNode->getPrev();
 	}
 	pathNodes.push_back(currentNode);
