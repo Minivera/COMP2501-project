@@ -23,6 +23,9 @@ private:
 	// Maximum speed of the player in units per milliseconds
 	double maxSpeed = 2.0;
 
+	// Boolean that tracks if the player moved this cycle.
+	bool moving = false;
+
 	// The base acceleration of the player in units per milliseconds
 	const double baseAcceleration = 0.15;
 

@@ -80,6 +80,7 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 	if (currentState == EnemyState::HURT) {
 		// We processed the hurt state, now we're executing it.
 		currentState = EnemyState::HURTING;
+		velocity = glm::vec3(0.0f);
 	}
 	else if (currentState == EnemyState::HURTING) {
 		invicibilityTimer -= deltaTime;
@@ -103,6 +104,7 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 	if (currentState == EnemyState::CHASE) {
 		// We processed the chase state, now we're executing it.
 		currentState = EnemyState::CHASING;
+		velocity = glm::vec3(0.0f);
 	}
 	else if (currentState == EnemyState::CHASING) {
 		// Calculate the angle between self and player
@@ -120,6 +122,7 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 	if (currentState == EnemyState::FLEE) {
 		// We processed the flee state, now we're executing it.
 		currentState = EnemyState::FLEEING;
+		velocity = glm::vec3(0.0f);
 	}
 	else if (currentState == EnemyState::FLEEING) {
 		// Calculate the angle between self and player
@@ -137,6 +140,7 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 	if (currentState == EnemyState::WANDER) {
 		// We processed the wander state, now we're executing it.
 		currentState = EnemyState::WANDERING;
+		velocity = glm::vec3(0.0f);
 	}
 	else if (currentState == EnemyState::WANDERING) {
 		// Update the current path based on the position
@@ -156,8 +160,7 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 	if (currentState == EnemyState::DIE) {
 		// Drop treasure or powerup and set as dirty
 		dirty = true;
-		if (random::randomFloat(0.0f, 1.0f) < 0.65f) {
-			// 65% change to drop treasure
+		if (random::randomFloat(0.0f, 1.0f) > powerupDropChance) {
 			entities.push_back(make_shared<TreasureGameObject>(random::randomInt(1, 3) * 5, position + glm::vec3(0, -0.3, 0), TreasureGameObject::treasureTextureID, numElements));
 		}
 		else {

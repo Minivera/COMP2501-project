@@ -129,7 +129,7 @@ void PlayerInventory::addToInventory(shared_ptr<PowerupGameObject> powerupEntity
 	currentPowerup = powerupEntity->getPowerup();
 
 	if (currentPowerup.type == PowerupType::Air) {
-		currentAir += currentPowerup.duration;
+		currentAir += currentPowerup.effect;
 	}
 	else {
 		powerupTimer = currentPowerup.duration;

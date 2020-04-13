@@ -13,14 +13,6 @@ void WorldVertex::connect(shared_ptr<WorldVertex> vertex, int edgeCost) {
 		return;
 	}
 
-	// Make sure this edge doesn't already exist in the other vertex
-	for (auto it = vertex->edges.begin(); it != vertex->edges.end(); it++) {
-		auto connected = getConnectingNode(*it);
-		if (connected == *this) {
-			return;
-		}
-	}
-
 	// Creates an edge corresponding to vertex
 	shared_ptr<WorldVertex> thisValue(this);
 	WorldEdge edge = { thisValue, vertex, edgeCost };
@@ -59,7 +51,7 @@ void Path::update(glm::vec3 position) {
 GameWorld::GameWorld(vector<vector<WorldCellDefinition>>& worldDefinition) {
 	// loop into the definition of the 2D world
 	for (int row = 0; row < worldDefinition.size(); row++) {
-		for (int column = 0; column < worldDefinition.size(); column++) {
+		for (int column = 0; column < worldDefinition.at(row).size(); column++) {
 			auto cell = worldDefinition.at(row).at(column);
 
 			// Create the vertex if it's not blocked
@@ -86,8 +78,8 @@ GameWorld::GameWorld(vector<vector<WorldCellDefinition>>& worldDefinition) {
 			for (int vertical = -1; vertical < 2; vertical++) {
 				for (int horizontal = -1; horizontal < 2; horizontal++) {
 					// Make sure we don't get out of bounds
-					if (row + vertical < 0 || row + vertical > worldDefinition.size() - 1 ||
-						column + horizontal < 0 || column + horizontal > worldDefinition.at(row).size() - 1) {
+					if (row + vertical < 0 || row + vertical > worldDefinition.size() ||
+						column + horizontal < 0 || column + horizontal > worldDefinition.at(row).size()) {
 						continue;
 					}
 

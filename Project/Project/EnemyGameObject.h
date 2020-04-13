@@ -45,6 +45,9 @@ protected:
 	// How far entities will move to when pathfinding.
 	const float pathfindDistance = 4.0f;
 
+	// The chance to drop powerup instead of treasure when defeated.
+	const float powerupDropChance = 1.0f;
+
 	// Protected constructors so the class cannot be instanciated.
 	EnemyGameObject(glm::vec3& entityPos, GLuint entityTexture, GLint entityNumElements);
 

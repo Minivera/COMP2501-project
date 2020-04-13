@@ -7,7 +7,7 @@ FishGameObject::FishGameObject(glm::vec3& entityPos, GLuint entityTexture, GLint
 	EnemyGameObject(entityPos, entityTexture, entityNumElements) {
 	health = 15;
 	scale = glm::vec3(0.5, 0.5, 1);
-	boundingBox = glm::vec2(0.5, 0.5);
+	boundingBox = glm::vec2(0.4, 0.4);
 }
 
 void FishGameObject::update(std::vector<shared_ptr<GameObject>>& entities, double deltaTime) {

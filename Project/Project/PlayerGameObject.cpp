@@ -88,8 +88,8 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 		velocity.x *= wallSlowEffect;
 	}
 
-	// Check if we are moving and, if yes, apply friction
-	if (velocity.x != 0) {
+	// Check if we are moving and have a forward velocity, apply friction
+	if (velocity.x != 0 && !moving) {
 		acceleration += glm::vec3(-velocity.x, 0.0f, 0.0f);
 	}
 	else {
@@ -248,7 +248,7 @@ void PlayerGameObject::render(Shader& spriteShader) {
 		glBindTexture(GL_TEXTURE_2D, playerHurtTextureID);
 		spriteShader.setUniform1f("count", 5.0f);
 	}
-	else if (velocity.x != 0 || velocity.y != 0) {
+	else if (moving) {
 		glBindTexture(GL_TEXTURE_2D, playerMovingTextureID);
 		spriteShader.setUniform1f("count", 7.0f);
 	}
@@ -303,6 +303,7 @@ void PlayerGameObject::renderParticles(Shader& particlesShader) {
 
 void PlayerGameObject::clean() {
 	gravityActivated = true;
+	moving = false;
 
 	if (currentState == PlayerState::HURTING && invicibilityTimer <= 0) {
 		currentState = PlayerState::NONE;
@@ -312,14 +313,17 @@ void PlayerGameObject::clean() {
 
 void PlayerGameObject::addLiftAcceleration() {
 	acceleration.y = 0;
+	moving = true;
 	velocity = glm::vec3(velocity.x, glm::min(velocity.y + baseAcceleration, maxSpeed), velocity.z);
 }
 
 void PlayerGameObject::addLeftAcceleration() {
+	moving = true;
 	velocity = glm::vec3(glm::max(velocity.x - baseAcceleration, -(maxSpeed)), velocity.y, velocity.z);
 }
 
 void PlayerGameObject::addRightAcceleration() {
+	moving = true;
 	velocity = glm::vec3(glm::min(velocity.x + baseAcceleration, maxSpeed), velocity.y, velocity.z);
 }
 
