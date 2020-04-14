@@ -34,11 +34,17 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 
 	shared_ptr<TerrainGameObject> collidesWith;
 
+	float maxDistance = glm::max(scale.x, scale.y) * 2;
 	// Attemps to collide with something
 	for (auto it = entities.begin(); it != entities.end(); it++) {
+		// Don't check anything if the entity is beyond the reach of the player
+		if (glm::distance(position, (*it)->getPosition()) > maxDistance) {
+			continue;
+		}
+
 		// Checks if the current object collides with a wall
 		auto terrain = dynamic_pointer_cast<TerrainGameObject>(*it);
-		if (terrain && checkCollision(*(*it))) {
+		if (terrain && terrain->getType() != TerrainType::BG && checkCollision(*(*it))) {
 			collidesWith = terrain;
 		}
 

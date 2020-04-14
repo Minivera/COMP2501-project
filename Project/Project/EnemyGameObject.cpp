@@ -34,7 +34,7 @@ void EnemyGameObject::preventCollisions(std::vector<shared_ptr<GameObject>>& ent
 	for (auto it = entities.begin(); it != entities.end(); it++) {
 		// Checks if the current object collides with a wall
 		auto terrain = dynamic_pointer_cast<TerrainGameObject>(*it);
-		if (terrain && checkCollision(*(*it))) {
+		if (terrain && terrain->getType() != TerrainType::BG && checkCollision(*(*it))) {
 			collidesWith = terrain;
 			break;
 		}

@@ -120,7 +120,7 @@ shared_ptr<Path> GameWorld::randomizedPathfind(shared_ptr<WorldVertex> start, fl
 			}
 
 			// Pathfind from the given start node to the random node
-			return pathfind(start, vertices.at(random::randomInt(0, closeVertices.size() - 1)));
+			return pathfind(start, closeVertices.at(random::randomInt(0, closeVertices.size() - 1)));
 		}
 	}
 
@@ -181,7 +181,7 @@ shared_ptr<Path> GameWorld::pathfind(shared_ptr<WorldVertex> start, shared_ptr<W
 			// Calculate the cost to get the corrent node + cost to traverse the edge
 			int nodeCost = lowest.cost + neighbours.at(i).cost;
 
-			//if current node cost is higher than calculated, update node, and add QNode to queue			
+			// If current node cost is higher than calculated, update node, and add QNode to queue			
 			if (node.getCalculatedCost() > nodeCost) {
 				node.setCalculatedCost(nodeCost);
 				node.setPrev(lowest.node);

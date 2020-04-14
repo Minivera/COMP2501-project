@@ -21,10 +21,16 @@ void GravityGameObject::update(std::vector<shared_ptr<GameObject>>& entities, do
 
 	bool collidesWithFloor = false;
 
+	float maxDistance = glm::max(scale.x, scale.y) * 2;
 	for (auto it = entities.begin(); it != entities.end(); it++) {
+		// Don't check anything if the entity is beyond the reach of the current entity
+		if (glm::distance(position, (*it)->getPosition()) > maxDistance) {
+			continue;
+		}
+
 		// Checks if the current object collides with a floor or with a top slant
 		auto converted = dynamic_pointer_cast<TerrainGameObject>(*it);
-		if (converted && checkCollision(*(*it)) && (converted->getType() == TerrainType::Floor || converted->getType() == TerrainType::BottomSlant)) {
+		if (converted && (converted->getType() == TerrainType::Floor || converted->getType() == TerrainType::BottomSlant) && checkCollision(*(*it))) {
 			collidesWithFloor = true;
 			break;
 		}
