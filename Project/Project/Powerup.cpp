@@ -10,7 +10,7 @@ namespace powerup {
 		case 0:
 			return Powerup{
 				PowerupType::Armor,
-				30,
+				5,
 				0 // Always on
 			};
 		case 1:
@@ -22,7 +22,7 @@ namespace powerup {
 		case 2:
 			return Powerup{
 				PowerupType::Pepper,
-				30,
+				15,
 				0.5 //boost damage by 50%
 			};
 		default:
