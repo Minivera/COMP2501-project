@@ -160,7 +160,7 @@ void EnemyGameObject::update(std::vector<shared_ptr<GameObject>>& entities, doub
 	if (currentState == EnemyState::DIE) {
 		// Drop treasure or powerup and set as dirty
 		dirty = true;
-		if (random::randomFloat(0.0f, 1.0f) > powerupDropChance) {
+		if (random::randomInt(1, 100) > powerupDropChance) {
 			entities.push_back(make_shared<TreasureGameObject>(random::randomInt(1, 3) * 5, position + glm::vec3(0, -0.3, 0), TreasureGameObject::treasureTextureID, numElements));
 		}
 		else {
