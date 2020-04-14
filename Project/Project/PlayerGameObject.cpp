@@ -119,7 +119,7 @@ void PlayerGameObject::update(std::vector<shared_ptr<GameObject>>& entities, dou
 	}
 
 	// Handle hurting mechanism if not invulnerable
-	if (currentState == PlayerState::HURT && !inventory->isInvulnerable()) {
+	if (currentState == PlayerState::HURT) {
 		// We processed the hurt state, now we're executing it.
 		currentState = PlayerState::HURTING;
 
@@ -361,7 +361,7 @@ void PlayerGameObject::attack() {
 }
 
 void PlayerGameObject::hurt(GameObject& enemy) {
-	if (currentState != PlayerState::HURT && currentState != PlayerState::HURTING) {
+	if (!inventory->isInvulnerable() && currentState != PlayerState::HURT && currentState != PlayerState::HURTING) {
 		currentState = PlayerState::HURT;
 
 		GLfloat enemyAngle = LineOfSight::drawLine(enemy.getPosition().x, enemy.getPosition().y, position.x, position.y).angle();
